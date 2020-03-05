@@ -1,0 +1,20 @@
+<input type="text"
+       [hidden]="isEdit === false || hasFocus === false"
+       [(ngModel)]="optionFilter" (blur)="blur();" (keydown.shift.tab)="tab($event)" (keydown.tab)="tab($event)"
+       (keyup)="updOptionsFilter($event, optionsArr)" (focus)="updOptionsFilter($event, optionsArr);"
+       #input title="To be added" [title]="filterHighlightIdx">
+<div #options 
+     style="position: relative;background-color:rgba(220, 220, 220);z-index: 3;padding: 5px;"
+     [hidden]="!matchingOptions || matchingOptions.length === 0">
+  <div *ngFor="let mOpt of matchingOptions; let i = index"
+        [class.highlightedFilter]="filterHighlightIdx === i" 
+        style="cursor: pointer; padding: 0 2px;" 
+        (mousedown)="switchToFilterOption(i);focus(input, $event);"
+        (mouseover)="filterHighlightIdx = i">{{mOpt.label}}</div>
+</div>
+<div [hidden]="isEdit === true && hasFocus === true"
+     [class.edit]="isEdit === true"
+     [class.modified]="modified === true"
+     (click)="focus(input, $event);">
+  {{displayValue()}}
+</div>

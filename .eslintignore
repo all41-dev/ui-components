@@ -1,0 +1,5 @@
+**/*.sql
+**/*.css
+src/browserslist
+src/favicon.ico
+src/**/*.json

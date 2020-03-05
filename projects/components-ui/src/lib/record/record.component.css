@@ -1,0 +1,55 @@
+.grid {
+  display: grid;
+  grid-template-columns: auto auto;
+  grid-auto-rows: 22px;
+  /* grid-template-rows: repeat(auto-fill, 30px);*/
+  text-align: left;
+  border-left: solid 1px var(--main-color, rgba(0, 76, 141, .5));
+  border-right: solid 1px var(--main-color, rgba(0, 76, 141, .5));
+  background-color: rgba(255, 255, 255, .5);
+  color: rgb(76, 76, 76);
+  border-top: solid 1px rgba(255, 255, 255, 0);
+  border-bottom: solid 1px rgba(255, 255, 255, 0);
+}
+.header {
+  background-color: rgba(0, 76, 141, .5);
+  color: rgb(214, 214, 214);
+  border-top-left-radius: 5px;
+  border-top-right-radius: 5px;
+  border-top: solid 1px var(--main-color, rgba(0, 76, 141, .5));
+  border-left: solid 1px var(--main-color, rgba(0, 76, 141, .5));
+  border-right: solid 1px var(--main-color, rgba(0, 76, 141, .5));
+  padding: 2px 0;
+}
+.header>h3 {
+  margin: 0;
+  vertical-align: center;
+  text-align: center;
+}
+.footer {
+  background-color: var(--main-color, rgba(0, 76, 141, .5));
+  color: rgb(214, 214, 214);
+  border-bottom-left-radius: 5px;
+  border-bottom-right-radius: 5px;
+  border-bottom: solid 1px var(--main-color, rgba(0, 76, 141, .5));
+  border-left: solid 1px var(--main-color, rgba(0, 76, 141, .5));
+  border-right: solid 1px var(--main-color, rgba(0, 76, 141, .5));
+  text-align: right;
+}
+.footer>button {
+  /*border-radius: 3px;*/
+  background-color: white;
+  border: 0;
+  margin: 2px;
+  color: rgb(76, 76, 76);
+}
+.footer>button:last-of-type {
+  margin-right: 5px;
+}
+.modified {
+  border: solid 1px orange;
+}
+
+.invalid {
+  color: red;
+}

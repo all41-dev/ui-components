@@ -1,0 +1,11 @@
+<textarea style="position:relative"
+       [hidden]="isEdit === false || hasFocus === false"
+       [(ngModel)]="value" (blur)="blur()" (keydown.shift.tab)="tab($event)" (keydown.tab)="tab($event)"
+          #input></textarea>
+<div [hidden]="isEdit === true && hasFocus === true"
+     [class.edit]="isEdit === true"
+     [title]="value"
+     [class.modified]="modified === true"
+     (click)="focus(input, $event)">
+  {{value === '' ? '&nbsp;' : value}}
+</div>

@@ -1,0 +1,16 @@
+<!--The content below is only a placeholder and can be replaced.-->
+<div>
+  <h1>
+    {{ title }} components test
+  </h1>
+  <!--<div  style="width:320px;float:left">-->
+    <!--<ift-record id="2" [layout]="recordLayout"></ift-record>-->
+  <!--</div>-->
+  <!--<div style="width:820px;float:left">-->
+  <ift-record-list
+    [layout]="recordListLayout" [(records)]="records" [(filterRecords)]="fRecs"></ift-record-list>
+  <ift-record-list
+    [layout]="rlColWithoutProp"></ift-record-list>
+  <!-- <ift-record [layout]="emotionProjectLayout" [(record)]="emotionRecord"></ift-record> -->
+  <pre>{{ fRecs ? fRecs.length: 0 }}</pre>
+</div>

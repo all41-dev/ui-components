@@ -1,0 +1,7 @@
+.label {
+  font-weight: bolder;
+  /*text-align: left;*/
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
+}

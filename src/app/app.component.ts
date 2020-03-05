@@ -1,0 +1,258 @@
+import {Component, OnInit} from '@angular/core';
+import {HttpClient} from '@angular/common/http';
+import {Column, EditType, RecordLayout, RecordListLayout, SelectionType, OptionsEditableColumn, RecordListComponent, RecordComponent} from '@harps/components-ui';
+import { Subscription } from 'rxjs';
+
+@Component({
+  selector: 'app-root',
+  templateUrl: './app.component.html',
+  styleUrls: ['./app.component.css']
+})
+export class AppComponent implements OnInit {
+  public title = 'base-ui';
+  public records = [];
+  public fRecs;
+
+  public columns: Column<any>[] = [{
+    isEditable: false,
+    label: 'col without data',
+    recordProperty: undefined,
+    width: '200px',
+    html: (parent, record): string => `<span>I am the <a href='/foo/${record.id}'>${record.id}</a>!`,
+    onClick: (parentComponent: RecordListComponent<any>, record): void => {
+      alert(record.title);
+      // to be implemented
+    }
+  }, {
+    label: 'Id',
+    editType: EditType.Number,
+    recordProperty: 'id',
+    isEditable: false,
+    width: '30px',
+  }, {
+    label: 'User',
+    editType: EditType.Typeahead,
+    recordProperty: 'userId',
+    isEditable: true,
+    width: '300px',
+    options: [
+      { label: 'foo', value: 'foo'},
+      { label: 'bar', value: 'bar'},
+      { label: 'baz', value: 'baz'},
+    ],
+    //filterValue: 'is',
+    //isFilterVisible: true,
+  }, {
+    label: 'Title',
+    editType: EditType.Text,
+    recordProperty: 'title',
+    isEditable: true,
+    isFilterVisible: true,
+    filterValue: 'ess',
+    width: '300px'
+  }, {
+    label: 'Body',
+    editType: EditType.Textarea, // multiline
+    recordProperty: 'body',
+    isEditable: true,
+    width: '500px'
+  // }, {
+  //   label: 'L4',
+  //   editType: EditType.Date, // date
+  //   recordProperty: 'recordDate',
+  //   isEditable: true,
+  //   isModifiedProperty: 'recordDateModified',
+  //   width: '60px'
+  // }, {
+  //   label: 'L5',
+  //   editType: EditType.Text, // dropdown
+  //   recordProperty: 'hardOption',
+  //   isEditable: true,
+  //   isModifiedProperty: 'hardOptionModified',
+  //   width: '100px',
+  //   isValid: (record: any): boolean => {
+  //     return record.hardOption !== null && record.hardOption.length >= 6;
+  //   }
+  // }, {
+  //   label: 'L6 monster very fucking long label plus',
+  //   editType: EditType.Dropdown,
+  //   recordProperty: 'quantity',
+  //   isEditable: true,
+  //   isModifiedProperty: 'quantityModified',
+  //   width: '70px',
+  //   options: [
+  //     {value: 1, label: 'First'},
+  //     {value: 2, label: 'Second'},
+  //     {value: 3, label: 'Third'},
+  //   ]
+  }];
+
+  // public sampleEntityUrl = 'http://localhost:3010/api/samples';
+  public sampleEntityUrl = 'https://jsonplaceholder.typicode.com/posts';
+
+  public recordLayout: RecordLayout<any> = {
+    columns: this.columns,
+    entityUrl: this.sampleEntityUrl,
+    labelsWidth: '80px',
+    valuesWidth: '250px',
+    title: 'record title',
+    primaryKeyProperty: 'id',
+    save: async (record): Promise<Subscription> => {
+      if (record.id !== undefined) {
+        return await this.http.put(`${this.recordLayout.entityUrl}/${record.id}`, record)
+          .subscribe((resp: any[]): any => resp[0]);
+      } else {
+        return await this.http.post(`${this.recordLayout.entityUrl}/`, record)
+          .subscribe((resp: any): any => resp);
+      }
+    }
+  };
+  
+  public emotionRecord: any;
+  public emotionProjectLayout: RecordLayout<any> = {
+    columns: [{
+      //   label: 'id',
+      //   recordProperty: 'id',
+      //   isEditable: false,
+      //   editType: EditType.Text,
+      //  }, {
+      label: 'status',
+      recordProperty: 'status',
+      isEditable: true,
+      editType: EditType.Dropdown,
+      options: [
+        { label: 'nouveau', value: 'new' },
+        { label: 'en cours', value: 'open' },
+        { label: 'en attente', value: 'on-hold' },
+        { label: 'annulé', value: 'cancelled' },
+        { label: 'terminé', value: 'finished' },
+      ]
+    }, {
+      label: 'titre',
+      recordProperty: 'title',
+      isEditable: true,
+      editType: EditType.Text,
+    }, {
+      label: 'description',
+      recordProperty: 'description',
+      isEditable: true,
+      editType: EditType.Textarea,
+    }, {
+      label: 'lien',
+      recordProperty: 'link',
+      isEditable: true,
+      editType: EditType.Text,
+    }, {
+      label: '',
+      recordProperty: undefined,
+      isEditable: false,
+      html: (layout: RecordComponent<any>, record: any): string => {
+        if(record.link) { return `<a href='${record.link}' target='_blank'>go</a>`}
+        return '';
+      },
+    }],
+    entityUrl: `http://localhost:8080/api/project`,
+    getUrl: `http://localhost:8080/api/project/d9b7ea0a-3455-481c-86e6-39abea632dd2`,
+    labelsWidth: '80px',
+    valuesWidth: '250px',
+    title: 'record title',
+    primaryKeyProperty: 'id',
+  };
+  
+  public recordListLayout: RecordListLayout<any>;
+
+  public columns2: Column<any>[] = [{
+    label: 'Id',
+    editType: EditType.Number,
+    recordProperty: 'id',
+    isEditable: false,
+    width: '30px',
+  }, {
+    label: 'Title',
+    editType: EditType.Text,
+    recordProperty: 'title',
+    isEditable: true,
+    width: '300px',
+  }, {
+    label: 'User',
+    editType: EditType.Dropdown,
+    recordProperty: 'userId',
+    isEditable: true,
+    // isEditable: (rec) => {
+    //   const res = rec.completed !== true;
+    //   console.info(res);
+    //   return res;
+    // },
+    width: '200px',
+    options: []
+    // {value: 1, label: 'First'},
+    // {value: 2, label: 'Second'},
+    // {value: 3, label: 'Third'},
+  }, {
+    label: 'Completed',
+    editType: EditType.Text,
+    recordProperty: 'completed',
+    isEditable: false,
+    width: '50px',
+  }];
+  public entityUrl2 = 'https://jsonplaceholder.typicode.com/todos';
+
+  public recordListLayout2: RecordListLayout<any> = {
+    height: 600,
+    columns: this.columns2,
+    entityUrl: this.entityUrl2,
+    primaryKeyProperty: 'id'
+  };
+
+  public rlColWithoutProp: RecordListLayout<any> = {
+    height:150,
+    entityUrl: '',
+    chunkSize: 10,
+    primaryKeyProperty: '',
+    isAddEnabled: true,
+    columns: [{
+      isEditable: false,
+      label: 'col without data',
+      recordProperty: undefined,
+      width: '200px',
+      html: '<span>I am the <strong>content</strong>!',
+      onClick: (/*_parentComponent: RecordListComponent<any>, _record*/): void => {
+        alert('foo');
+        // to be implemented
+      },
+
+    }]
+  }
+
+  // eslint-disable-next-line @typescript-eslint/no-parameter-properties
+  public constructor(public http: HttpClient) {}
+
+  public ngOnInit(): void {
+    // this.http.get(`${'https://jsonplaceholder.typicode.com/users'}`)
+    //   .subscribe((resp: any[]) => this.columns2.find(c => c.recordProperty === 'userId').options = resp.map(r => {
+    //     return {value: r.id, label: r.name};
+    //   }));
+
+    this.recordListLayout = {
+      height: 500,
+      columns: this.columns,
+      primaryKeyProperty: 'id',
+      entityUrl: this.sampleEntityUrl,
+      selectionType: SelectionType.Single,
+      isDeleteEnabled: true,
+      isAddEnabled: true,
+      loadOnInit: false,
+      title: 'record list layout',
+      chunkSize: 20,
+      newRecTemplate: {
+        value: 'foobar'
+      }
+    };
+    this.http.get(this.sampleEntityUrl).toPromise().then((res: any) => this.records = res);
+
+    this.http.get('https://jsonplaceholder.typicode.com/users').toPromise().then((users: any[]): void => {
+      (this.recordListLayout.columns.find((c): boolean => c.recordProperty === 'userId') as OptionsEditableColumn<any>).options = users.map((u): any => ({label: u.name, value: u.id})),
+      (this.recordLayout.columns.find((c): boolean => c.recordProperty === 'userId') as OptionsEditableColumn<any>).options = users.map((u): any => ({label: u.name, value: u.id}))
+    })
+  }
+}

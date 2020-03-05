@@ -1,0 +1,12 @@
+<select
+       [hidden]="isEdit === false || hasFocus === false"
+       [(ngModel)]="value" (blur)="blur()" (keydown.shift.tab)="tab($event)" (keydown.tab)="tab($event)"
+        #input title="To be added">
+  <option *ngFor="let option of optionsArr" [ngValue]="option.value">{{option.label}}</option>
+</select>
+<div [hidden]="isEdit === true && hasFocus === true"
+     [class.edit]="isEdit === true"
+     [class.modified]="modified === true"
+     (click)="focus(input, $event)">
+  {{displayValue}}
+</div>

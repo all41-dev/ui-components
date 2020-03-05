@@ -1,0 +1,111 @@
+<div class="header" [style.width]="componentWidth"><h3>{{title}}</h3></div>
+<div *ngIf="getRestricted" class="error" [style.width]="componentWidth">Permission denied</div>
+<div class="grid"
+     (keydown.control.z)="cancelShortcut($event, cancelButton)"
+     (keydown.control.s)="saveShortcut($event, saveButton)"
+     [class.modified]="isModified()"
+     [style.width]="componentWidth"
+      *ngIf="record">
+  <ng-container *ngFor="let col of layout.columns">
+    <ift-column [(label)]="col.label" [style.maxWidth]="labelsWidth" [style.width]="labelsWidth" [class.invalid]="col.isValid !== undefined && !col.isValid(record)"></ift-column>
+    <ng-container [ngSwitch]="col.editType">
+      <ng-template [ngSwitchCase]="undefined">
+        <ift-text-value
+          [attr.edit]="patchRestricted || !col.isEditable ? null : ''"
+          [(modified)]="record[col.recordProperty + 'Modified']"
+          [(value)]="record[col.recordProperty]"
+          (valueChange)="col.onChange ? col.onChange(record, [record]) : undefined;
+            layout.onChange ? layout.onChange(record) : undefined"
+          [style.width]="valuesWidth"
+          [parentComponent]="inst"
+          [record]="record"
+          [columnLayout]="col"
+          (tabEvent)="tab($event)"></ift-text-value>
+      </ng-template>
+      <ng-template [ngSwitchCase]="EditType.Text">
+        <ift-text-value
+          [attr.edit]="patchRestricted || !col.isEditable ? null : ''"
+          [(modified)]="record[col.recordProperty + 'Modified']"
+          [(value)]="record[col.recordProperty]"
+          (valueChange)="col.onChange ? col.onChange(record, [record]) : undefined;
+            layout.onChange ? layout.onChange(record) : undefined"
+          [style.width]="valuesWidth"
+          [parentComponent]="inst"
+          [record]="record"
+          [columnLayout]="col"
+          (tabEvent)="tab($event)"></ift-text-value>
+      </ng-template>
+      <ng-template [ngSwitchCase]="EditType.Password">
+        <ift-password-value
+          [attr.edit]="patchRestricted || !col.isEditable ? null : ''"
+          [(modified)]="record[col.recordProperty + 'Modified']"
+          [(value)]="record[col.recordProperty]"
+          [style.width]="valuesWidth"
+          [parentComponent]="inst"
+          [record]="record"
+          [columnLayout]="col"
+          (tabEvent)="tab($event)"></ift-password-value>
+      </ng-template>
+      <ng-template [ngSwitchCase]="EditType.Dropdown">
+        <ift-dropdown-value
+          [attr.edit]="patchRestricted || !col.isEditable ? null : ''"
+          [(modified)]="record[col.recordProperty + 'Modified']"
+          [(value)]="record[col.recordProperty]"
+          [(options)] = "col.options"
+          [style.width]="valuesWidth"
+          [parentComponent]="inst"
+          [record]="record"
+          [columnLayout]="col"
+          (tabEvent)="tab($event)"></ift-dropdown-value>
+      </ng-template>
+      <ng-template [ngSwitchCase]="EditType.Typeahead">
+        <ift-typeahead-value
+          [attr.edit]="patchRestricted || !col.isEditable ? null : ''"
+          [(modified)]="record[col.recordProperty + 'Modified']"
+          [(value)]="record[col.recordProperty]"
+          [(options)] = "col.options"
+          [parentComponent]="inst"
+          [record]="record"
+          [columnLayout]="col"
+          (tabEvent)="tab($event)"></ift-typeahead-value>
+      </ng-template>
+      <ng-template [ngSwitchCase]="EditType.Textarea">
+        <ift-textarea-value
+          [attr.edit]="patchRestricted || !col.isEditable ? null : ''"
+          [(modified)]="record[col.recordProperty + 'Modified']"
+          [(value)]="record[col.recordProperty]"
+          [style.width]="valuesWidth"
+          [parentComponent]="inst"
+          [record]="record"
+          [columnLayout]="col"
+          (tabEvent)="tab($event)"></ift-textarea-value>
+      </ng-template>
+      <ng-template [ngSwitchCase]="EditType.Number">
+        <ift-number-value
+          [attr.edit]="patchRestricted || !col.isEditable ? null : ''"
+          [(modified)]="record[col.recordProperty + 'Modified']"
+          [(value)]="record[col.recordProperty]"
+          [style.width]="valuesWidth"
+          [parentComponent]="inst"
+          [record]="record"
+          [columnLayout]="col"
+          (tabEvent)="tab($event)"></ift-number-value>
+      </ng-template>
+      <ng-template [ngSwitchCase]="EditType.Date">
+        <ift-date-value
+          [attr.edit]="patchRestricted || !col.isEditable ? null : ''"
+          [(modified)]="record[col.recordProperty + 'Modified']"
+          [(value)]="record[col.recordProperty]"
+          [style.width]="valuesWidth"
+          [parentComponent]="inst"
+          [record]="record"
+          [columnLayout]="col"
+          (tabEvent)="tab($event)"></ift-date-value>
+      </ng-template>
+    </ng-container>
+  </ng-container>
+</div>
+<div class="footer" [style.width]="componentWidth">
+  <button #saveButton role="button" [style.visibility]="isModified() && saveEnabled() ? 'visible' : 'hidden'" (click)="save()" [disabled]="!isValid()">Save</button>
+  <button #cancelButton role="button" [style.visibility]="isModified() ? 'visible' : 'hidden'" (click)="cancelChanges()">Cancel</button>
+</div>

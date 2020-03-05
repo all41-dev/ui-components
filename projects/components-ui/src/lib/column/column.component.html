@@ -1,0 +1,2 @@
+<div class="label" [title]="filter ? label+'(' + filter + ')' : label" >{{label}}</div>
+<input style="width:95%" type="text" *ngIf="isFilterVisible" [(ngModel)]="filter">

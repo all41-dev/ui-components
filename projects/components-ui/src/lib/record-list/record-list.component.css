@@ -1,0 +1,97 @@
+.grid {
+  display: grid;
+  grid-template-columns: auto;
+  grid-auto-rows: 22px;
+  /*max-height: 70px;*/
+  overflow-y: scroll;
+  /*border-bottom: solid 1px #004c8d;*/
+  border-left: solid 1px var(--main-color, rgba(0, 76, 141, .5));
+  border-right: solid 1px var(--main-color, rgba(0, 76, 141, .5));
+  box-shadow: 0 3px rgba(0,0,0,.16), 0 3px 6px rgba(0,0,0,.23);
+  background-color: rgba(255, 255, 255, .5);
+  color: rgb(76, 76, 76);
+  /*border-bottom-left-radius: 5px;*/
+  /*border-bottom-right-radius: 5px; --> disabled as behind scrollbar on chrome --> ugly */
+}
+.row {
+  display: grid;
+  /*grid-template-columns: 30px 300px 70px;*/
+  grid-auto-rows: auto;
+  border: solid 1px transparent;
+  /*margin-top: 1px;*/
+}
+.header:first-of-type {
+  /*border-top-left-radius: 5px;*/
+  /*border-top-right-radius: 5px;*/
+}
+.header>h3 {
+  margin: 0;
+  text-align: center;
+}
+.header {
+  background-color: var(--main-color, rgba(0, 76, 141, .5));
+  color: rgb(214, 214, 214);
+  border-top: solid 1px var(--main-color, rgba(0, 76, 141, .5));
+  border-left: solid 1px var(--main-color, rgba(0, 76, 141, .5));
+  border-right: solid 1px var(--main-color, rgba(0, 76, 141, .5));
+  box-shadow: 0 3px rgba(0,0,0,.16), 0 3px 6px rgba(0,0,0,.23);
+}
+.footer {
+  background-color: var(--main-color, rgba(0, 76, 141, .5));
+  color: rgb(214, 214, 214);
+  /*border-bottom-left-radius: 5px;*/
+  /*border-bottom-right-radius: 5px;*/
+  box-shadow: 0 3px 6px rgba(0,0,0,.16), 0 3px 6px rgba(0,0,0,.23);
+  border-bottom: solid 1px var(--main-color, rgba(0, 76, 141, .5));
+  border-left: solid 1px var(--main-color, rgba(0, 76, 141, .5));
+  border-right: solid 1px var(--main-color, rgba(0, 76, 141, .5));
+  text-align: right;
+  min-height: 20px;
+}
+.footer>button,
+.footer>span>button
+ {
+  /*border-radius: 3px;*/
+  background-color: white;
+  border: 0;
+  margin: 2px;
+  color: rgb(76, 76, 76);
+}
+.footer>button:last-of-type {
+  margin-right: 5px;
+}
+.selected {
+  border: solid 1px lightskyblue;
+}
+.modified {
+  border: solid 1px orange;
+}
+.row-command {
+  /* position: relative; */
+  /* top: -19px; */
+  /*background-color: lightskyblue;*/
+  /*float: right;*/
+  visibility: hidden;
+  /* margin-right: auto; */
+  width: 20px;
+}
+.row-command > div {
+  position: relative;
+  right: 120px;
+  width: 120px;
+  height: 20px;
+  top: -20px;
+  text-align: right;
+}
+.row-command button {
+  font-size: 12px;
+  padding: 0 2px;
+}
+
+.row:hover > .row-command {
+  visibility: visible;
+}
+
+.error{
+  background-color: #f8d7da;
+}
