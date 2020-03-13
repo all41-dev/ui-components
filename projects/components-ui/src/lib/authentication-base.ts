@@ -1,5 +1,6 @@
-import {JwksValidationHandler, OAuthService, AuthConfig} from 'angular-oauth2-oidc';
-import {AddHeadersInterceptor} from './add-headers';
+import { OAuthService, AuthConfig } from 'angular-oauth2-oidc';
+import { JwksValidationHandler } from 'angular-oauth2-oidc-jwks';
+import { AddHeadersInterceptor } from './add-headers';
 import { OnInit } from '@angular/core';
 import { Config } from './config';
 
@@ -36,17 +37,17 @@ export abstract class AuthenticationBase implements OnInit {
   // eslint-disable-next-line @typescript-eslint/no-parameter-properties
   public constructor(protected oauthService: OAuthService, protected config: Config) {
     this.baseUrl = window['_app_base'] || '/';
-    console.debug(`AuthenticationBase.constructor() baseUrl: ${this.baseUrl}`);
+    // console.debug(`AuthenticationBase.constructor() baseUrl: ${this.baseUrl}`);
   }
   public async ngOnInit(): Promise<void> {
-    console.trace(`AuthenticationBase.ngOnInit() baseUrl: ${this.baseUrl}`)
+    // console.trace(`AuthenticationBase.ngOnInit() baseUrl: ${this.baseUrl}`)
     await this.config.init(this.baseUrl + '_config').then(() => {
       const authType = this.config.get('authType');
-      console.trace(`Auth type: ${authType}`)
+      // console.trace(`Auth type: ${authType}`)
       if (authType === 'server') {
         this.afterAuthInit();
       } else {
-        console.trace(`AuthenticationBase.ngOnInit() #2 baseUrl: ${this.baseUrl}`)
+        // console.trace(`AuthenticationBase.ngOnInit() #2 baseUrl: ${this.baseUrl}`)
         this.config.getAuthConfig(this.baseUrl + '_config').then((authConfig): void => {
           this.authInit(authConfig);
           this.afterAuthInit();
@@ -68,15 +69,15 @@ export abstract class AuthenticationBase implements OnInit {
     this.oauthService.tokenValidationHandler = new JwksValidationHandler();
 
     this.oauthService.loadDiscoveryDocumentAndTryLogin().then((): void => {
-      console.debug('loadDiscoveryDocumentAndTryLogin success');
+      // console.debug('loadDiscoveryDocumentAndTryLogin success');
       const idToken = this.oauthService.getIdToken();
       if (idToken === null) {
         this.login();
       }
       AddHeadersInterceptor.idToken = idToken;
       this.isIdTokenSet = true;
-    }, (reason): void => {
-      console.error(`loadDiscoveryDocumentAndTryLogin error: ${reason}`);
+    }, (/*_reason*/): void => {
+      // console.error(`loadDiscoveryDocumentAndTryLogin error: ${_reason}`);
       this.login();
     });
   }
