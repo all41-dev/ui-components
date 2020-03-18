@@ -44,7 +44,7 @@ export abstract class AuthenticationBase implements OnInit {
     await this.config.init(this.baseUrl + '_config').then(() => {
       const authType = this.config.get('authType');
       // console.trace(`Auth type: ${authType}`)
-      if (authType === 'server') {
+      if (authType === 'server' || authType === undefined) {
         this.afterAuthInit();
       } else {
         // console.trace(`AuthenticationBase.ngOnInit() #2 baseUrl: ${this.baseUrl}`)

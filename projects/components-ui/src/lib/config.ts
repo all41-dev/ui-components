@@ -15,13 +15,13 @@ export class Config {
   public constructor(protected httpClient: HttpClient) {}
 
   public async init(configUri = `/_config`, userUri = '/user', tokenUri = '/token'): Promise<void> {
-    console.trace(`Config.init() configUri: ${configUri}`);
+    // console.trace(`Config.init() configUri: ${configUri}`);
     if (Config._serverConfig) {
       return;
     }
 
     if ( !Config._configPromise ) {
-      console.trace(`Config.init() #2 configUri: ${configUri}`);
+      // console.trace(`Config.init() #2 configUri: ${configUri}`);
       Config._configPromise = this.httpClient.get(configUri).toPromise().then((config: any): void => {
         // console.debug(config);
         Config._serverConfig = config;
