@@ -37,7 +37,9 @@ export class Config {
             }, (err): void => console.error(`Error while retriving ${tokenUri}: ${JSON.stringify(err)}`));
           }    
         }
-      }), (err): void => console.error(`Error while retriving ${configUri}: ${JSON.stringify(err)}`);
+      }), (err): void => {
+        console.error(`Error while retriving ${configUri}: ${JSON.stringify(err)}`);
+      };
     }
     await Config._configPromise;
 
@@ -46,7 +48,8 @@ export class Config {
   }
   public get(prop: string): any {
     if (!Config._serverConfig) {
-      throw new Error('Config has not been initialized, ensure init() has been invoked and finished successfully.');
+      // throw new Error('Config has not been initialized, ensure init() has been invoked and finished successfully.');
+      Config._serverConfig = {};
     }
     if (prop === 'user') { return Config._serverUser; }
     if (prop === 'token') { return Config._serverToken; }
