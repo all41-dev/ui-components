@@ -1,6 +1,6 @@
 import {Component, OnInit} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
-import {Column, EditType, RecordLayout, RecordListLayout, SelectionType, OptionsEditableColumn, RecordListComponent, RecordComponent} from '@harps/components-ui';
+import {Column, EditType, RecordLayout, RecordListLayout, SelectionType, OptionsEditableColumn, RecordListComponent, RecordComponent} from '@all41/ui-components';
 import { Subscription } from 'rxjs';
 
 @Component({
@@ -18,44 +18,44 @@ export class AppComponent implements OnInit {
     label: 'col without data',
     recordProperty: undefined,
     width: '200px',
-    html: (parent, record): string => `<span>I am the <a href='/foo/${record.id}'>${record.id}</a>!`,
+    html: (parent, record): string => `<span>I am the <a href='/foo/${record.country}'>${record.country}</a>!`,
     onClick: (parentComponent: RecordListComponent<any>, record): void => {
       alert(record.title);
       // to be implemented
     }
+  // }, {
+  //   label: 'Id',
+  //   editType: EditType.Number,
+  //   recordProperty: 'id',
+  //   isEditable: false,
+  //   width: '30px',
+  // }, {
+  //   label: 'User',
+  //   editType: EditType.Typeahead,
+  //   recordProperty: 'userId',
+  //   isEditable: true,
+  //   width: '300px',
+  //   options: [
+  //     { label: 'foo', value: 'foo'},
+  //     { label: 'bar', value: 'bar'},
+  //     { label: 'baz', value: 'baz'},
+  //   ],
+  //   //filterValue: 'is',
+  //   //isFilterVisible: true,
   }, {
-    label: 'Id',
-    editType: EditType.Number,
-    recordProperty: 'id',
+    label: 'country',
+    // editType: EditType.Text,
+    recordProperty: 'country',
     isEditable: false,
-    width: '30px',
-  }, {
-    label: 'User',
-    editType: EditType.Typeahead,
-    recordProperty: 'userId',
-    isEditable: true,
-    width: '300px',
-    options: [
-      { label: 'foo', value: 'foo'},
-      { label: 'bar', value: 'bar'},
-      { label: 'baz', value: 'baz'},
-    ],
-    //filterValue: 'is',
-    //isFilterVisible: true,
-  }, {
-    label: 'Title',
-    editType: EditType.Text,
-    recordProperty: 'title',
-    isEditable: true,
     isFilterVisible: true,
-    filterValue: 'ess',
+    // filterValue: 'ess',
     width: '300px'
-  }, {
-    label: 'Body',
-    editType: EditType.Textarea, // multiline
-    recordProperty: 'body',
-    isEditable: true,
-    width: '500px'
+  // }, {
+  //   label: 'Body',
+  //   editType: EditType.Textarea, // multiline
+  //   recordProperty: 'body',
+  //   isEditable: true,
+  //   width: '500px'
   // }, {
   //   label: 'L4',
   //   editType: EditType.Date, // date
@@ -88,7 +88,8 @@ export class AppComponent implements OnInit {
   }];
 
   // public sampleEntityUrl = 'http://localhost:3010/api/samples';
-  public sampleEntityUrl = 'https://jsonplaceholder.typicode.com/posts';
+  // public sampleEntityUrl = 'https://jsonplaceholder.typicode.com/posts';
+  public sampleEntityUrl = 'https://api.airvisual.com/v2/countries?key=b0b877d8-1c61-41fc-a228-933e729bd97e';// key expires on Apr 15 2021
 
   public recordLayout: RecordLayout<any> = {
     columns: this.columns,
@@ -159,7 +160,21 @@ export class AppComponent implements OnInit {
     primaryKeyProperty: 'id',
   };
   
-  public recordListLayout: RecordListLayout<any>;
+  public recordListLayout: RecordListLayout<any> = {
+    height: 500,
+    columns: this.columns,
+    primaryKeyProperty: 'country',
+    entityUrl: this.sampleEntityUrl,
+    selectionType: SelectionType.Single,
+    isDeleteEnabled: false,
+    isAddEnabled: false,
+    loadOnInit: false,
+    title: 'record list layout',
+    chunkSize: 20,
+    newRecTemplate: {
+      country: 'foobar'
+    }
+  };
 
   public columns2: Column<any>[] = [{
     label: 'Id',
@@ -233,26 +248,11 @@ export class AppComponent implements OnInit {
     //     return {value: r.id, label: r.name};
     //   }));
 
-    this.recordListLayout = {
-      height: 500,
-      columns: this.columns,
-      primaryKeyProperty: 'id',
-      entityUrl: this.sampleEntityUrl,
-      selectionType: SelectionType.Single,
-      isDeleteEnabled: true,
-      isAddEnabled: true,
-      loadOnInit: false,
-      title: 'record list layout',
-      chunkSize: 20,
-      newRecTemplate: {
-        value: 'foobar'
-      }
-    };
-    this.http.get(this.sampleEntityUrl).toPromise().then((res: any) => this.records = res);
+    this.http.get(this.sampleEntityUrl).toPromise().then((res: any) => this.records = res.data);
 
-    this.http.get('https://jsonplaceholder.typicode.com/users').toPromise().then((users: any[]): void => {
-      (this.recordListLayout.columns.find((c): boolean => c.recordProperty === 'userId') as OptionsEditableColumn<any>).options = users.map((u): any => ({label: u.name, value: u.id})),
-      (this.recordLayout.columns.find((c): boolean => c.recordProperty === 'userId') as OptionsEditableColumn<any>).options = users.map((u): any => ({label: u.name, value: u.id}))
-    })
+    // this.http.get('https://jsonplaceholder.typicode.com/users').toPromise().then((users: any[]): void => {
+    //   (this.recordListLayout.columns.find((c): boolean => c.recordProperty === 'userId') as OptionsEditableColumn<any>).options = users.map((u): any => ({label: u.name, value: u.id})),
+    //   (this.recordLayout.columns.find((c): boolean => c.recordProperty === 'userId') as OptionsEditableColumn<any>).options = users.map((u): any => ({label: u.name, value: u.id}))
+    // })
   }
 }

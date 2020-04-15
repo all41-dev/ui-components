@@ -33,7 +33,7 @@ export class RecordListComponent<T> implements OnInit, OnChanges {
           if (!(val && val.indexOf(f.filterValue.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase()) !== -1)) { return false; }
         } else {
           // only string filters are implemented yet.
-        }
+        } 
       }
       // all filters passed
       return true;
