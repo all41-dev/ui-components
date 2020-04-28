@@ -2,7 +2,7 @@ import {Component, ElementRef, EventEmitter, Input, OnChanges, OnInit, Output, S
 import {HttpClient, HttpErrorResponse} from '@angular/common/http';
 import scrollIntoView from 'scroll-into-view-if-needed';
 import {RecordListLayout, SelectionType} from '../../model/record-list-layout';
-import {EditType} from '../../model/column';
+import {EditType, Option} from '../../model/column';
 import {AccessFunctions} from '../access-functions';
 import { OptionsEditableColumn } from '../../model/column';
 
@@ -23,25 +23,38 @@ export class RecordListComponent<T> implements OnInit, OnChanges {
 
   public get filteredRecords(): T[] {
     if (!this.records) { return []; }
+    const activeFilters = this.layout.columns.filter((c): boolean => c.filterValue && c.filterValue !== '');
+    const cachedOptions: any = {};
     const res = this.records.filter((r): boolean => {
-      const activeFilters = this.layout.columns.filter((c): boolean => c.filterValue && c.filterValue !== '');
       for (const f of activeFilters) {
         // To be reactivated when implementing complex filters (number range, dates, list of values, etc..)
         // if (typeof f.filterValue === 'string' && f.filterValue !== '') {
-        const baseValue: string = r[f.recordProperty] ? 
-          typeof r[f.recordProperty] === 'string' ? r[f.recordProperty] as any :
-            `${r[f.recordProperty]}` : '';
-        const val = baseValue.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase();
-        if (val === undefined) return false;
 
-        const filter = f.filterValue.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase();
-        if(f.isEditable && [EditType.Dropdown, EditType.Typeahead].includes(f.editType)) {
-          const optionsVal = (f as OptionsEditableColumn<T>).options;
-          const options = typeof optionsVal === 'function' ? optionsVal() : optionsVal;
+        if (f.isEditable && [EditType.Dropdown, EditType.Typeahead].includes(f.editType)) {
+          let options: Option[] = cachedOptions[f.recordProperty];
+
+          if (!options) {
+            const optionsVal = (f as OptionsEditableColumn<T>).options;
+            options = typeof optionsVal === 'function' ? optionsVal() : optionsVal;
+            cachedOptions[f.recordProperty] = options;  
+          }
           const option = options.find((o) => o.value === r[f.recordProperty]);
           if (!option) return false;
+
+          if (option.label.includes(f.filterValue)) return true; // straight test (optimization)
+
+          const filter = f.filterValue.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase();
           return option.label.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase().includes(filter);
         } else {
+          const baseValue: string = r[f.recordProperty] ?
+            typeof r[f.recordProperty] === 'string' ?
+              r[f.recordProperty] as any :
+              `${r[f.recordProperty]}` : '';
+          if (baseValue.includes(f.filterValue)) return true; // straight test (optimization)
+
+          const val = baseValue.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase();
+          const filter = f.filterValue.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase();
+          // if (val === undefined) return false;// should not happen
           return val.includes(filter);
         }
         // } else {
