@@ -40,7 +40,7 @@ export class RecordListComponent<T> implements OnInit, OnChanges {
           const options = typeof optionsVal === 'function' ? optionsVal() : optionsVal;
           const option = options.find((o) => o.value === r[f.recordProperty]);
           if (!option) return false;
-          return option.label.includes(filter);
+          return option.label.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase().includes(filter);
         } else {
           return val.includes(filter);
         }
