@@ -4,6 +4,7 @@ import scrollIntoView from 'scroll-into-view-if-needed';
 import {RecordListLayout, SelectionType} from '../../model/record-list-layout';
 import {EditType} from '../../model/column';
 import {AccessFunctions} from '../access-functions';
+import { OptionsEditableColumn } from '../../model/column';
 
 @Component({
   selector: 'ift-record-list',
@@ -23,17 +24,29 @@ export class RecordListComponent<T> implements OnInit, OnChanges {
   public get filteredRecords(): T[] {
     if (!this.records) { return []; }
     const res = this.records.filter((r): boolean => {
-      const activeFilters = this.layout.columns.filter((c): boolean => c.filterValue !== undefined);
+      const activeFilters = this.layout.columns.filter((c): boolean => c.filterValue && c.filterValue !== '');
       for (const f of activeFilters) {
-        if (typeof f.filterValue === 'string' && f.filterValue !== '') {
-          const baseValue: string = r[f.recordProperty] ? 
-            typeof r[f.recordProperty] === 'string' ? r[f.recordProperty] as any :
-              `${r[f.recordProperty]}` : '';
-          const val = baseValue.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase();
-          if (!(val && val.indexOf(f.filterValue.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase()) !== -1)) { return false; }
+        // To be reactivated when implementing complex filters (number range, dates, list of values, etc..)
+        // if (typeof f.filterValue === 'string' && f.filterValue !== '') {
+        const baseValue: string = r[f.recordProperty] ? 
+          typeof r[f.recordProperty] === 'string' ? r[f.recordProperty] as any :
+            `${r[f.recordProperty]}` : '';
+        const val = baseValue.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase();
+        if (val === undefined) return false;
+
+        const filter = f.filterValue.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase();
+        if(f.isEditable && [EditType.Dropdown, EditType.Typeahead].includes(f.editType)) {
+          const optionsVal = (f as OptionsEditableColumn<T>).options;
+          const options = typeof optionsVal === 'function' ? optionsVal() : optionsVal;
+          const option = options.find((o) => o.value === r[f.recordProperty]);
+          if (!option) return false;
+          return option.label.includes(filter);
         } else {
-          // only string filters are implemented yet.
-        } 
+          return val.includes(filter);
+        }
+        // } else {
+        //   // only string filters are implemented yet.
+        // } 
       }
       // all filters passed
       return true;

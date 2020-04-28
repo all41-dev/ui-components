@@ -85,6 +85,25 @@ export class AppComponent implements OnInit {
   //     {value: 2, label: 'Second'},
   //     {value: 3, label: 'Third'},
   //   ]
+  },{
+    //   label: 'id',
+    //   recordProperty: 'id',
+    //   isEditable: false,
+    //   editType: EditType.Text,
+    //  }, {
+    label: 'status',
+    recordProperty: 'status',
+    isEditable: true,
+    editType: EditType.Dropdown,
+    width: '100px',
+    options: [
+      { label: 'nouveau', value: 'new' },
+      { label: 'en cours', value: 'open' },
+      { label: 'en attente', value: 'on-hold' },
+      { label: 'annulé', value: 'cancelled' },
+      { label: 'terminé', value: 'finished' },
+    ],
+    isFilterVisible: true,
   }];
 
   // public sampleEntityUrl = 'http://localhost:3010/api/samples';
@@ -248,7 +267,10 @@ export class AppComponent implements OnInit {
     //     return {value: r.id, label: r.name};
     //   }));
 
-    this.http.get(this.sampleEntityUrl).toPromise().then((res: any) => this.records = res.data);
+    this.http.get(this.sampleEntityUrl).toPromise().then((res: any) => this.records = res.data.map((r) => {
+      r.status = 'open';
+      return r;
+    }));
 
     // this.http.get('https://jsonplaceholder.typicode.com/users').toPromise().then((users: any[]): void => {
     //   (this.recordListLayout.columns.find((c): boolean => c.recordProperty === 'userId') as OptionsEditableColumn<any>).options = users.map((u): any => ({label: u.name, value: u.id})),

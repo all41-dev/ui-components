@@ -8,7 +8,7 @@ export interface BaseColumn<T> {
   isEditable: boolean;
   width?: string;
   isValid?: (record: any) => boolean;
-  filterValue?: any;
+  filterValue?: string;
   isFilterVisible?: boolean;
   onChange?: (rec: T, recList: T[]) => void;
 }

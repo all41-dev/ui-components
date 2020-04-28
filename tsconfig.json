@@ -5,17 +5,17 @@
     "importHelpers": true,
     "outDir": "./dist/out-tsc",
     "sourceMap": true,
-    "declaration": false,
-    "module": "es2015",
+    "declaration": true,
+    "module": "CommonJS",
     "moduleResolution": "node",
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
-    "target": "es5",
+    "target": "ES2020",
     "typeRoots": [
       "node_modules/@types"
     ],
     "lib": [
-      "es2017",
+      "ES2017",
       "dom"
     ],
     "paths": {
