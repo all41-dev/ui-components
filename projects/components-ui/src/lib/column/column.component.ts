@@ -17,7 +17,7 @@ export class ColumnComponent implements OnInit {
   public set filter(value: any) {
     this.filterValue = value;
     this.filterValueChange.emit(this.filterValue);
-    console.info(`filter value sent: ${this.filterValue}`);
+    // console.info(`filter value sent: ${this.filterValue}`);
   }
 
   public constructor() { }

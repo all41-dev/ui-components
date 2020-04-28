@@ -38,13 +38,18 @@ export class RecordListComponent<T> implements OnInit, OnChanges {
             options = typeof optionsVal === 'function' ? optionsVal() : optionsVal;
             cachedOptions[f.recordProperty] = options;  
           }
-          const option = options.find((o) => o.value === r[f.recordProperty]);
-          if (!option) return false;
+          let label: string = (r as any)[`__${f.recordProperty}Label`];
 
-          if (option.label.includes(f.filterValue)) return true; // straight test (optimization)
+          if(!label){
+            const option = options.find((o) => o.value === r[f.recordProperty]);
+            if (!option) return false;
+            label = (r as any)[`__${f.recordProperty}Label`] = option.label;
+          }
+
+          if (label.includes(f.filterValue)) return true; // straight test (optimization)
 
           const filter = f.filterValue.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase();
-          return option.label.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase().includes(filter);
+          return label.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase().includes(filter);
         } else {
           const baseValue: string = r[f.recordProperty] ?
             typeof r[f.recordProperty] === 'string' ?

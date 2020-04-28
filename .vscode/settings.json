@@ -1,0 +1,6 @@
+{
+    "mochaExplorer.logpanel": true,
+    "mochaExplorer.files": "**/*.spec.ts",
+    "mochaExplorer.require": "ts-node/register",
+    "mochaExplorer.nodePath": null,
+  }

@@ -14,7 +14,7 @@ describe('ValueComponent', (): void => {
   }));
 
   beforeEach((): void => {
-    fixture = TestBed.createComponent(ValueComponent);
+    fixture = TestBed.createComponent(ValueComponent as any);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
