@@ -18,8 +18,8 @@ export class DateValueComponent extends ValueComponent {
     }
     return this.value.toISOString().split('T')[0];
   }
-  public set strValue(val: string) {
-    this.value = new Date(val);
+  public set strValue(val: string | undefined) {
+    this.value = val ? new Date(val) : undefined;
   }
 
   public constructor() {
