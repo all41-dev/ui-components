@@ -1,6 +1,7 @@
 {
   "name": "@all41-dev/ui-components.host",
   "version": "1.2.0",
+  "repository": "https://npm.pkg.github.com/",
   "scripts": {
     "ng": "ng",
     "start": "npm run build:lib-debug && ng serve --port 4210",
