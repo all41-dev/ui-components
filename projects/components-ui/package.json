@@ -1,7 +1,7 @@
 {
-  "name": "@all41/ui-components",
+  "name": "@all41-dev/ui-components",
   "author": "eric@all41.dev",
-  "description": "Angular library for ui",
+  "description": "Angular library for ui components",
   "peerDependencies": {
     "@angular/common": "^9.1.0",
     "@angular/core": "^9.1.0"

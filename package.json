@@ -1,5 +1,5 @@
 {
-  "name": "@all41/ui-components.host",
+  "name": "@all41-dev/ui-components.host",
   "version": "1.0.7",
   "scripts": {
     "ng": "ng",

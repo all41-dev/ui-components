@@ -5,6 +5,7 @@ import {RecordListLayout, SelectionType} from '../../model/record-list-layout';
 import {EditType, Option} from '../../model/column';
 import {AccessFunctions} from '../access-functions';
 import { OptionsEditableColumn } from '../../model/column';
+import { isArray } from 'util';
 
 @Component({
   selector: 'ift-record-list',
@@ -494,15 +495,27 @@ export class RecordListComponent<T> implements OnInit, OnChanges {
   }
   public click(r: T): void {
     // console.info('click');
-    this.layout.click === undefined ?
-      this.toggleSelection(r) :
+    if (this.layout.click) {
       this.layout.click(r);
+      return;
+    }
+    if(!this.layout.selectionTrigger || (typeof this.layout.selectionTrigger === 'string' && ['dblclick', 'contextmenu'].includes(this.layout.selectionTrigger))) return;
+
+    if(this.layout.selectionTrigger.includes('click')) {
+      this.toggleSelection(r);
+    }
   }
   public dblclick(r: T): void {
     // console.info('dblclick');
-    this.layout.dblClick === undefined ?
-      this.toggleSelection(r) :
+    if (this.layout.dblClick) {
       this.layout.dblClick(r);
+      return;
+    }
+    if(!this.layout.selectionTrigger || (typeof this.layout.selectionTrigger === 'string' && ['click', 'contextmenu'].includes(this.layout.selectionTrigger))) return;
+
+    if(this.layout.selectionTrigger.includes('dblclick')) {
+      this.toggleSelection(r);
+    }
   }
   public toggleContextMenu(event): void {
     const target = event.target;

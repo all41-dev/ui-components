@@ -192,7 +192,8 @@ export class AppComponent implements OnInit {
     chunkSize: 20,
     newRecTemplate: {
       country: 'foobar'
-    }
+    },
+    selectionTrigger: 'click',
   };
 
   public columns2: Column<any>[] = [{
