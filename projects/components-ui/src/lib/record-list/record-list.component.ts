@@ -499,9 +499,9 @@ export class RecordListComponent<T> implements OnInit, OnChanges {
       this.layout.click(r);
       return;
     }
-    if(!this.layout.selectionTrigger || (typeof this.layout.selectionTrigger === 'string' && ['dblclick', 'contextmenu'].includes(this.layout.selectionTrigger))) return;
+    if((typeof this.layout.selectionTrigger === 'string' && ['dblclick', 'contextmenu'].includes(this.layout.selectionTrigger))) return;
 
-    if(this.layout.selectionTrigger.includes('click')) {
+    if(!this.layout.selectionTrigger || this.layout.selectionTrigger.includes('click')) {
       this.toggleSelection(r);
     }
   }
