@@ -10,7 +10,7 @@ export class AddHeadersInterceptor implements HttpInterceptor {
   public static idToken: string = undefined;
   public intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
     // Clone the request to add the new header
-    if ( req.headers.has('Authorization') || AddHeadersInterceptor.idToken === undefined) {
+    if ( req.headers.has('Authorization') || !AddHeadersInterceptor.idToken) {
       return next.handle(req);
     }
 

@@ -5,7 +5,7 @@ import { OAuthModule } from 'angular-oauth2-oidc';
 import { FormsModule } from '@angular/forms';
 
 import { AppComponent } from './app.component';
-import { ComponentsUiModule, AddHeadersInterceptor } from '@all41/ui-components';
+import { ComponentsUiModule, AddHeadersInterceptor } from '@all41-dev/ui-components';
 
 @NgModule({
   declarations: [
