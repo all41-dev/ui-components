@@ -127,11 +127,11 @@
         </ng-template>
       </ng-container>
     </ng-container>
-    <span #rowCommand class="row-command" [style.visibility]="layout.isDeleteEnabled ? 'visible' : 'hidden'"> <!--[style.left]="'' + (rowCommand.parentElement.clientWidth - rowCommand.clientWidth) + 'px'">-->
+    <span #rowCommand class="row-command" [style.visibility]="layout.isDeleteEnabled || layout.selectionTrigger?.includes('contextmenu') ? 'visible' : 'hidden'"> <!--[style.left]="'' + (rowCommand.parentElement.clientWidth - rowCommand.clientWidth) + 'px'">-->
       <button role="button" (click)="toggleContextMenu($event)">...</button>
       <div #rowMenu style="display: none;" (blur)="hideContextMenu($event)" tabindex="0">
         <button (click)="deleteRecord(record)" [style.visibility]="layout.isDeleteEnabled ? 'visible' : 'hidden'" title="delete">delete</button>
-        <!-- <button (click)="toggleSelection(record)" [style.visibility]="+layout.selectionType === 0 ? 'hidden' : 'visible'" title="select">select</button> -->
+        <button (click)="toggleSelection(record)" [style.visibility]="+layout.selectionType === 0 || !layout.selectionTrigger?.includes('contextmenu') ? 'hidden' : 'visible'" title="select">select</button>
       </div>
     </span>
   </div>
