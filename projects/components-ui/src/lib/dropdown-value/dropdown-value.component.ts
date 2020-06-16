@@ -37,6 +37,6 @@ export class DropdownValueComponent extends ValueComponent {
   public get displayValue(): string {
     const res = this.optionsArr.find((opt): boolean => opt.value === this.value);
 
-    return res === undefined ? this.value : res.label;
+    return res?.label || this.value;
   }
 }

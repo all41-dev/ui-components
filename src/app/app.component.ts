@@ -96,7 +96,7 @@ export class AppComponent implements OnInit {
     isEditable: true,
     editType: EditType.Dropdown,
     width: '100px',
-    options: [
+    options: () => [
       { label: 'nouveau', value: 'new' },
       { label: 'en cours', value: 'open' },
       { label: 'en attente', value: 'on-hold' },
