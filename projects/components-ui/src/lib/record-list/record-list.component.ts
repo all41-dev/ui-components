@@ -18,6 +18,13 @@ export class RecordListComponent<T> extends AuthenticationBase implements OnChan
   @Input() public layout: RecordListLayout<T>;
   @Input() public selectedRecords: T[] = [];
   @Input() public url: string;
+  @Input() public set authCompleted(value: boolean) {
+    if (!this._authCompleted && this._loadOnAuthCompleted && value) {
+      this.load();
+      this._loadOnAuthCompleted = false;
+    }
+    this._authCompleted = value;
+  };
   @Output() public selectedRecordsChange: EventEmitter<T[]> = new EventEmitter<T[]>();
   @Input() public records: T[] = [];
   @Output() public recordsChange: EventEmitter<T[]> = new EventEmitter<T[]>();
@@ -112,6 +119,8 @@ export class RecordListComponent<T> extends AuthenticationBase implements OnChan
   public deleteRestricted = false;
   public postRestricted = false;
 
+  private _authCompleted = false;
+  private _loadOnAuthCompleted = false;
   // private _filterHash = '';
   // public get filterHash() {
   //   const ctFilterHash = this.layout.columns.map((c) => c.filterValue || '').reduce((a, b) => `${a}|${b}`);
@@ -186,7 +195,11 @@ export class RecordListComponent<T> extends AuthenticationBase implements OnChan
     this.currentChunk = 0;
 
     if (this.loadOnInit && this.url !== undefined) {
-      this.load();
+      if (this._authCompleted) {
+        this.load();
+      } else {
+        this._loadOnAuthCompleted = true;
+      }
     }
     if (this.layout.click !== undefined) {
       this.cursorStyle = 'pointer';
