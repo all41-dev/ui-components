@@ -5,14 +5,16 @@ import {RecordListLayout, SelectionType} from '../../model/record-list-layout';
 import {EditType, Option} from '../../model/column';
 import {AccessFunctions} from '../access-functions';
 import { OptionsEditableColumn } from '../../model/column';
-import { isArray } from 'util';
+import { AuthenticationBase } from '../authentication-base';
+import { OAuthService } from 'angular-oauth2-oidc';
+import { Config } from '../config';
 
 @Component({
   selector: 'ift-record-list',
   templateUrl: './record-list.component.html',
   styleUrls: ['./record-list.component.css']
 })
-export class RecordListComponent<T> implements OnInit, OnChanges {
+export class RecordListComponent<T> extends AuthenticationBase implements OnChanges {
   @Input() public layout: RecordListLayout<T>;
   @Input() public selectedRecords: T[] = [];
   @Input() public url: string;
@@ -123,7 +125,8 @@ export class RecordListComponent<T> implements OnInit, OnChanges {
   // }
 
   // eslint-disable-next-line @typescript-eslint/no-parameter-properties
-  public constructor(private http: HttpClient, protected access: AccessFunctions ) {
+  public constructor(private http: HttpClient, protected access: AccessFunctions, protected oauthService: OAuthService, protected config: Config ) {
+    super(oauthService, config);
     this.inst = this;
     this.selectedRecordsChange.emit(this.selectedRecords);
     this.recordsChange.emit(this.records);
@@ -160,7 +163,7 @@ export class RecordListComponent<T> implements OnInit, OnChanges {
   }
 
   // todo: introduce filters
-  public ngOnInit(): void {
+  public async afterAuthInit(): Promise<void> {
     // this.layout = new Proxy(this.layout, {set: this.layoutUpdated})
     // this.layout.reload = this.load;
     // this.layoutChange.emit(this.layout);
