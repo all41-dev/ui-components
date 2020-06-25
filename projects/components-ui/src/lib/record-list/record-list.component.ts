@@ -164,6 +164,7 @@ export class RecordListComponent<T> extends AuthenticationBase implements OnChan
 
   // todo: introduce filters
   public async afterAuthInit(): Promise<void> {
+    super.afterAuthInit();
     // this.layout = new Proxy(this.layout, {set: this.layoutUpdated})
     // this.layout.reload = this.load;
     // this.layoutChange.emit(this.layout);
