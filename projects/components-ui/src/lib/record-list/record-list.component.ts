@@ -20,6 +20,7 @@ export class RecordListComponent<T> extends AuthenticationBase implements OnChan
   @Input() public url: string;
   @Input() public set authCompleted(value: boolean) {
     if (!this._authCompleted && this._loadOnAuthCompleted && value) {
+      console.info('load from authCompleted');
       this.load();
       this._loadOnAuthCompleted = false;
     }
@@ -196,6 +197,7 @@ export class RecordListComponent<T> extends AuthenticationBase implements OnChan
 
     if (this.loadOnInit && this.url !== undefined) {
       if (this._authCompleted) {
+        console.info('load from afterAuthInit');
         this.load();
       } else {
         this._loadOnAuthCompleted = true;
