@@ -1,13 +1,14 @@
-import {Component, ElementRef, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChange, ViewChild} from '@angular/core';
+import {Component, ElementRef, EventEmitter, Input, OnChanges, Output, SimpleChange, ViewChild} from '@angular/core';
 import {HttpClient, HttpErrorResponse} from '@angular/common/http';
 import scrollIntoView from 'scroll-into-view-if-needed';
-import {RecordListLayout, SelectionType} from '../../model/record-list-layout';
+import {RecordListLayout} from '../../model/record-list-layout';
 import {EditType, Option} from '../../model/column';
 import {AccessFunctions} from '../access-functions';
 import { OptionsEditableColumn } from '../../model/column';
 import { AuthenticationBase } from '../authentication-base';
 import { OAuthService } from 'angular-oauth2-oidc';
 import { Config } from '../config';
+import { RecordLayout } from '../../model/record-layout';
 
 @Component({
   selector: 'ift-record-list',
@@ -15,7 +16,7 @@ import { Config } from '../config';
   styleUrls: ['./record-list.component.css']
 })
 export class RecordListComponent<T> extends AuthenticationBase implements OnChanges {
-  @Input() public layout: RecordListLayout<T>;
+  @Input() public layout: RecordListLayout<T> & Partial<RecordLayout<T>>;
   @Input() public selectedRecords: T[] = [];
   @Input() public url: string;
   @Input() public set authCompleted(value: boolean) {
@@ -122,17 +123,6 @@ export class RecordListComponent<T> extends AuthenticationBase implements OnChan
 
   private _authCompleted = false;
   private _loadOnAuthCompleted = false;
-  // private _filterHash = '';
-  // public get filterHash() {
-  //   const ctFilterHash = this.layout.columns.map((c) => c.filterValue || '').reduce((a, b) => `${a}|${b}`);
-  //   if (ctFilterHash !== this._filterHash) {
-  //     // console.debug(`${this._filterHash} --> ${ctFilterHash}`);
-  //     this._filterHash = ctFilterHash;
-  //     this.filterRecords = this.filteredRecords;
-  //     this.filterRecordsChange.emit(this.filterRecords);
-  //   }
-  //   return this._filterHash;
-  // }
 
   // eslint-disable-next-line @typescript-eslint/no-parameter-properties
   public constructor(private http: HttpClient, protected access: AccessFunctions, protected oauthService: OAuthService, protected config: Config ) {
@@ -179,7 +169,7 @@ export class RecordListComponent<T> extends AuthenticationBase implements OnChan
     // this.layout.reload = this.load;
     // this.layoutChange.emit(this.layout);
     this.records = [];
-    if (this.layout.selectionType === undefined) { this.layout.selectionType = SelectionType.Single; }
+    if (this.layout.selectionType === undefined) { this.layout.selectionType = 'single'; }
     if (this.layout.isDeleteEnabled === undefined) { this.layout.isDeleteEnabled = false; }
     if (this.layout.isAddEnabled === undefined) { this.layout.isAddEnabled = false; }
     if (this.layout.newRecTemplate === undefined) { this.layout.newRecTemplate = {}; }
@@ -488,16 +478,16 @@ export class RecordListComponent<T> extends AuthenticationBase implements OnChan
     const idx = this.selectedRecords.indexOf(r);
 
     switch (this.layout.selectionType) {
-      case SelectionType.None:
+      case 'none':
         return;
-      case SelectionType.Multiple:
+      case 'multiple':
         if (idx === -1) {
           this.selectedRecords.push(r);
         } else {
           this.selectedRecords.splice(idx, 1);
         }
         break;
-      case SelectionType.Single:
+      case 'single':
       default:
         this.selectedRecords.splice(0, this.selectedRecords.length);
         if (idx === -1) {

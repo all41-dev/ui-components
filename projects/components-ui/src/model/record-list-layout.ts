@@ -4,7 +4,7 @@ import {RecordBaseLayout} from './record-base-layout';
 export interface RecordListLayout<T> extends RecordBaseLayout<T> {
   height: number;
   /** @default None */
-  selectionType?: SelectionType;
+  selectionType?: 'none' | 'single' | 'multiple';
   /** @default click */
   selectionTrigger?: 'click' | 'dblclick' | 'contextmenu' | ('click' | 'dblclick' | 'contextmenu')[];
   /** @default false */
@@ -19,10 +19,9 @@ export interface RecordListLayout<T> extends RecordBaseLayout<T> {
   /** @default all records (no pagination) */
   chunkSize?: number;
   onRecChange?: (rec: T, recList: T[]) => void;
-}
-
-export enum SelectionType {
-  None,
-  Single,
-  Multiple
+  /**
+   * @description active only if selectionType is single
+   * @default none
+   * */
+  detailPosition?: 'none' | 'bottom' | 'right' | 'top' | 'left';
 }

@@ -147,3 +147,4 @@
     <button #newButton [style.visibility]="layout.isAddEnabled ? 'visible' : 'hidden'" role="button" (click)="new()">New</button>
   </span>
 </div>
+<ift-record *ngIf="selectedRecords.length === 1" [record]="selectedRecords[0]" [layout]="layout"></ift-record>
