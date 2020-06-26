@@ -49,7 +49,7 @@ export abstract class AuthenticationBase implements OnInit {
         // console.trace(`AuthenticationBase.ngOnInit() #2 baseUrl: ${this.baseUrl}`)
         this.config.getAuthConfig(this.baseUrl + '_config').then((authConfig): void => {
           this.authInit(authConfig);
-          this.afterAuthInit();
+          // this.afterAuthInit();
         });  
       }
     });
@@ -81,7 +81,7 @@ export abstract class AuthenticationBase implements OnInit {
     });
   }
 
-  protected afterAuthInit(): void {
+  protected afterAuthInit(): void | Promise<void> {
     this.user = this.config.get('user');
 
     this.token = this.config.get('token');
