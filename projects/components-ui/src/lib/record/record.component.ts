@@ -1,7 +1,6 @@
 import {HttpClient} from '@angular/common/http';
 import {Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChange} from '@angular/core';
 import {RecordLayout} from '../../model/record-layout';
-import {EditType} from '../../model/column';
 import { AccessFunctions } from '../access-functions';
 //import AccessFunctions from '../access-functions';
 
@@ -27,7 +26,6 @@ export class RecordComponent<T> implements OnInit, OnChanges {
   public valuesWidth = 'inherit';
   public componentWidth = 'inherit';
   public title = '';
-  public EditType = EditType;
   public currentUrl: string = undefined;
 
   // eslint-disable-next-line @typescript-eslint/no-parameter-properties
@@ -164,7 +162,6 @@ export class RecordComponent<T> implements OnInit, OnChanges {
       this.currentUrl = undefined;
       // No id provided, nothing displayed if read only, new record if edit
       if (!this.record) {
-        // eslint-disable-next-line @typescript-eslint/no-object-literal-type-assertion
         this.record = {} as T;
         this.recordChange.emit(this.record);
       }

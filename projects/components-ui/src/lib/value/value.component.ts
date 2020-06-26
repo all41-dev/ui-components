@@ -4,7 +4,9 @@ import { RecordListComponent } from '../record-list/record-list.component';
 import { RecordComponent } from '../record/record.component';
 
 export abstract class ValueComponent implements OnInit {
-  public get isEdit(): boolean { return this.columnLayout ? this.columnLayout.isEditable : false; };
+  public get isEdit(): boolean {
+    return ['create', 'update'].includes(this.parentIsList ? this.columnLayout.listDisplay : this.columnLayout.detailDisplay);
+  };
   @Input() public hasFocus = false;
   @Input() public modified: boolean;
   @Input() public parentComponent: RecordComponent<any>|RecordListComponent<any>;
@@ -12,6 +14,7 @@ export abstract class ValueComponent implements OnInit {
   @Input() public record: any;
   @Output() public modifiedChange: EventEmitter<boolean> = new EventEmitter<boolean>();
   @Output() public tabEvent: EventEmitter<any> = new EventEmitter<any>();
+  private get parentIsList(): boolean { return this.parentComponent instanceof RecordListComponent; }
 
   public value: any; // to be overridden with correct type in derived classes
 
@@ -19,14 +22,12 @@ export abstract class ValueComponent implements OnInit {
   protected initialValue: any;
 
   public get html(): string {
-    if(!this.columnLayout.isEditable && (this.columnLayout as ReadonlyColumn<any>).html) {
+    if(!this.isEdit && (this.columnLayout as ReadonlyColumn<any>).html) {
       const html = (this.columnLayout as ReadonlyColumn<any>).html;
       return typeof html === 'string' ? html : html(this.parentComponent, this.record);
     }
     // console.debug(`prop value: ${this.value}`);
     return this.value === '' ? '&nbsp;' : this.value;
-  }
-  public constructor() {
   }
 
   public ngOnInit(): void {

@@ -5,7 +5,8 @@ import { RecordListComponent } from '../lib/record-list/record-list.component';
 export interface BaseColumn<T> {
   label: string;
   recordProperty: keyof T|undefined;
-  isEditable: boolean;
+  listDisplay: 'none' | 'read' | 'create' | 'update';
+  detailDisplay: 'none' | 'read' | 'create' | 'update';
   width?: string;
   isValid?: (record: any) => boolean;
   filterValue?: string;
@@ -14,32 +15,22 @@ export interface BaseColumn<T> {
 }
 
 export interface ReadonlyColumn<T> extends BaseColumn<T> {
-  isEditable: false;
+  listDisplay: 'none' | 'read';
+  detailDisplay: 'none' | 'read';
   html?: ((parentComponent: RecordComponent<T>|RecordListComponent<T>, record: any) => string)|string;
   onClick?: (parentComponent: RecordComponent<T>|RecordListComponent<T>, record: any) => void;
 }
 
 export interface EditableColumn<T> extends BaseColumn<T> {
-  isEditable: true;
-  editType: EditType;
+  editType: 'text' | 'number' | 'date' | 'textarea' | 'dropdown' | 'typeahead' | 'password';
 }
 
 export interface OptionsEditableColumn<T> extends EditableColumn<T> {
-  editType: EditType.Dropdown|EditType.Typeahead;
+  editType: 'typeahead' | 'dropdown';
   options: Option[] | (() => Option[]);
 }
 
-export type Column<T> = ReadonlyColumn<T>|EditableColumn<T>|OptionsEditableColumn<T>;
-
-export enum EditType {
-  Text,
-  Number,
-  Date,
-  Textarea,
-  Dropdown,
-  Typeahead,
-  Password
-}
+export type Column<T> = ReadonlyColumn<T> | EditableColumn<T> | OptionsEditableColumn<T>;
 
 export interface Option {
   value: any;

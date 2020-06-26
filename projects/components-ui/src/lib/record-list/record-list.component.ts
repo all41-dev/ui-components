@@ -2,7 +2,7 @@ import {Component, ElementRef, EventEmitter, Input, OnChanges, Output, SimpleCha
 import {HttpClient, HttpErrorResponse} from '@angular/common/http';
 import scrollIntoView from 'scroll-into-view-if-needed';
 import {RecordListLayout} from '../../model/record-list-layout';
-import {EditType, Option} from '../../model/column';
+import { Option, EditableColumn } from '../../model/column';
 import {AccessFunctions} from '../access-functions';
 import { OptionsEditableColumn } from '../../model/column';
 import { AuthenticationBase } from '../authentication-base';
@@ -42,7 +42,7 @@ export class RecordListComponent<T> extends AuthenticationBase implements OnChan
         // To be reactivated when implementing complex filters (number range, dates, list of values, etc..)
         // if (typeof f.filterValue === 'string' && f.filterValue !== '') {
 
-        if (f.isEditable && [EditType.Dropdown, EditType.Typeahead].includes(f.editType)) {
+        if (!['none', 'read'].includes(f.listDisplay) && ['typeahead', 'dropdown'].includes((f as EditableColumn<T>).editType)) {
           let options: Option[] = cachedOptions[f.recordProperty];
 
           if (!options) {
@@ -92,7 +92,6 @@ export class RecordListComponent<T> extends AuthenticationBase implements OnChan
   public inst: RecordListComponent<T>;
 
   public title = '';
-  public EditType = EditType;
   public cursorStyle = 'inherit';
   public loadOnInit = true;
 
@@ -545,6 +544,6 @@ export class RecordListComponent<T> extends AuthenticationBase implements OnChan
   public isReadOnly(): boolean {
     return !(this.layout.isAddEnabled ||
       this.layout.isDeleteEnabled ||
-      this.layout.columns.some((c): boolean => c.isEditable));
+      this.layout.columns.some((c): boolean => ['create', 'update'].includes(c.listDisplay)));
   }
 }

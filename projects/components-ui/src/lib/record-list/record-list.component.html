@@ -27,7 +27,7 @@
       <ng-container [ngSwitch]="col.editType">
         <ng-template [ngSwitchCase]="undefined">
           <ift-text-value
-            [attr.edit]="patchRestricted || !col.isEditable ? null : ''"
+            [attr.edit]="patchRestricted || ['none', 'read'].includes(col.listDisplay) ? null : ''"
             [(modified)]="record[col.recordProperty + 'Modified']"
             [(value)]="record[col.recordProperty]"
             (modifiedChange)="col.onChange ? col.onChange(record, records) : undefined;
@@ -38,9 +38,9 @@
             (tabEvent)="tab($event)">
           </ift-text-value>
         </ng-template>
-        <ng-template [ngSwitchCase]="EditType.Text">
+        <ng-template ngSwitchCase="text">
           <ift-text-value
-            [attr.edit]="patchRestricted || !col.isEditable ? null : ''"
+            [attr.edit]="patchRestricted || ['none', 'read'].includes(col.listDisplay) ? null : ''"
             [(modified)]="record[col.recordProperty + 'Modified']"
             [(value)]="record[col.recordProperty]"
             (modifiedChange)="col.onChange ? col.onChange(record, records) : undefined;
@@ -51,9 +51,9 @@
             (tabEvent)="tab($event)">
           </ift-text-value>
         </ng-template>
-        <ng-template [ngSwitchCase]="EditType.Password">
+        <ng-template ngSwitchCase="password">
           <ift-password-value
-            [attr.edit]="patchRestricted || !col.isEditable ? null : ''"
+            [attr.edit]="patchRestricted || ['none', 'read'].includes(col.listDisplay) ? null : ''"
             [(modified)]="record[col.recordProperty + 'Modified']"
             [(value)]="record[col.recordProperty]"
             (modifiedChange)="col.onChange ? col.onChange(record, records) : undefined;
@@ -63,9 +63,9 @@
               [columnLayout]="col"
               (tabEvent)="tab($event)"></ift-password-value>
         </ng-template>
-        <ng-template [ngSwitchCase]="EditType.Dropdown">
+        <ng-template ngSwitchCase="dropdown">
           <ift-dropdown-value
-            [attr.edit]="patchRestricted || !col.isEditable ? null : ''"
+            [attr.edit]="patchRestricted || ['none', 'read'].includes(col.listDisplay) ? null : ''"
             [(modified)]="record[col.recordProperty + 'Modified']"
             [(value)]="record[col.recordProperty]"
             (modifiedChange)="col.onChange ? col.onChange(record, records) : undefined;
@@ -76,9 +76,9 @@
             [columnLayout]="col"
             (tabEvent)="tab($event)"></ift-dropdown-value>
         </ng-template>
-        <ng-template [ngSwitchCase]="EditType.Typeahead">
+        <ng-template ngSwitchCase="typeahead">
           <ift-typeahead-value
-            [attr.edit]="patchRestricted || !col.isEditable ? null : ''"
+            [attr.edit]="patchRestricted || ['none', 'read'].includes(col.listDisplay) ? null : ''"
             [(modified)]="record[col.recordProperty + 'Modified']"
             [(value)]="record[col.recordProperty]"
             (modifiedChange)="col.onChange ? col.onChange(record, records) : undefined;
@@ -89,9 +89,9 @@
             [columnLayout]="col"
             (tabEvent)="tab($event)"></ift-typeahead-value>
         </ng-template>
-        <ng-template [ngSwitchCase]="EditType.Textarea">
+        <ng-template ngSwitchCase="textarea">
           <ift-textarea-value
-            [attr.edit]="patchRestricted || !col.isEditable ? null : ''"
+            [attr.edit]="patchRestricted || ['none', 'read'].includes(col.listDisplay) ? null : ''"
             [(modified)]="record[col.recordProperty + 'Modified']"
             [(value)]="record[col.recordProperty]"
             (modifiedChange)="col.onChange ? col.onChange(record, records) : undefined;
@@ -101,9 +101,9 @@
               [columnLayout]="col"
               (tabEvent)="tab($event)"></ift-textarea-value>
         </ng-template>
-        <ng-template [ngSwitchCase]="EditType.Number">
+        <ng-template ngSwitchCase="number">
           <ift-number-value
-            [attr.edit]="patchRestricted || !col.isEditable ? null : ''"
+            [attr.edit]="patchRestricted || ['none', 'read'].includes(col.listDisplay) ? null : ''"
             [(modified)]="record[col.recordProperty + 'Modified']"
             [(value)]="record[col.recordProperty]"
             (modifiedChange)="col.onChange ? col.onChange(record, records) : undefined;
@@ -113,9 +113,9 @@
             [columnLayout]="col"
             (tabEvent)="tab($event)"></ift-number-value>
         </ng-template>
-        <ng-template [ngSwitchCase]="EditType.Date">
+        <ng-template ngSwitchCase="date">
           <ift-date-value
-            [attr.edit]="patchRestricted || !col.isEditable ? null : ''"
+            [attr.edit]="patchRestricted || ['none', 'read'].includes(col.listDisplay) ? null : ''"
             [(modified)]="record[col.recordProperty + 'Modified']"
             [(value)]="record[col.recordProperty]"
             (modifiedChange)="col.onChange ? col.onChange(record, records) : undefined;
@@ -147,4 +147,4 @@
     <button #newButton [style.visibility]="layout.isAddEnabled ? 'visible' : 'hidden'" role="button" (click)="new()">New</button>
   </span>
 </div>
-<ift-record *ngIf="selectedRecords.length === 1" [record]="selectedRecords[0]" [layout]="layout"></ift-record>
+<ift-record *ngIf="layout.detailPosition === 'bottom' && selectedRecords.length === 1" [record]="selectedRecords[0]" [layout]="layout"></ift-record>

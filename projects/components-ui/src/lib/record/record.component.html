@@ -22,7 +22,7 @@
           [columnLayout]="col"
           (tabEvent)="tab($event)"></ift-text-value>
       </ng-template>
-      <ng-template [ngSwitchCase]="EditType.Text">
+      <ng-template ngSwitchCase="text">
         <ift-text-value
           [attr.edit]="patchRestricted || !col.isEditable ? null : ''"
           [(modified)]="record[col.recordProperty + 'Modified']"
@@ -35,7 +35,7 @@
           [columnLayout]="col"
           (tabEvent)="tab($event)"></ift-text-value>
       </ng-template>
-      <ng-template [ngSwitchCase]="EditType.Password">
+      <ng-template ngSwitchCase="password">
         <ift-password-value
           [attr.edit]="patchRestricted || !col.isEditable ? null : ''"
           [(modified)]="record[col.recordProperty + 'Modified']"
@@ -46,7 +46,7 @@
           [columnLayout]="col"
           (tabEvent)="tab($event)"></ift-password-value>
       </ng-template>
-      <ng-template [ngSwitchCase]="EditType.Dropdown">
+      <ng-template ngSwitchCase="dropdown">
         <ift-dropdown-value
           [attr.edit]="patchRestricted || !col.isEditable ? null : ''"
           [(modified)]="record[col.recordProperty + 'Modified']"
@@ -58,7 +58,7 @@
           [columnLayout]="col"
           (tabEvent)="tab($event)"></ift-dropdown-value>
       </ng-template>
-      <ng-template [ngSwitchCase]="EditType.Typeahead">
+      <ng-template ngSwitchCase="typeahead">
         <ift-typeahead-value
           [attr.edit]="patchRestricted || !col.isEditable ? null : ''"
           [(modified)]="record[col.recordProperty + 'Modified']"
@@ -69,7 +69,7 @@
           [columnLayout]="col"
           (tabEvent)="tab($event)"></ift-typeahead-value>
       </ng-template>
-      <ng-template [ngSwitchCase]="EditType.Textarea">
+      <ng-template ngSwitchCase="textarea">
         <ift-textarea-value
           [attr.edit]="patchRestricted || !col.isEditable ? null : ''"
           [(modified)]="record[col.recordProperty + 'Modified']"
@@ -80,7 +80,7 @@
           [columnLayout]="col"
           (tabEvent)="tab($event)"></ift-textarea-value>
       </ng-template>
-      <ng-template [ngSwitchCase]="EditType.Number">
+      <ng-template ngSwitchCase="number">
         <ift-number-value
           [attr.edit]="patchRestricted || !col.isEditable ? null : ''"
           [(modified)]="record[col.recordProperty + 'Modified']"
@@ -91,7 +91,7 @@
           [columnLayout]="col"
           (tabEvent)="tab($event)"></ift-number-value>
       </ng-template>
-      <ng-template [ngSwitchCase]="EditType.Date">
+      <ng-template ngSwitchCase="date">
         <ift-date-value
           [attr.edit]="patchRestricted || !col.isEditable ? null : ''"
           [(modified)]="record[col.recordProperty + 'Modified']"

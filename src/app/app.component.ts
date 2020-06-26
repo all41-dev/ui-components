@@ -1,6 +1,6 @@
 import {Component, OnInit} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
-import {Column, EditType, RecordLayout, RecordListLayout, SelectionType, OptionsEditableColumn, RecordListComponent, RecordComponent} from '@all41/ui-components';
+import {Column, RecordLayout, RecordListLayout, RecordListComponent, RecordComponent} from '@all41-dev/ui-components';
 import { Subscription } from 'rxjs';
 
 @Component({
@@ -14,7 +14,8 @@ export class AppComponent implements OnInit {
   public fRecs;
 
   public columns: Column<any>[] = [{
-    isEditable: false,
+    listDisplay: 'read',
+    detailDisplay: 'read',
     label: 'col without data',
     recordProperty: undefined,
     width: '200px',
@@ -46,7 +47,8 @@ export class AppComponent implements OnInit {
     label: 'country',
     // editType: EditType.Text,
     recordProperty: 'country',
-    isEditable: false,
+    listDisplay: 'read',
+    detailDisplay: 'read',
     isFilterVisible: true,
     // filterValue: 'ess',
     width: '300px'
@@ -93,10 +95,11 @@ export class AppComponent implements OnInit {
     //  }, {
     label: 'status',
     recordProperty: 'status',
-    isEditable: true,
-    editType: EditType.Dropdown,
+    listDisplay: 'update',
+    detailDisplay: 'update',
+    editType: 'dropdown',
     width: '100px',
-    options: () => [
+    options: (): any => [
       { label: 'nouveau', value: 'new' },
       { label: 'en cours', value: 'open' },
       { label: 'en attente', value: 'on-hold' },
@@ -138,8 +141,9 @@ export class AppComponent implements OnInit {
       //  }, {
       label: 'status',
       recordProperty: 'status',
-      isEditable: true,
-      editType: EditType.Dropdown,
+      listDisplay: 'update',
+      detailDisplay: 'update',
+      editType: 'dropdown',
       options: [
         { label: 'nouveau', value: 'new' },
         { label: 'en cours', value: 'open' },
@@ -150,22 +154,26 @@ export class AppComponent implements OnInit {
     }, {
       label: 'titre',
       recordProperty: 'title',
-      isEditable: true,
-      editType: EditType.Text,
+      listDisplay: 'update',
+      detailDisplay: 'update',
+      editType: 'text',
     }, {
       label: 'description',
       recordProperty: 'description',
-      isEditable: true,
-      editType: EditType.Textarea,
+      listDisplay: 'update',
+      detailDisplay: 'update',
+      editType: 'textarea',
     }, {
       label: 'lien',
       recordProperty: 'link',
-      isEditable: true,
-      editType: EditType.Text,
+      listDisplay: 'update',
+      detailDisplay: 'update',  
+      editType: 'text',
     }, {
       label: '',
       recordProperty: undefined,
-      isEditable: false,
+      listDisplay: 'read',
+      detailDisplay: 'read',
       html: (layout: RecordComponent<any>, record: any): string => {
         if(record.link) { return `<a href='${record.link}' target='_blank'>go</a>`}
         return '';
@@ -184,7 +192,7 @@ export class AppComponent implements OnInit {
     columns: this.columns,
     primaryKeyProperty: 'country',
     entityUrl: this.sampleEntityUrl,
-    selectionType: SelectionType.Single,
+    selectionType: 'single',
     isDeleteEnabled: false,
     isAddEnabled: false,
     loadOnInit: false,
@@ -198,21 +206,24 @@ export class AppComponent implements OnInit {
 
   public columns2: Column<any>[] = [{
     label: 'Id',
-    editType: EditType.Number,
+    editType: 'number',
     recordProperty: 'id',
-    isEditable: false,
+    listDisplay: 'read',
+    detailDisplay: 'read',
     width: '30px',
   }, {
     label: 'Title',
-    editType: EditType.Text,
+    editType: 'text',
     recordProperty: 'title',
-    isEditable: true,
+    listDisplay: 'update',
+    detailDisplay: 'update',
     width: '300px',
   }, {
     label: 'User',
-    editType: EditType.Dropdown,
+    editType: 'dropdown',
     recordProperty: 'userId',
-    isEditable: true,
+    listDisplay: 'update',
+    detailDisplay: 'update',
     // isEditable: (rec) => {
     //   const res = rec.completed !== true;
     //   console.info(res);
@@ -225,9 +236,10 @@ export class AppComponent implements OnInit {
     // {value: 3, label: 'Third'},
   }, {
     label: 'Completed',
-    editType: EditType.Text,
+    editType: 'text',
     recordProperty: 'completed',
-    isEditable: false,
+    listDisplay: 'read',
+    detailDisplay: 'read',
     width: '50px',
   }];
   public entityUrl2 = 'https://jsonplaceholder.typicode.com/todos';
@@ -246,7 +258,8 @@ export class AppComponent implements OnInit {
     primaryKeyProperty: '',
     isAddEnabled: true,
     columns: [{
-      isEditable: false,
+      listDisplay: 'read',
+      detailDisplay: 'read',
       label: 'col without data',
       recordProperty: undefined,
       width: '200px',
