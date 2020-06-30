@@ -1,8 +1,8 @@
-import {HttpClient} from '@angular/common/http';
-import {Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChange} from '@angular/core';
-import {RecordLayout} from '../../model/record-layout';
+import { HttpClient } from '@angular/common/http';
+import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChange } from '@angular/core';
+import { RecordLayout } from '../../model/record-layout';
 import { AccessFunctions } from '../access-functions';
-import { RecordListLayout } from '@all41-dev/ui-components';
+import { RecordListLayout } from '../../model/record-list-layout';
 //import AccessFunctions from '../access-functions';
 
 @Component({
