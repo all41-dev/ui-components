@@ -1,6 +1,6 @@
 {
   "name": "@all41-dev/ui-components.host",
-  "version": "2.0.0",
+  "version": "2.0.1",
   "scripts": {
     "ng": "ng",
     "start": "npm run build:lib-debug && ng serve --port 4210",
@@ -34,8 +34,7 @@
     "scroll-into-view-if-needed": "^2.2.24",
     "zone.js": "^0.10.3"
   },
-  "deps-disabled": {
-  },
+  "deps-disabled": {},
   "devDependencies": {
     "@all41-dev/ui-components": "file:dist/components-ui",
     "@angular-devkit/build-angular": "^0.1000.0",
