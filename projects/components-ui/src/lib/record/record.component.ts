@@ -2,6 +2,7 @@ import {HttpClient} from '@angular/common/http';
 import {Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChange} from '@angular/core';
 import {RecordLayout} from '../../model/record-layout';
 import { AccessFunctions } from '../access-functions';
+import { RecordListLayout } from '@all41-dev/ui-components';
 //import AccessFunctions from '../access-functions';
 
 @Component({
@@ -11,7 +12,7 @@ import { AccessFunctions } from '../access-functions';
 })
 export class RecordComponent<T> implements OnInit, OnChanges {
   @Input() public id?: any;
-  @Input() public layout: RecordLayout<T>;
+  @Input() public layout: RecordLayout<T> & RecordListLayout<T>;
   @Input() public record: T|undefined;
   @Output() public recordChange: EventEmitter<T> = new EventEmitter<T>();
   @Input() public url: string;
@@ -25,6 +26,7 @@ export class RecordComponent<T> implements OnInit, OnChanges {
   public labelsWidth = 'inherit';
   public valuesWidth = 'inherit';
   public componentWidth = 'inherit';
+  public componentHeight = 'inherit';
   public title = '';
   public currentUrl: string = undefined;
 
@@ -91,10 +93,16 @@ export class RecordComponent<T> implements OnInit, OnChanges {
     if (this.layout.valuesWidth !== undefined) {
       this.valuesWidth = this.layout.valuesWidth;
     }
-    if (this.layout.labelsWidth !== undefined && this.layout.valuesWidth !== undefined) {
-      const width =  parseInt(this.layout.labelsWidth.replace('px', ''), 10) +
-        parseInt(this.layout.valuesWidth.replace('px', ''), 10);
-      this.componentWidth = `${width}px`;
+    if (['left', 'right'].includes(this.layout.detailPosition)) {
+      if (this.layout.labelsWidth !== undefined && this.layout.valuesWidth !== undefined) {
+        const width =  parseInt(this.layout.labelsWidth.replace('px', ''), 10) +
+          parseInt(this.layout.valuesWidth.replace('px', ''), 10);
+        this.componentWidth = `${width + 19}px`;
+        this.componentHeight = `${this.layout.height}px`;
+      }  
+    } else {
+      this.componentWidth = `${this.getWidth() + 19}px`;
+      //height is kept as default
     }
     if (this.layout.title !== undefined) {
       this.title = this.layout.title;
@@ -267,5 +275,10 @@ export class RecordComponent<T> implements OnInit, OnChanges {
     })[0].click();
     event.stopPropagation();
     event.preventDefault();
+  }
+  public getWidth(): number {
+    return (this.layout.columns.map((c): number =>
+      parseInt(c.width.replace('px', '').trim(), 10))
+      .reduce((a, b): number => a + b, 0)) + 22 /* 22 for context menu*/;
   }
 }

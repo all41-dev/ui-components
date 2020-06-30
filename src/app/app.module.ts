@@ -5,7 +5,7 @@ import { OAuthModule } from 'angular-oauth2-oidc';
 import { FormsModule } from '@angular/forms';
 
 import { AppComponent } from './app.component';
-import { ComponentsUiModule, AddHeadersInterceptor } from '@all41-dev/ui-components';
+import { ComponentsUiModule, AddHeadersInterceptor, Config } from '@all41-dev/ui-components';
 
 @NgModule({
   declarations: [
@@ -22,6 +22,6 @@ import { ComponentsUiModule, AddHeadersInterceptor } from '@all41-dev/ui-compone
     provide: HTTP_INTERCEPTORS,
     useClass: AddHeadersInterceptor,
     multi: true,
-  },],  bootstrap: [AppComponent]
+  }, Config],  bootstrap: [AppComponent]
 })
 export class AppModule { }

@@ -91,7 +91,9 @@ export class RecordListComponent<T> extends AuthenticationBase implements OnChan
   @ViewChild('grid', {static: false}) public grid: ElementRef;
   public inst: RecordListComponent<T>;
 
-  public title = '';
+  public get title(): string | undefined {
+    return this.layout.title;
+  };
   public cursorStyle = 'inherit';
   public loadOnInit = true;
 
@@ -172,7 +174,7 @@ export class RecordListComponent<T> extends AuthenticationBase implements OnChan
     if (this.layout.isDeleteEnabled === undefined) { this.layout.isDeleteEnabled = false; }
     if (this.layout.isAddEnabled === undefined) { this.layout.isAddEnabled = false; }
     if (this.layout.newRecTemplate === undefined) { this.layout.newRecTemplate = {}; }
-    if (this.layout.title !== undefined) {this.title = this.layout.title; }
+    // if (this.layout.title !== undefined) {this.title = this.layout.title; }
     if (this.layout.loadOnInit !== undefined) {this.loadOnInit = this.layout.loadOnInit; }
 
     if (this.url === undefined && this.layout.entityUrl !== undefined) {

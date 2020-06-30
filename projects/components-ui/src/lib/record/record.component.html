@@ -1,10 +1,11 @@
-<div class="header" [style.width]="componentWidth"><h3>{{title}}</h3></div>
-<div *ngIf="getRestricted" class="error" [style.width]="componentWidth">Permission denied</div>
+<!-- <div class="header" [style.width]="componentWidth"><h3>{{title}}</h3></div> -->
+<!-- <div *ngIf="getRestricted" class="error" [style.width]="componentWidth">Permission denied</div> -->
 <div class="grid"
      (keydown.control.z)="cancelShortcut($event, cancelButton)"
      (keydown.control.s)="saveShortcut($event, saveButton)"
      [class.modified]="isModified()"
      [style.width]="componentWidth"
+     [style.height]="componentHeight"
       *ngIf="record">
   <ng-container *ngFor="let col of layout.columns">
     <ift-column [(label)]="col.label" [style.maxWidth]="labelsWidth" [style.width]="labelsWidth" [class.invalid]="col.isValid !== undefined && !col.isValid(record)"></ift-column>
