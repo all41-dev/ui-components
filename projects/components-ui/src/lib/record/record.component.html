@@ -7,7 +7,7 @@
      [style.width]="componentWidth"
      [style.height]="componentHeight"
       *ngIf="record">
-  <ng-container *ngFor="let col of layout.columns">
+  <ng-container *ngFor="let col of detailColumns">
     <ift-column [(label)]="col.label" [style.maxWidth]="labelsWidth" [style.width]="labelsWidth" [class.invalid]="col.isValid !== undefined && !col.isValid(record)"></ift-column>
     <ng-container [ngSwitch]="col.editType">
       <ng-template [ngSwitchCase]="undefined">

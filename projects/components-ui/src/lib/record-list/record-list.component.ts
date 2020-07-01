@@ -2,7 +2,7 @@ import {Component, ElementRef, EventEmitter, Input, OnChanges, Output, SimpleCha
 import {HttpClient, HttpErrorResponse} from '@angular/common/http';
 import scrollIntoView from 'scroll-into-view-if-needed';
 import {RecordListLayout} from '../../model/record-list-layout';
-import { Option, EditableColumn } from '../../model/column';
+import { Option, EditableColumn, Column } from '../../model/column';
 import {AccessFunctions} from '../access-functions';
 import { OptionsEditableColumn } from '../../model/column';
 import { AuthenticationBase } from '../authentication-base';
@@ -121,6 +121,7 @@ export class RecordListComponent<T> extends AuthenticationBase implements OnChan
   public patchRestricted = false;
   public deleteRestricted = false;
   public postRestricted = false;
+  public get listColumns(): Column<T>[] { return this.layout.columns.filter((c) => c.listDisplay !== 'none' && c.width !== '0'); }
 
   private _authCompleted = false;
   private _loadOnAuthCompleted = false;

@@ -3,6 +3,7 @@ import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChange
 import { RecordLayout } from '../../model/record-layout';
 import { AccessFunctions } from '../access-functions';
 import { RecordListLayout } from '../../model/record-list-layout';
+import { Column } from '../../model/column';
 //import AccessFunctions from '../access-functions';
 
 @Component({
@@ -29,6 +30,7 @@ export class RecordComponent<T> implements OnInit, OnChanges {
   public componentHeight = 'inherit';
   public title = '';
   public currentUrl: string = undefined;
+  public get detailColumns(): Column<T>[] { return this.layout.columns.filter((c) => c.detailDisplay !== 'none'); }
 
   // eslint-disable-next-line @typescript-eslint/no-parameter-properties
   public constructor(private http: HttpClient, private access: AccessFunctions) {
