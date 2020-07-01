@@ -31,6 +31,7 @@ export class RecordComponent<T> implements OnInit, OnChanges {
   public title = '';
   public currentUrl: string = undefined;
   public get detailColumns(): Column<T>[] { return this.layout.columns.filter((c) => c.detailDisplay !== 'none'); }
+  public get listColumns(): Column<T>[] { return this.layout.columns.filter((c) => c.listDisplay !== 'none' && c.width !== '0'); }
 
   // eslint-disable-next-line @typescript-eslint/no-parameter-properties
   public constructor(private http: HttpClient, private access: AccessFunctions) {
@@ -279,7 +280,7 @@ export class RecordComponent<T> implements OnInit, OnChanges {
     event.preventDefault();
   }
   public getWidth(): number {
-    return (this.layout.columns.map((c): number =>
+    return (this.listColumns.map((c): number =>
       parseInt(c.width.replace('px', '').trim(), 10))
       .reduce((a, b): number => a + b, 0)) + 22 /* 22 for context menu*/;
   }
