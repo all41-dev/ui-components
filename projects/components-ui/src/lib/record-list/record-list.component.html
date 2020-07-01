@@ -1,160 +1,162 @@
-<ift-record 
-  *ngIf="['left', 'right', 'top'].includes(layout.detailPosition) && selectedRecords.length === 1"
-  [record]="selectedRecords[0]"
-  [layout]="layout"
-  [style.float]="['left', 'right'].includes(layout.detailPosition) ? layout.detailPosition : 'inherit'">
-</ift-record>
-<div class="header" [style.display]="title ? 'none' : 'default'" [style.width]="'' + (getWidth()+19) + 'px'"><h3>{{title}}</h3></div>
-<div #headerRow class="row header"
-     [style.width]="'' + (getWidth()+19) + 'px'"
-     [style.gridTemplateColumns]="gridTemplateColumns()">
-  <ng-container *ngFor="let col of listColumns">
-    <div><ift-column [label]="col.label" [isFilterVisible]="col.isFilterVisible" [(filterValue)]="col.filterValue"></ift-column></div>
-  </ng-container>
-</div>
-<div *ngIf="getRestricted" class="error"
-    [style.width]="'' + (getWidth() + 19) + 'px'">Permission denied</div>
-<div *ngIf="!getRestricted" class="grid" #grid
-     (keydown.control.z)="cancelShortcut($event, cancelButton)"
-     (keydown.control.s)="saveShortcut($event, saveButton)"
-     (keydown.control.insert)="newShortcut($event, newButton)"
-     [style.width]="'' + (getWidth() + 19) + 'px'"
-     [style.height]="getDataHeight(headerRow, controlsRow) + 'px'"
-     [style.maxHeight]="getDataHeight(headerRow, controlsRow) + 'px'" >
-  <div class="row"
-       [style.width]="'' + getWidth() + 'px'"
-       [style.cursor]="cursorStyle"
-       [style.gridTemplateColumns]="gridTemplateColumns()"
-       *ngFor="let record of currentRecords"
-       [class.modified]="isModified(record)"
-       [class.selected]="selectedRecords.indexOf(record) !== -1"
-        (dblclick)="dblclick(record)" (click)="click(record)" >
+<div [style.width]="outerWidth">
+  <ift-record 
+    *ngIf="['left', 'right', 'top'].includes(layout.detailPosition) && selectedRecords.length === 1"
+    [record]="selectedRecords[0]"
+    [layout]="layout"
+    [style.float]="['left', 'right'].includes(layout.detailPosition) ? layout.detailPosition : 'inherit'">
+  </ift-record>
+  <div class="header" [style.display]="title ? 'none' : 'default'" [style.width]="'' + (getWidth()+19) + 'px'"><h3>{{title}}</h3></div>
+  <div #headerRow class="row header"
+      [style.width]="'' + (getWidth()+19) + 'px'"
+      [style.gridTemplateColumns]="gridTemplateColumns()">
     <ng-container *ngFor="let col of listColumns">
-      <ng-container [ngSwitch]="col.editType">
-        <ng-template [ngSwitchCase]="undefined">
-          <ift-text-value
-            [attr.edit]="patchRestricted || ['none', 'read'].includes(col.listDisplay) ? null : ''"
-            [(modified)]="record[col.recordProperty + 'Modified']"
-            [(value)]="record[col.recordProperty]"
-            (modifiedChange)="col.onChange ? col.onChange(record, records) : undefined;
-              layout.onRecChange ? layout.onRecChange(record, records) : undefined"
-            [parentComponent]="inst"
-            [record]="record"
-            [columnLayout]="col"
-            (tabEvent)="tab($event)">
-          </ift-text-value>
-        </ng-template>
-        <ng-template ngSwitchCase="text">
-          <ift-text-value
-            [attr.edit]="patchRestricted || ['none', 'read'].includes(col.listDisplay) ? null : ''"
-            [(modified)]="record[col.recordProperty + 'Modified']"
-            [(value)]="record[col.recordProperty]"
-            (modifiedChange)="col.onChange ? col.onChange(record, records) : undefined;
-              layout.onRecChange ? layout.onRecChange(record, records) : undefined"
-            [parentComponent]="inst"
-            [record]="record"
-            [columnLayout]="col"
-            (tabEvent)="tab($event)">
-          </ift-text-value>
-        </ng-template>
-        <ng-template ngSwitchCase="password">
-          <ift-password-value
-            [attr.edit]="patchRestricted || ['none', 'read'].includes(col.listDisplay) ? null : ''"
-            [(modified)]="record[col.recordProperty + 'Modified']"
-            [(value)]="record[col.recordProperty]"
-            (modifiedChange)="col.onChange ? col.onChange(record, records) : undefined;
-              layout.onRecChange ? layout.onRecChange(record, records) : undefined"
-              [parentComponent]="inst"
-              [record]="record"
-              [columnLayout]="col"
-              (tabEvent)="tab($event)"></ift-password-value>
-        </ng-template>
-        <ng-template ngSwitchCase="dropdown">
-          <ift-dropdown-value
-            [attr.edit]="patchRestricted || ['none', 'read'].includes(col.listDisplay) ? null : ''"
-            [(modified)]="record[col.recordProperty + 'Modified']"
-            [(value)]="record[col.recordProperty]"
-            (modifiedChange)="col.onChange ? col.onChange(record, records) : undefined;
-              layout.onRecChange ? layout.onRecChange(record, records) : undefined"
-            [options] = "col.options"
-            [parentComponent]="inst"
-            [record]="record"
-            [columnLayout]="col"
-            (tabEvent)="tab($event)"></ift-dropdown-value>
-        </ng-template>
-        <ng-template ngSwitchCase="typeahead">
-          <ift-typeahead-value
-            [attr.edit]="patchRestricted || ['none', 'read'].includes(col.listDisplay) ? null : ''"
-            [(modified)]="record[col.recordProperty + 'Modified']"
-            [(value)]="record[col.recordProperty]"
-            (modifiedChange)="col.onChange ? col.onChange(record, records) : undefined;
-              layout.onRecChange ? layout.onRecChange(record, records) : undefined"
-            [options] = "col.options"
-            [parentComponent]="inst"
-            [record]="record"
-            [columnLayout]="col"
-            (tabEvent)="tab($event)"></ift-typeahead-value>
-        </ng-template>
-        <ng-template ngSwitchCase="textarea">
-          <ift-textarea-value
-            [attr.edit]="patchRestricted || ['none', 'read'].includes(col.listDisplay) ? null : ''"
-            [(modified)]="record[col.recordProperty + 'Modified']"
-            [(value)]="record[col.recordProperty]"
-            (modifiedChange)="col.onChange ? col.onChange(record, records) : undefined;
-              layout.onRecChange ? layout.onRecChange(record, records) : undefined"
-              [parentComponent]="inst"
-              [record]="record"
-              [columnLayout]="col"
-              (tabEvent)="tab($event)"></ift-textarea-value>
-        </ng-template>
-        <ng-template ngSwitchCase="number">
-          <ift-number-value
-            [attr.edit]="patchRestricted || ['none', 'read'].includes(col.listDisplay) ? null : ''"
-            [(modified)]="record[col.recordProperty + 'Modified']"
-            [(value)]="record[col.recordProperty]"
-            (modifiedChange)="col.onChange ? col.onChange(record, records) : undefined;
-              layout.onRecChange ? layout.onRecChange(record, records) : undefined"
-            [parentComponent]="inst"
-            [record]="record"
-            [columnLayout]="col"
-            (tabEvent)="tab($event)"></ift-number-value>
-        </ng-template>
-        <ng-template ngSwitchCase="date">
-          <ift-date-value
-            [attr.edit]="patchRestricted || ['none', 'read'].includes(col.listDisplay) ? null : ''"
-            [(modified)]="record[col.recordProperty + 'Modified']"
-            [(value)]="record[col.recordProperty]"
-            (modifiedChange)="col.onChange ? col.onChange(record, records) : undefined;
-              layout.onRecChange ? layout.onRecChange(record, records) : undefined"
-              [parentComponent]="inst"
-              [record]="record"
-              [columnLayout]="col"
-              (tabEvent)="tab($event)"></ift-date-value>
-        </ng-template>
-      </ng-container>
+      <div><ift-column [label]="col.label" [isFilterVisible]="col.isFilterVisible" [(filterValue)]="col.filterValue"></ift-column></div>
     </ng-container>
-    <span #rowCommand class="row-command" [style.visibility]="layout.isDeleteEnabled || layout.selectionTrigger?.includes('contextmenu') ? 'visible' : 'hidden'"> <!--[style.left]="'' + (rowCommand.parentElement.clientWidth - rowCommand.clientWidth) + 'px'">-->
-      <button role="button" (click)="toggleContextMenu($event)">...</button>
-      <div #rowMenu style="display: none;" (blur)="hideContextMenu($event)" tabindex="0">
-        <button (click)="deleteRecord(record)" [style.visibility]="layout.isDeleteEnabled ? 'visible' : 'hidden'" title="delete">delete</button>
-        <button (click)="toggleSelection(record)" [style.visibility]="layout.selectionType === 'none' || !layout.selectionTrigger?.includes('contextmenu') ? 'hidden' : 'visible'" title="select">select</button>
-      </div>
+  </div>
+  <div *ngIf="getRestricted" class="error"
+      [style.width]="'' + (getWidth() + 19) + 'px'">Permission denied</div>
+  <div *ngIf="!getRestricted" class="grid" #grid
+      (keydown.control.z)="cancelShortcut($event, cancelButton)"
+      (keydown.control.s)="saveShortcut($event, saveButton)"
+      (keydown.control.insert)="newShortcut($event, newButton)"
+      [style.width]="'' + (getWidth() + 19) + 'px'"
+      [style.height]="getDataHeight(headerRow, controlsRow) + 'px'"
+      [style.maxHeight]="getDataHeight(headerRow, controlsRow) + 'px'" >
+    <div class="row"
+        [style.width]="'' + getWidth() + 'px'"
+        [style.cursor]="cursorStyle"
+        [style.gridTemplateColumns]="gridTemplateColumns()"
+        *ngFor="let record of currentRecords"
+        [class.modified]="isModified(record)"
+        [class.selected]="selectedRecords.indexOf(record) !== -1"
+          (dblclick)="dblclick(record)" (click)="click(record)" >
+      <ng-container *ngFor="let col of listColumns">
+        <ng-container [ngSwitch]="col.editType">
+          <ng-template [ngSwitchCase]="undefined">
+            <ift-text-value
+              [attr.edit]="patchRestricted || ['none', 'read'].includes(col.listDisplay) ? null : ''"
+              [(modified)]="record[col.recordProperty + 'Modified']"
+              [(value)]="record[col.recordProperty]"
+              (modifiedChange)="col.onChange ? col.onChange(record, records) : undefined;
+                layout.onRecChange ? layout.onRecChange(record, records) : undefined"
+              [parentComponent]="inst"
+              [record]="record"
+              [columnLayout]="col"
+              (tabEvent)="tab($event)">
+            </ift-text-value>
+          </ng-template>
+          <ng-template ngSwitchCase="text">
+            <ift-text-value
+              [attr.edit]="patchRestricted || ['none', 'read'].includes(col.listDisplay) ? null : ''"
+              [(modified)]="record[col.recordProperty + 'Modified']"
+              [(value)]="record[col.recordProperty]"
+              (modifiedChange)="col.onChange ? col.onChange(record, records) : undefined;
+                layout.onRecChange ? layout.onRecChange(record, records) : undefined"
+              [parentComponent]="inst"
+              [record]="record"
+              [columnLayout]="col"
+              (tabEvent)="tab($event)">
+            </ift-text-value>
+          </ng-template>
+          <ng-template ngSwitchCase="password">
+            <ift-password-value
+              [attr.edit]="patchRestricted || ['none', 'read'].includes(col.listDisplay) ? null : ''"
+              [(modified)]="record[col.recordProperty + 'Modified']"
+              [(value)]="record[col.recordProperty]"
+              (modifiedChange)="col.onChange ? col.onChange(record, records) : undefined;
+                layout.onRecChange ? layout.onRecChange(record, records) : undefined"
+                [parentComponent]="inst"
+                [record]="record"
+                [columnLayout]="col"
+                (tabEvent)="tab($event)"></ift-password-value>
+          </ng-template>
+          <ng-template ngSwitchCase="dropdown">
+            <ift-dropdown-value
+              [attr.edit]="patchRestricted || ['none', 'read'].includes(col.listDisplay) ? null : ''"
+              [(modified)]="record[col.recordProperty + 'Modified']"
+              [(value)]="record[col.recordProperty]"
+              (modifiedChange)="col.onChange ? col.onChange(record, records) : undefined;
+                layout.onRecChange ? layout.onRecChange(record, records) : undefined"
+              [options] = "col.options"
+              [parentComponent]="inst"
+              [record]="record"
+              [columnLayout]="col"
+              (tabEvent)="tab($event)"></ift-dropdown-value>
+          </ng-template>
+          <ng-template ngSwitchCase="typeahead">
+            <ift-typeahead-value
+              [attr.edit]="patchRestricted || ['none', 'read'].includes(col.listDisplay) ? null : ''"
+              [(modified)]="record[col.recordProperty + 'Modified']"
+              [(value)]="record[col.recordProperty]"
+              (modifiedChange)="col.onChange ? col.onChange(record, records) : undefined;
+                layout.onRecChange ? layout.onRecChange(record, records) : undefined"
+              [options] = "col.options"
+              [parentComponent]="inst"
+              [record]="record"
+              [columnLayout]="col"
+              (tabEvent)="tab($event)"></ift-typeahead-value>
+          </ng-template>
+          <ng-template ngSwitchCase="textarea">
+            <ift-textarea-value
+              [attr.edit]="patchRestricted || ['none', 'read'].includes(col.listDisplay) ? null : ''"
+              [(modified)]="record[col.recordProperty + 'Modified']"
+              [(value)]="record[col.recordProperty]"
+              (modifiedChange)="col.onChange ? col.onChange(record, records) : undefined;
+                layout.onRecChange ? layout.onRecChange(record, records) : undefined"
+                [parentComponent]="inst"
+                [record]="record"
+                [columnLayout]="col"
+                (tabEvent)="tab($event)"></ift-textarea-value>
+          </ng-template>
+          <ng-template ngSwitchCase="number">
+            <ift-number-value
+              [attr.edit]="patchRestricted || ['none', 'read'].includes(col.listDisplay) ? null : ''"
+              [(modified)]="record[col.recordProperty + 'Modified']"
+              [(value)]="record[col.recordProperty]"
+              (modifiedChange)="col.onChange ? col.onChange(record, records) : undefined;
+                layout.onRecChange ? layout.onRecChange(record, records) : undefined"
+              [parentComponent]="inst"
+              [record]="record"
+              [columnLayout]="col"
+              (tabEvent)="tab($event)"></ift-number-value>
+          </ng-template>
+          <ng-template ngSwitchCase="date">
+            <ift-date-value
+              [attr.edit]="patchRestricted || ['none', 'read'].includes(col.listDisplay) ? null : ''"
+              [(modified)]="record[col.recordProperty + 'Modified']"
+              [(value)]="record[col.recordProperty]"
+              (modifiedChange)="col.onChange ? col.onChange(record, records) : undefined;
+                layout.onRecChange ? layout.onRecChange(record, records) : undefined"
+                [parentComponent]="inst"
+                [record]="record"
+                [columnLayout]="col"
+                (tabEvent)="tab($event)"></ift-date-value>
+          </ng-template>
+        </ng-container>
+      </ng-container>
+      <span #rowCommand class="row-command" [style.visibility]="layout.isDeleteEnabled || layout.selectionTrigger?.includes('contextmenu') ? 'visible' : 'hidden'"> <!--[style.left]="'' + (rowCommand.parentElement.clientWidth - rowCommand.clientWidth) + 'px'">-->
+        <button role="button" (click)="toggleContextMenu($event)">...</button>
+        <div #rowMenu style="display: none;" (blur)="hideContextMenu($event)" tabindex="0">
+          <button (click)="deleteRecord(record)" [style.visibility]="layout.isDeleteEnabled ? 'visible' : 'hidden'" title="delete">delete</button>
+          <button (click)="toggleSelection(record)" [style.visibility]="layout.selectionType === 'none' || !layout.selectionTrigger?.includes('contextmenu') ? 'hidden' : 'visible'" title="select">select</button>
+        </div>
+      </span>
+    </div>
+  </div>
+  <div #controlsRow class="footer" [style.width]="'' + (getWidth() + 19) + 'px'">
+    <button style="float:left" [style.visibility]="filteredRecords.length < chunkSize || currentChunk === 0 ? 'hidden' : 'visible'" role="button" (click)="currentChunk = currentChunk - 1">&lt;{{ currentChunk }}</button>
+    <span style="margin: 2px 0" style="float:left"> {{(chunkSize * currentChunk) + 1}} - {{ lastCurrentRecord }} (total {{ filteredRecords.length }}) </span>
+    <button style="float:left" [style.visibility]="filteredRecords.length < chunkSize || currentChunk + 1 === totalChunks ? 'hidden' : 'visible'" role="button" (click)="currentChunk = currentChunk + 1">{{ currentChunk + 2 }}&gt;</button>
+
+    <span [hidden]="isReadOnly()">
+      <button #saveButton [style.visibility]="modifiedRecords().length > 0 ? 'visible' : 'hidden'" role="button" (click)="save()">Save {{modifiedRecords().length}} record(s)</button>
+      <button #cancelButton [style.visibility]="modifiedRecords().length > 0 ? 'visible' : 'hidden'" role="button" (click)="cancelChanges()">Revert changes</button>
+      <button #newButton [style.visibility]="layout.isAddEnabled ? 'visible' : 'hidden'" role="button" (click)="new()">New</button>
     </span>
   </div>
+  <ift-record 
+    *ngIf="layout.detailPosition === 'bottom' && selectedRecords.length === 1"
+    [record]="selectedRecords[0]"
+    [layout]="layout">
+  </ift-record>
 </div>
-<div #controlsRow class="footer" [style.width]="'' + (getWidth() + 19) + 'px'">
-  <button style="float:left" [style.visibility]="filteredRecords.length < chunkSize || currentChunk === 0 ? 'hidden' : 'visible'" role="button" (click)="currentChunk = currentChunk - 1">&lt;{{ currentChunk }}</button>
-  <span style="margin: 2px 0" style="float:left"> {{(chunkSize * currentChunk) + 1}} - {{ lastCurrentRecord }} (total {{ filteredRecords.length }}) </span>
-  <button style="float:left" [style.visibility]="filteredRecords.length < chunkSize || currentChunk + 1 === totalChunks ? 'hidden' : 'visible'" role="button" (click)="currentChunk = currentChunk + 1">{{ currentChunk + 2 }}&gt;</button>
-
-  <span [hidden]="isReadOnly()">
-    <button #saveButton [style.visibility]="modifiedRecords().length > 0 ? 'visible' : 'hidden'" role="button" (click)="save()">Save {{modifiedRecords().length}} record(s)</button>
-    <button #cancelButton [style.visibility]="modifiedRecords().length > 0 ? 'visible' : 'hidden'" role="button" (click)="cancelChanges()">Revert changes</button>
-    <button #newButton [style.visibility]="layout.isAddEnabled ? 'visible' : 'hidden'" role="button" (click)="new()">New</button>
-  </span>
-</div>
-<ift-record 
-  *ngIf="layout.detailPosition === 'bottom' && selectedRecords.length === 1"
-  [record]="selectedRecords[0]"
-  [layout]="layout">
-</ift-record>

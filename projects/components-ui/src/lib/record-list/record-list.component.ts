@@ -144,6 +144,17 @@ export class RecordListComponent<T> extends AuthenticationBase implements OnChan
       .reduce((a, b): number => a + b, 0)) + 22 /* 22 for context menu*/;
   }
 
+  public get outerWidth(): string {
+    let res = getWidth();
+    if (['left', 'right'].includes(layout.detailPosition)) {
+      const detailWidth =  parseInt(this.layout.labelsWidth.replace('px', ''), 10) +
+        parseInt(this.layout.valuesWidth.replace('px', ''), 10);
+  
+      res += detailWidth
+    } 
+    return `${res}px`;
+  }
+
   public checkScopes(): void {
     if (this.layout.postScope !== undefined && !this.access.hasAccess([this.layout.entityScope, this.layout.postScope])) {
       this.postRestricted = true;

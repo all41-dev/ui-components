@@ -101,7 +101,7 @@ export class RecordComponent<T> implements OnInit, OnChanges {
         const width =  parseInt(this.layout.labelsWidth.replace('px', ''), 10) +
           parseInt(this.layout.valuesWidth.replace('px', ''), 10);
         this.componentWidth = `${width + 19}px`;
-        this.componentHeight = `${this.layout.height}px`;
+        this.componentHeight = `${this.layout.height - 40}px`;
       }  
     } else {
       this.componentWidth = `${this.getWidth() + 19}px`;
