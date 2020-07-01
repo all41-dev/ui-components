@@ -2,7 +2,7 @@
 <div #headerRow class="row header"
      [style.width]="'' + (getWidth()+19) + 'px'"
      [style.gridTemplateColumns]="gridTemplateColumns()">
-  <ng-container *ngFor="let col of layout.columns">
+  <ng-container *ngFor="let col of listColumns">
     <div><ift-column [label]="col.label" [isFilterVisible]="col.isFilterVisible" [(filterValue)]="col.filterValue"></ift-column></div>
   </ng-container>
 </div>

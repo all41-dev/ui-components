@@ -139,7 +139,7 @@ export class RecordListComponent<T> extends AuthenticationBase implements OnChan
   }
 
   public getWidth(): number {
-    return (this.layout.columns.map((c): number =>
+    return (this.listColumns.map((c): number =>
       parseInt(c.width.replace('px', '').trim(), 10))
       .reduce((a, b): number => a + b, 0)) + 22 /* 22 for context menu*/;
   }
