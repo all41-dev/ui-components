@@ -91,9 +91,6 @@ export class RecordListComponent<T> extends AuthenticationBase implements OnChan
   @ViewChild('grid', {static: false}) public grid: ElementRef;
   public inst: RecordListComponent<T>;
 
-  public get title(): string | undefined {
-    return this.layout.title;
-  };
   public cursorStyle = 'inherit';
   public loadOnInit = true;
 

@@ -5,7 +5,7 @@
     [layout]="layout"
     [style.float]="['left', 'right'].includes(layout.detailPosition) ? layout.detailPosition : 'inherit'">
   </ift-record>
-  <div class="header" [style.display]="title ? 'none' : 'default'" [style.width]="'' + (getWidth()+19) + 'px'"><h3>{{title}}</h3></div>
+  <div class="header" [style.width]="'' + (getWidth()+19) + 'px'"><h3>{{layout.title}}</h3></div>
   <div #headerRow class="row header"
       [style.width]="'' + (getWidth()+19) + 'px'"
       [style.gridTemplateColumns]="gridTemplateColumns()">

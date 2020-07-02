@@ -101,13 +101,13 @@ export class RecordComponent<T> implements OnInit, OnChanges {
         const width =  parseInt(this.layout.labelsWidth.replace('px', ''), 10) +
           parseInt(this.layout.valuesWidth.replace('px', ''), 10);
         this.componentWidth = `${width + 19}px`;
-        this.componentHeight = `${this.layout.height - 20}px`;
+        this.componentHeight = `${this.layout.height}px`;
       }  
     } else {
       this.componentWidth = `${this.getWidth() + 19}px`;
       //height is kept as default
     }
-    if (this.layout.title !== undefined) {
+    if (this.layout.title) {
       this.title = this.layout.title;
     }
 
