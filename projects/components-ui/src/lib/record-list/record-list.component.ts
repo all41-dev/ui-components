@@ -441,6 +441,7 @@ export class RecordListComponent<T> extends AuthenticationBase implements OnChan
     if (!this.records) { this.records = []; }
     const templateCopy = JSON.parse(JSON.stringify(this.layout.newRecTemplate));
     this.records.push(templateCopy as T);
+    this.toggleSelection(templateCopy);
     setTimeout((): void => {
       const elem: HTMLElement = this.grid.nativeElement;
 
