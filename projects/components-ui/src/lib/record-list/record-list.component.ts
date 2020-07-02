@@ -441,7 +441,6 @@ export class RecordListComponent<T> extends AuthenticationBase implements OnChan
     if (!this.records) { this.records = []; }
     const templateCopy = JSON.parse(JSON.stringify(this.layout.newRecTemplate));
     this.records.push(templateCopy as T);
-    this.toggleSelection(templateCopy);
     setTimeout((): void => {
       const elem: HTMLElement = this.grid.nativeElement;
 
@@ -454,6 +453,7 @@ export class RecordListComponent<T> extends AuthenticationBase implements OnChan
         return c.getAttribute('edit') !== null;
       })[0];
       // console.info(`firstEditField: ${firstEditField}`);
+      this.toggleSelection(templateCopy);
       if ( firstEditField === undefined ) { return; }
       const labelElement: HTMLElement = Array.from(firstEditField.children).filter((c): boolean => {
         const classStr = c.getAttribute('class');
