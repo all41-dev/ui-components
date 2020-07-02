@@ -407,9 +407,9 @@ export class RecordListComponent<T> extends AuthenticationBase implements OnChan
       } else {
         // end of row reached
         const nextRow = !!event.shiftKey ? nextValue.parentElement.previousSibling : nextValue.parentElement.nextSibling;
-        console.debug('next row');
-        console.debug(nextRow);
-        if (nextRow === null) {
+        // console.debug('next row');
+        // console.debug(nextRow);
+        if (nextRow === null || !nextRow.tagName) {
           // no more row found
           this.new();
           event.stopPropagation();

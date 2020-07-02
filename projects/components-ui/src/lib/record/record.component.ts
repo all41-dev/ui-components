@@ -257,20 +257,20 @@ export class RecordComponent<T> implements OnInit, OnChanges {
       target = target.parentElement;
     }
     if (target === null) {
-      console.error('Container of tab event not found');
+      // console.error('Container of tab event not found');
       return;
     }
     let nextValue = target;
     do {
       nextValue = !!event.shiftKey ? nextValue.previousSibling : nextValue.nextSibling;
-      console.debug(nextValue)
+      // console.debug(nextValue)
     } while (nextValue !== null &&
     (nextValue.tagName === undefined // It is the case for html comments
       || (!nextValue.tagName.toUpperCase().endsWith('-VALUE')
         || nextValue.getAttribute('edit') === null)));
 
     if (nextValue === null) {
-      console.debug('No more field found');
+      // console.debug('No more field found');
       return;
     }
 
