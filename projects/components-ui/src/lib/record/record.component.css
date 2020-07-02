@@ -8,6 +8,7 @@
   box-shadow: 0 3px rgba(0,0,0,.16), 0 3px 6px rgba(0,0,0,.23);
   background-color: rgba(255, 255, 255, .5);
   color: rgb(76, 76, 76);
+  overflow-y: scroll;
 }
 .header {
   background-color: var(--main-color,rgba(0, 76, 141, .5));

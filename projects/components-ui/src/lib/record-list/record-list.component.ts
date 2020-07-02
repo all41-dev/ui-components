@@ -419,10 +419,10 @@ export class RecordListComponent<T> extends AuthenticationBase implements OnChan
           nextValue = !!event.shiftKey ? nextRow.lastChild : nextRow.firstChild;
         }
       }
-    } while (nextValue.tagName === undefined || !nextValue.tagName.toUpperCase().endsWith('-VALUE')
-    || nextValue.getAttribute('edit') === null);
+    } while (nextValue && (nextValue.tagName === undefined || !nextValue.tagName.toUpperCase().endsWith('-VALUE')
+    || nextValue.getAttribute('edit') === null));
 
-    if ( nextValue === undefined ) { return; }
+    if ( !nextValue ) { return; }
     const elemToClick = Array.from<HTMLElement>(nextValue.children).filter((c): boolean => {
       const classAttr = c.getAttribute('class');
       const classes =  [null, ''].indexOf(classAttr)  === -1 ? classAttr.split(' ') : [];
