@@ -117,7 +117,8 @@ export class RecordComponent<T> implements OnInit, OnChanges {
     
     this.checkScopes();
 
-    if (this.layout.loadOnInit === undefined || this.layout.loadOnInit) {
+    // if detailPosition is set then gets the record from recordList parent, no own loading
+    if ((!this.layout.detailPosition || this.layout.detailPosition === 'none') && this.layout.loadOnInit === undefined || this.layout.loadOnInit) {
       this.load();
     }
   }

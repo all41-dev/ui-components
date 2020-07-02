@@ -156,7 +156,7 @@
   </div>
   <ift-record 
     *ngIf="layout.detailPosition === 'bottom' && selectedRecords.length === 1"
-    [record]="selectedRecords[0]"
+    [(record)]="selectedRecords[0]"
     [layout]="layout">
   </ift-record>
 </div>
