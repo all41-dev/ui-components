@@ -101,7 +101,7 @@ export class RecordComponent<T> implements OnInit, OnChanges {
         const width =  parseInt(this.layout.labelsWidth.replace('px', ''), 10) +
           parseInt(this.layout.valuesWidth.replace('px', ''), 10);
         this.componentWidth = `${width + 19}px`;
-        this.componentHeight = `${this.layout.height - 40}px`;
+        this.componentHeight = `${this.layout.height - 18}px`;
       }  
     } else {
       this.componentWidth = `${this.getWidth() + 19}px`;
@@ -263,13 +263,14 @@ export class RecordComponent<T> implements OnInit, OnChanges {
     let nextValue = target;
     do {
       nextValue = !!event.shiftKey ? nextValue.previousSibling : nextValue.nextSibling;
+      console.debug(nextValue)
     } while (nextValue !== null &&
     (nextValue.tagName === undefined // It is the case for html comments
       || (!nextValue.tagName.toUpperCase().endsWith('-VALUE')
         || nextValue.getAttribute('edit') === null)));
 
     if (nextValue === null) {
-      // console.info('No more field found');
+      console.debug('No more field found');
       return;
     }
 

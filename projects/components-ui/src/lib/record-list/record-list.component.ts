@@ -150,7 +150,7 @@ export class RecordListComponent<T> extends AuthenticationBase implements OnChan
       const detailWidth =  parseInt(this.layout.labelsWidth.replace('px', ''), 10) +
         parseInt(this.layout.valuesWidth.replace('px', ''), 10);
   
-      res += detailWidth
+      res += detailWidth + 42;
     } 
     return `${res}px`;
   }
@@ -407,7 +407,8 @@ export class RecordListComponent<T> extends AuthenticationBase implements OnChan
       } else {
         // end of row reached
         const nextRow = !!event.shiftKey ? nextValue.parentElement.previousSibling : nextValue.parentElement.nextSibling;
-
+        console.debug('next row');
+        console.debug(nextRow);
         if (nextRow === null) {
           // no more row found
           this.new();
