@@ -275,6 +275,7 @@ export class RecordListComponent<T> extends AuthenticationBase implements OnChan
   }
 
   public modifiedRecords(): T[] {
+    if (!this.records) return [];
     return this.records.filter((r): boolean =>
       this.layout.columns.map((c): any => r[c.recordProperty + 'Modified']).some((c): boolean => c));
   }
