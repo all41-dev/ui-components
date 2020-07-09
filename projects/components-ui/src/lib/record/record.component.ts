@@ -211,8 +211,7 @@ export class RecordComponent<T> implements OnInit, OnChanges {
         this.record['__primaryKey'] = undefined;
         this.http.patch(`${this.layout.entityUrl}/${pk}`, this.record)
           .subscribe((resp: T | T[]): void => {
-            this.record = Array.isArray(resp) ?
-              resp[0] : resp;
+            this._updateObj(this.record, Array.isArray(resp) ? resp[0] : resp);
             if (this.layout.initRecord) { this.record = this.layout.initRecord([this.record])}
             (this.record as any).__primaryKey = this.record[this.layout.primaryKeyProperty];
             this.recordChange.emit(this.record);
@@ -225,7 +224,7 @@ export class RecordComponent<T> implements OnInit, OnChanges {
       if(!this.postRestricted){
         this.http.post(`${this.layout.entityUrl}/`, this.record)
           .subscribe((resp: T): void => {
-            this.record = resp;
+            this._updateObj(this.record, resp);
             if (this.layout.initRecord) { this.record = this.layout.initRecord([this.record])}
             (this.record as any).__primaryKey = this.record[this.layout.primaryKeyProperty];
             this.recordChange.emit(this.record);
@@ -285,5 +284,9 @@ export class RecordComponent<T> implements OnInit, OnChanges {
     return (this.listColumns.map((c): number =>
       parseInt(c.width.replace('px', '').trim(), 10))
       .reduce((a, b): number => a + b, 0)) + 22 /* 22 for context menu*/;
+  }
+  private _updateObj(from: Object, to: Object) {
+    for (var prop in from) { if (from.hasOwnProperty(prop)) { delete from[prop]; } }
+    Object.assign(from, to);
   }
 }

@@ -120,6 +120,11 @@ export class RecordListComponent<T> extends AuthenticationBase implements OnChan
   public postRestricted = false;
   public get listColumns(): Column<T>[] { return this.layout.columns.filter((c) => c.listDisplay !== 'none' && c.width !== '0'); }
 
+  public get getUrl(): string | undefined { return this.layout.getUrl || this.url || this.layout.entityUrl; }
+  public get postUrl(): string | undefined { return this.layout.postUrl || this.url || this.layout.entityUrl; }
+  public patchUrl(pk: string): string | undefined { return this._urlInsertPk(this.layout.patchUrl || this.url || this.layout.entityUrl, pk); }
+  public deleteUrl(pk: string): string | undefined { return this._urlInsertPk(this.layout.deleteUrl || this.url || this.layout.entityUrl, pk); }
+
   private _authCompleted = false;
   private _loadOnAuthCompleted = false;
 
@@ -132,7 +137,7 @@ export class RecordListComponent<T> extends AuthenticationBase implements OnChan
   }
 
   public gridTemplateColumns(): string {
-    return this.layout.columns.map((c): string => c.width).reduce((a, b): string => a + ' ' + b) + ' 24px'; // last col for context menu
+    return this.layout.columns.filter((c) => c.listDisplay !== 'none').map((c): string => c.width).reduce((a, b): string => a + ' ' + b) + ' 24px'; // last col for context menu
   }
 
   public getWidth(): number {
@@ -186,18 +191,15 @@ export class RecordListComponent<T> extends AuthenticationBase implements OnChan
     // if (this.layout.title !== undefined) {this.title = this.layout.title; }
     if (this.layout.loadOnInit !== undefined) {this.loadOnInit = this.layout.loadOnInit; }
 
-    if (this.url === undefined && this.layout.entityUrl !== undefined) {
-      this.url = this.layout.entityUrl;
-    }
-
     this.checkScopes();
 
     this.chunkSize = this.layout.chunkSize || 100;
     this.currentChunk = 0;
 
-    if (this.loadOnInit && this.url !== undefined) {
-      if (this._authCompleted) {
-        console.info('load from afterAuthInit');
+    if (this.loadOnInit) {
+      // undefined means that authentication is disabled
+      if ([undefined, true].includes(this._authCompleted)) {
+        // console.info('load from afterAuthInit');
         this.load();
       } else {
         this._loadOnAuthCompleted = true;
@@ -231,8 +233,8 @@ export class RecordListComponent<T> extends AuthenticationBase implements OnChan
 
   public load(): void {
     // console.info('loading ' + this.url);
-    if (this.url !== undefined && !this.getRestricted) {
-      this.http.get<T[]>(this.url).subscribe(
+    if (this.getUrl && !this.getRestricted) {
+      this.http.get<T[]>(this.getUrl).subscribe(
         async (resp: T[]): Promise<void> => {
           resp.map((rec: T): void => {
             let res = rec;
@@ -295,18 +297,18 @@ export class RecordListComponent<T> extends AuthenticationBase implements OnChan
     saveButton.click();
   }
   public save(/*event = null*/): void {
-    if (this.layout.save !== undefined) {
+    if (this.layout.save) {
       return this.layout.save(this.modifiedRecords());
     }
 
     this.modifiedRecords().forEach((r): void => {
       if (!r['__primaryKey']) {
         if(!this.postRestricted){
-          this.http.post(`${this.layout.entityUrl}/`, r)
+          this.http.post(`${this.postUrl}/`, r)
             .subscribe((newRecord: T): void => {
               if (this.layout.initRecord) { newRecord = this.layout.initRecord([newRecord])}
               (newRecord as any).__primaryKey = [this.layout.primaryKeyProperty];
-              this.records[this.records.indexOf(r)] = newRecord;
+              this._updateObj(this.records[this.records.indexOf(r)], newRecord);
             }, (e): void => {
               if(e.status === 403) { this.postRestricted = true; }
               console.error(JSON.stringify(e));
@@ -316,8 +318,8 @@ export class RecordListComponent<T> extends AuthenticationBase implements OnChan
         if(!this.patchRestricted){
           const pk = r['__primaryKey'];
           r['__primaryKey'] = undefined;
-          const urlParts = this.layout.entityUrl.split('?');
-          this.http.patch(`${urlParts[0]}/${pk}?${urlParts[1] || ''}`, r)
+          
+          this.http.patch(this.patchUrl(pk), r)
             .subscribe(this.replaceRecords.bind(this),
               (e): void => {
                 if(e.status === 403) { this.patchRestricted = true; }
@@ -381,7 +383,7 @@ export class RecordListComponent<T> extends AuthenticationBase implements OnChan
       if (this.layout.initRecord) { r = this.layout.initRecord([r])}
       (r as any).__primaryKey = r[this.layout.primaryKeyProperty];
       const index = this.records.map((r2): any => r2[this.layout.primaryKeyProperty]).indexOf(r[this.layout.primaryKeyProperty]);
-      recs[index] = r;
+      this._updateObj(recs[index], r);
     });
   }
 
@@ -475,8 +477,7 @@ export class RecordListComponent<T> extends AuthenticationBase implements OnChan
 
   public deleteRecord(r: T): void {
     if(!this.deleteRestricted){
-      const urlParts = this.layout.entityUrl.split('?');
-      this.http.delete(`${urlParts[0]}/${r[this.layout.primaryKeyProperty]}?${urlParts[1] || ''}`)
+      this.http.delete(this.deleteUrl(r[this.layout.primaryKeyProperty]))
         .subscribe((): void => {
           this.records.splice(this.records.indexOf(r), 1);
         },
@@ -559,5 +560,14 @@ export class RecordListComponent<T> extends AuthenticationBase implements OnChan
     return !(this.layout.isAddEnabled ||
       this.layout.isDeleteEnabled ||
       this.layout.columns.some((c): boolean => ['create', 'update'].includes(c.listDisplay)));
+  }
+
+  private _urlInsertPk = (url: string, pk: string): string => {
+    const urlParts = url.split('?');
+    return `${urlParts[0]}/${pk}?${urlParts[1] || ''}`;
+  }
+  private _updateObj(from: Object, to: Object) {
+    for (var prop in from) { if (from.hasOwnProperty(prop)) { delete from[prop]; } }
+    Object.assign(from, to);
   }
 }
