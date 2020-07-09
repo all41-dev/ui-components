@@ -480,6 +480,9 @@ export class RecordListComponent<T> extends AuthenticationBase implements OnChan
       this.http.delete(this.deleteUrl(r[this.layout.primaryKeyProperty].toString()))
         .subscribe((): void => {
           this.records.splice(this.records.indexOf(r), 1);
+          if (this.selectedRecords.includes(r)) {
+            this.selectedRecords.splice(this.selectedRecords.indexOf(r), 1);
+          }
         },
         (e): void => {
           if(e.status == 403) { this.deleteRestricted = true; }
