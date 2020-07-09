@@ -566,6 +566,7 @@ export class RecordListComponent<T> extends AuthenticationBase implements OnChan
     const urlParts = url.split('?');
     return `${urlParts[0]}/${pk}?${urlParts[1] || ''}`;
   }
+  
   private _updateObj(from: Object, to: Object) {
     for (var prop in from) { if (from.hasOwnProperty(prop)) { delete from[prop]; } }
     Object.assign(from, to);

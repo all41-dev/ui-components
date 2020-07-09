@@ -33,6 +33,11 @@ export class RecordComponent<T> implements OnInit, OnChanges {
   public get detailColumns(): Column<T>[] { return this.layout.columns.filter((c) => c.detailDisplay !== 'none'); }
   public get listColumns(): Column<T>[] { return this.layout.columns.filter((c) => c.listDisplay !== 'none' && c.width !== '0'); }
 
+  public get getUrl(): string | undefined { return this.layout.getUrl || this.url || this.layout.entityUrl; }
+  public get postUrl(): string | undefined { return this.layout.postUrl || this.url || this.layout.entityUrl; }
+  public patchUrl(pk: string): string | undefined { return this._urlInsertPk(this.layout.patchUrl || this.url || this.layout.entityUrl, pk); }
+  public deleteUrl(pk: string): string | undefined { return this._urlInsertPk(this.layout.deleteUrl || this.url || this.layout.entityUrl, pk); }
+
   // eslint-disable-next-line @typescript-eslint/no-parameter-properties
   public constructor(private http: HttpClient, private access: AccessFunctions) {
     this.inst = this;
@@ -111,10 +116,6 @@ export class RecordComponent<T> implements OnInit, OnChanges {
       this.title = this.layout.title;
     }
 
-    if ((this.layout.entityUrl || this.layout.getUrl) && !this.url) {
-      this.url = this.layout.getUrl || this.layout.entityUrl;
-    }
-    
     this.checkScopes();
 
     // if detailPosition is set then gets the record from recordList parent, no own loading
@@ -130,14 +131,9 @@ export class RecordComponent<T> implements OnInit, OnChanges {
       switch (propName) {
         case 'layout' :
           if (changedProp.currentValue !== undefined) {
-            const getUrl = this.layout.getUrl === undefined ?
-              this.layout.entityUrl : this.layout.getUrl;
-            if (this.currentUrl !== getUrl) {
+            if (this.currentUrl !== this.getUrl) {
               // prevent execution if loadOnInit is false & the change hapens during init
-              if (this.currentUrl) {
-                this.load();
-              }
-              this.currentUrl = getUrl;
+              this.load();
             }
           }
           break;
@@ -153,10 +149,10 @@ export class RecordComponent<T> implements OnInit, OnChanges {
   }
 
   public load(): void {
-    if (this.url !== undefined) {
-      this.currentUrl = this.url;
+    if (this.getUrl !== undefined) {
+      this.currentUrl = this.getUrl;
       if(!this.getRestricted){
-        this.http.get<T[]>(`${this.url}`)
+        this.http.get<T[]>(`${this.getUrl}`)
           .subscribe((resp: T[]): void => {
             this.record = resp[0] === undefined ? undefined : 
               this.layout.load ? this.layout.load(resp[0]) : resp[0];
@@ -178,7 +174,7 @@ export class RecordComponent<T> implements OnInit, OnChanges {
         this.recordChange.emit(this.record);
       }
     } else {
-      this.currentUrl = `${this.layout.entityUrl}/${this.id}`;
+      this.currentUrl = `${this.getUrl}/${this.id}`;
       if(!this.getRestricted){
         this.http.get<T[]>(this.currentUrl)
           .subscribe((resp: T[]): void => {
@@ -209,7 +205,7 @@ export class RecordComponent<T> implements OnInit, OnChanges {
       if(!this.patchRestricted){
         const pk = this.record['__primaryKey'];
         this.record['__primaryKey'] = undefined;
-        this.http.patch(`${this.layout.entityUrl}/${pk}`, this.record)
+        this.http.patch(this.patchUrl(pk), this.record)
           .subscribe((resp: T | T[]): void => {
             this._updateObj(this.record, Array.isArray(resp) ? resp[0] : resp);
             if (this.layout.initRecord) { this.record = this.layout.initRecord([this.record])}
@@ -222,7 +218,7 @@ export class RecordComponent<T> implements OnInit, OnChanges {
       }
     } else {
       if(!this.postRestricted){
-        this.http.post(`${this.layout.entityUrl}/`, this.record)
+        this.http.post(this.postUrl, this.record)
           .subscribe((resp: T): void => {
             this._updateObj(this.record, resp);
             if (this.layout.initRecord) { this.record = this.layout.initRecord([this.record])}
@@ -280,11 +276,18 @@ export class RecordComponent<T> implements OnInit, OnChanges {
     event.stopPropagation();
     event.preventDefault();
   }
+
   public getWidth(): number {
     return (this.listColumns.map((c): number =>
       parseInt(c.width.replace('px', '').trim(), 10))
       .reduce((a, b): number => a + b, 0)) + 22 /* 22 for context menu*/;
   }
+
+  private _urlInsertPk = (url: string, pk: string): string => {
+    const urlParts = url.split('?');
+    return `${urlParts[0]}/${pk}?${urlParts[1] || ''}`;
+  }
+
   private _updateObj(from: Object, to: Object) {
     for (var prop in from) { if (from.hasOwnProperty(prop)) { delete from[prop]; } }
     Object.assign(from, to);
