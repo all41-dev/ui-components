@@ -304,7 +304,7 @@ export class RecordListComponent<T> extends AuthenticationBase implements OnChan
     this.modifiedRecords().forEach((r): void => {
       if (!r['__primaryKey']) {
         if(!this.postRestricted){
-          this.http.post(`${this.postUrl}/`, r)
+          this.http.post(this.postUrl, r)
             .subscribe((newRecord: T): void => {
               if (this.layout.initRecord) { newRecord = this.layout.initRecord([newRecord])}
               (newRecord as any).__primaryKey = [this.layout.primaryKeyProperty];
@@ -566,7 +566,7 @@ export class RecordListComponent<T> extends AuthenticationBase implements OnChan
     const urlParts = url.split('?');
     return `${urlParts[0]}/${pk}?${urlParts[1] || ''}`;
   }
-  
+
   private _updateObj(from: Object, to: Object) {
     for (var prop in from) { if (from.hasOwnProperty(prop)) { delete from[prop]; } }
     Object.assign(from, to);

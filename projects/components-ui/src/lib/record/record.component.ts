@@ -131,7 +131,7 @@ export class RecordComponent<T> implements OnInit, OnChanges {
       switch (propName) {
         case 'layout' :
           if (changedProp.currentValue !== undefined) {
-            if (this.currentUrl !== this.getUrl) {
+            if ((!this.layout.detailPosition || this.layout.detailPosition === 'none') && this.currentUrl !== this.getUrl) {
               // prevent execution if loadOnInit is false & the change hapens during init
               this.load();
             }
