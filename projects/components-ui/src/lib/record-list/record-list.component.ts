@@ -224,7 +224,7 @@ export class RecordListComponent<T> extends AuthenticationBase implements OnChan
           break;
         case 'records' :
           if (this.records) {
-            this.records.forEach((rec): void => (rec as any).__primaryKey = rec[this.layout.primaryKeyProperty]);
+            this.records.forEach((rec): T[keyof T] => (rec as any).__primaryKey = rec[this.layout.primaryKeyProperty]);
           }
           break;
       }
@@ -477,7 +477,7 @@ export class RecordListComponent<T> extends AuthenticationBase implements OnChan
 
   public deleteRecord(r: T): void {
     if(!this.deleteRestricted){
-      this.http.delete(this.deleteUrl(r[this.layout.primaryKeyProperty]))
+      this.http.delete(this.deleteUrl(r[this.layout.primaryKeyProperty].toString()))
         .subscribe((): void => {
           this.records.splice(this.records.indexOf(r), 1);
         },
