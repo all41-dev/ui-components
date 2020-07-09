@@ -148,6 +148,7 @@ export class RecordComponent<T> implements OnInit, OnChanges {
   }
 
   public load(): void {
+    console.debug(`detailPosition: ${this.layout.detailPosition}`);
     if (!this.layout.detailPosition || this.layout.detailPosition === 'none') {
       // if detailPosition is set then gets the record from recordList parent, no own loading
       return;
