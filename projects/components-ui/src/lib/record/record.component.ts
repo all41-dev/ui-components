@@ -118,8 +118,7 @@ export class RecordComponent<T> implements OnInit, OnChanges {
 
     this.checkScopes();
 
-    // if detailPosition is set then gets the record from recordList parent, no own loading
-    if ((!this.layout.detailPosition || this.layout.detailPosition === 'none') && this.layout.loadOnInit === undefined || this.layout.loadOnInit) {
+    if (this.layout.loadOnInit === undefined || this.layout.loadOnInit) {
       this.load();
     }
   }
@@ -131,7 +130,7 @@ export class RecordComponent<T> implements OnInit, OnChanges {
       switch (propName) {
         case 'layout' :
           if (changedProp.currentValue !== undefined) {
-            if ((!this.layout.detailPosition || this.layout.detailPosition === 'none') && this.currentUrl !== this.getUrl) {
+            if (this.currentUrl !== this.getUrl) {
               // prevent execution if loadOnInit is false & the change hapens during init
               this.load();
             }
@@ -149,6 +148,11 @@ export class RecordComponent<T> implements OnInit, OnChanges {
   }
 
   public load(): void {
+    if (!this.layout.detailPosition || this.layout.detailPosition === 'none') {
+      // if detailPosition is set then gets the record from recordList parent, no own loading
+      return;
+    }
+
     if (this.getUrl !== undefined) {
       this.currentUrl = this.getUrl;
       if(!this.getRestricted){
