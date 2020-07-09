@@ -162,7 +162,7 @@ export class RecordComponent<T> implements OnInit, OnChanges {
             this.record = resp[0] === undefined ? undefined : 
               this.layout.load ? this.layout.load(resp[0]) : resp[0];
             if (this.record) {
-              if (this.layout.initRecord) { this.record = this.layout.initRecord([this.record])}
+              if (this.layout.initRecord) { this.record = this.layout.initRecord(this.record)}
               (this.record as any).__primaryKey = this.record[this.layout.primaryKeyProperty];
             }
             this.recordChange.emit(this.record);
@@ -186,7 +186,7 @@ export class RecordComponent<T> implements OnInit, OnChanges {
             this.record = resp[0] === undefined ? undefined : 
               this.layout.load ? this.layout.load(resp[0]) : resp[0];
             if (this.record) {
-              if (this.layout.initRecord) { this.record = this.layout.initRecord([this.record])}
+              if (this.layout.initRecord) { this.record = this.layout.initRecord(this.record)}
               (this.record as any).__primaryKey = this.record[this.layout.primaryKeyProperty];
             }
             this.recordChange.emit(this.record);
@@ -213,7 +213,7 @@ export class RecordComponent<T> implements OnInit, OnChanges {
         this.http.patch(this.patchUrl(pk), this.record)
           .subscribe((resp: T | T[]): void => {
             this._updateObj(this.record, Array.isArray(resp) ? resp[0] : resp);
-            if (this.layout.initRecord) { this.record = this.layout.initRecord([this.record])}
+            if (this.layout.initRecord) { this.record = this.layout.initRecord(this.record)}
             (this.record as any).__primaryKey = this.record[this.layout.primaryKeyProperty];
             this.recordChange.emit(this.record);
           }, (e): void => {
@@ -226,7 +226,7 @@ export class RecordComponent<T> implements OnInit, OnChanges {
         this.http.post(this.postUrl, this.record)
           .subscribe((resp: T): void => {
             this._updateObj(this.record, resp);
-            if (this.layout.initRecord) { this.record = this.layout.initRecord([this.record])}
+            if (this.layout.initRecord) { this.record = this.layout.initRecord(this.record)}
             (this.record as any).__primaryKey = this.record[this.layout.primaryKeyProperty];
             this.recordChange.emit(this.record);
           }, (e): void => {
