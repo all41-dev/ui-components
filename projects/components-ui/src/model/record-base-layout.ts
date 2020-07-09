@@ -4,7 +4,7 @@ import {Column} from './column';
 export interface RecordBaseLayout<T> {
   columns: Column<T>[];
   entityUrl: string;
-  primaryKeyProperty: string;
+  primaryKeyProperty: keyof T;
   getUrl?: string;
   postUrl?: string;
   patchUrl?: string;
