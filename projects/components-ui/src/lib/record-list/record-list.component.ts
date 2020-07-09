@@ -236,9 +236,9 @@ export class RecordListComponent<T> extends AuthenticationBase implements OnChan
     if (this.getUrl && !this.getRestricted) {
       this.http.get<T[]>(this.getUrl).subscribe(
         async (resp: T[]): Promise<void> => {
-          resp.map((rec: T): void => {
+          resp.map(async (rec: T): Promise<void> => {
             let res = rec;
-            if (this.layout.initRecord) { res = this.layout.initRecord(rec)}
+            if (this.layout.initRecord) { res = await this.layout.initRecord(rec)}
             (res as any).__primaryKey = res[this.layout.primaryKeyProperty];
           });
 
@@ -305,8 +305,8 @@ export class RecordListComponent<T> extends AuthenticationBase implements OnChan
       if (!r['__primaryKey']) {
         if(!this.postRestricted){
           this.http.post(this.postUrl, r)
-            .subscribe((newRecord: T): void => {
-              if (this.layout.initRecord) { newRecord = this.layout.initRecord(newRecord)}
+            .subscribe(async (newRecord: T): Promise<void> => {
+              if (this.layout.initRecord) { newRecord = await this.layout.initRecord(newRecord)}
               (newRecord as any).__primaryKey = [this.layout.primaryKeyProperty];
               this._updateObj(this.records[this.records.indexOf(r)], newRecord);
             }, (e): void => {
@@ -379,8 +379,8 @@ export class RecordListComponent<T> extends AuthenticationBase implements OnChan
   public replaceRecords(newRecords: T | T[]): void {
     const recs = this.records;
     const nRecs = Array.isArray(newRecords) ? newRecords : [newRecords];
-    nRecs.forEach((r: T): void => {
-      if (this.layout.initRecord) { r = this.layout.initRecord(r)}
+    nRecs.forEach(async (r: T): Promise<void> => {
+      if (this.layout.initRecord) { r = await this.layout.initRecord(r)}
       (r as any).__primaryKey = r[this.layout.primaryKeyProperty];
       const index = this.records.map((r2): any => r2[this.layout.primaryKeyProperty]).indexOf(r[this.layout.primaryKeyProperty]);
       this._updateObj(recs[index], r);

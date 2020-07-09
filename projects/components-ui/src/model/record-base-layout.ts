@@ -16,5 +16,5 @@ export interface RecordBaseLayout<T> {
   deleteScope?: string|string[];
   entityScope?: string|string[];
   loadOnInit?: boolean;
-  initRecord?: (args: T) => T;
+  initRecord?: (args: T) => Promise<T>;
 }
