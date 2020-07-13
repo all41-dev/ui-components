@@ -41,6 +41,8 @@
           [attr.edit]="patchRestricted || [undefined, 'none', 'read'].includes(col.detailDisplay) ? null : ''"
           [(modified)]="record[col.recordProperty + 'Modified']"
           [(value)]="record[col.recordProperty]"
+          (valueChange)="col.onChange ? col.onChange(record, [record]) : undefined;
+            layout.onChange ? layout.onChange(record) : undefined"
           [style.width]="valuesWidth"
           [parentComponent]="inst"
           [record]="record"
@@ -52,6 +54,8 @@
           [attr.edit]="patchRestricted || [undefined, 'none', 'read'].includes(col.detailDisplay) ? null : ''"
           [(modified)]="record[col.recordProperty + 'Modified']"
           [(value)]="record[col.recordProperty]"
+          (valueChange)="col.onChange ? col.onChange(record, [record]) : undefined;
+            layout.onChange ? layout.onChange(record) : undefined"
           [(options)] = "col.options"
           [style.width]="valuesWidth"
           [parentComponent]="inst"
@@ -64,6 +68,8 @@
           [attr.edit]="patchRestricted || [undefined, 'none', 'read'].includes(col.detailDisplay) ? null : ''"
           [(modified)]="record[col.recordProperty + 'Modified']"
           [(value)]="record[col.recordProperty]"
+          (valueChange)="col.onChange ? col.onChange(record, [record]) : undefined;
+            layout.onChange ? layout.onChange(record) : undefined"
           [(options)] = "col.options"
           [parentComponent]="inst"
           [record]="record"
@@ -75,6 +81,8 @@
           [attr.edit]="patchRestricted || [undefined, 'none', 'read'].includes(col.detailDisplay) ? null : ''"
           [(modified)]="record[col.recordProperty + 'Modified']"
           [(value)]="record[col.recordProperty]"
+          (valueChange)="col.onChange ? col.onChange(record, [record]) : undefined;
+            layout.onChange ? layout.onChange(record) : undefined"
           [style.width]="valuesWidth"
           [parentComponent]="inst"
           [record]="record"
@@ -86,6 +94,8 @@
           [attr.edit]="patchRestricted || [undefined, 'none', 'read'].includes(col.detailDisplay) ? null : ''"
           [(modified)]="record[col.recordProperty + 'Modified']"
           [(value)]="record[col.recordProperty]"
+          (valueChange)="col.onChange ? col.onChange(record, [record]) : undefined;
+            layout.onChange ? layout.onChange(record) : undefined"
           [style.width]="valuesWidth"
           [parentComponent]="inst"
           [record]="record"
@@ -97,6 +107,8 @@
           [attr.edit]="patchRestricted || [undefined, 'none', 'read'].includes(col.detailDisplay) ? null : ''"
           [(modified)]="record[col.recordProperty + 'Modified']"
           [(value)]="record[col.recordProperty]"
+          (valueChange)="col.onChange ? col.onChange(record, [record]) : undefined;
+            layout.onChange ? layout.onChange(record) : undefined"
           [style.width]="valuesWidth"
           [parentComponent]="inst"
           [record]="record"
