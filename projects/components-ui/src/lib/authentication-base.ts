@@ -18,7 +18,10 @@ export abstract class AuthenticationBase implements OnInit {
     * */
   public baseUrl: string;
   public scopes: string[] = [];
-  protected authCompleted = false;
+
+  private _authCompleted = false;
+  public get isAuthCompleted(): boolean { return this._authCompleted; };
+  protected setAuthCompleted(): void { this._authCompleted = true; }
   private _isIdTokenSet = false;
   public get isIdTokenSet(): boolean {
     return this._isIdTokenSet;
@@ -88,6 +91,6 @@ export abstract class AuthenticationBase implements OnInit {
     this.token = this.config.get('token');
     if (this.token)
       this.scopes = this.token.scope.split(' ');
-    this.authCompleted = true;
+    this.setAuthCompleted();
   };
 }
