@@ -20,12 +20,14 @@ export class RecordListComponent<T> extends AuthenticationBase implements OnChan
   @Input() public selectedRecords: T[] = [];
   @Input() public url: string;
   @Input() public set authCompleted(value: boolean) {
-    if (!this._authCompleted && this._loadOnAuthCompleted && value) {
-      console.info('load from authCompleted');
-      this.load();
-      this._loadOnAuthCompleted = false;
+    if(value) {
+      if (!this.isAuthCompleted && this._loadOnAuthCompleted && value) {
+        console.info('load from authCompleted');
+        this.load();
+        this._loadOnAuthCompleted = false;
+      }
+      this.setAuthCompleted();
     }
-    this._authCompleted = value;
   };
   @Output() public selectedRecordsChange: EventEmitter<T[]> = new EventEmitter<T[]>();
   @Input() public records: T[] = [];
@@ -125,7 +127,6 @@ export class RecordListComponent<T> extends AuthenticationBase implements OnChan
   public patchUrl(pk: string): string | undefined { return this._urlInsertPk(this.layout.patchUrl || this.url || this.layout.entityUrl, pk); }
   public deleteUrl(pk: string): string | undefined { return this._urlInsertPk(this.layout.deleteUrl || this.url || this.layout.entityUrl, pk); }
 
-  private _authCompleted = false;
   private _loadOnAuthCompleted = false;
 
   // eslint-disable-next-line @typescript-eslint/no-parameter-properties
