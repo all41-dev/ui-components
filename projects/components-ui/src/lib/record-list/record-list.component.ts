@@ -199,7 +199,8 @@ export class RecordListComponent<T> extends AuthenticationBase implements OnChan
 
     if (this.loadOnInit) {
       // undefined means that authentication is disabled
-      if ([undefined, true].includes(this._authCompleted)) {
+      // if ([undefined, true].includes(this._authCompleted)) {
+      if (this.isAuthCompleted) {
         // console.info('load from afterAuthInit');
         this.load();
       } else {
