@@ -13,8 +13,9 @@ div.edit:after {
   content: " ";
   white-space: pre;
 }
-input{
-  width: 100%;
+textarea {
+  width: 98%;
+  height: 50px;
   box-sizing: border-box;
   padding: 0;
   border: 0;
