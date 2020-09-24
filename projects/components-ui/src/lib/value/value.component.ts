@@ -5,7 +5,17 @@ import { RecordComponent } from '../record/record.component';
 
 export abstract class ValueComponent implements OnInit {
   public get isEdit(): boolean {
-    return ['create', 'update'].includes(this.parentIsList ? this.columnLayout.listDisplay : this.columnLayout.detailDisplay);
+    const displaySetting = this.parentIsList ? this.columnLayout.listDisplay : this.columnLayout.detailDisplay;
+    const recordIsNew = !this.record['__primaryKey'];
+
+    switch (displaySetting) {
+      case 'update':
+        return true; // update means create and update
+      case 'create':
+        return recordIsNew;
+      default:
+        return false;
+    }
   };
   @Input() public hasFocus = false;
   @Input() public modified: boolean;
