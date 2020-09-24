@@ -34,7 +34,7 @@
         <ng-container [ngSwitch]="col.editType">
           <ng-template [ngSwitchCase]="undefined">
             <ift-text-value
-              [attr.edit]="patchRestricted || ['none', 'read'].includes(col.listDisplay) ? null : ''"
+              [attr.edit2]="patchRestricted || ['none', 'read'].includes(col.listDisplay) ? null : ''"
               [(modified)]="record[col.recordProperty + 'Modified']"
               [(value)]="record[col.recordProperty]"
               (modifiedChange)="col.onChange ? col.onChange(record, records) : undefined;

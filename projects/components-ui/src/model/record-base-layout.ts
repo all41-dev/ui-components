@@ -3,7 +3,7 @@ import {Column} from './column';
 // eslint-disable-next-line @typescript-eslint/interface-name-prefix
 export interface RecordBaseLayout<T> {
   columns: Column<T>[];
-  entityUrl: string;
+  entityUrl?: string;
   primaryKeyProperty: keyof T;
   getUrl?: string;
   postUrl?: string;
