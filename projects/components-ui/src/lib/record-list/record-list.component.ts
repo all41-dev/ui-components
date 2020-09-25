@@ -44,7 +44,7 @@ export class RecordListComponent<T> extends AuthenticationBase implements OnChan
         // To be reactivated when implementing complex filters (number range, dates, list of values, etc..)
         // if (typeof f.filterValue === 'string' && f.filterValue !== '') {
 
-        if (!['none', 'read'].includes(f.listDisplay) && ['typeahead', 'dropdown'].includes((f as EditableColumn<T>).editType)) {
+        if (['typeahead', 'dropdown'].includes((f as EditableColumn<T>).editType)) {
           let options: Option[] = cachedOptions[f.recordProperty];
 
           if (!options) {
@@ -63,7 +63,7 @@ export class RecordListComponent<T> extends AuthenticationBase implements OnChan
           if (label.includes(f.filterValue)) return true; // straight test (optimization)
 
           const filter = f.filterValue.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase();
-          return label.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase().includes(filter);
+          if (!label.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase().includes(filter)) return false;
         } else {
           const baseValue: string = r[f.recordProperty] ?
             typeof r[f.recordProperty] === 'string' ?
@@ -74,7 +74,7 @@ export class RecordListComponent<T> extends AuthenticationBase implements OnChan
           const val = baseValue.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase();
           const filter = f.filterValue.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase();
           // if (val === undefined) return false;// should not happen
-          return val.includes(filter);
+          if (!val.includes(filter)) return false;
         }
         // } else {
         //   // only string filters are implemented yet.
