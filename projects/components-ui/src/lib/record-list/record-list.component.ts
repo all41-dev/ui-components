@@ -60,7 +60,7 @@ export class RecordListComponent<T> extends AuthenticationBase implements OnChan
             label = (r as any)[`__${f.recordProperty}Label`] = option.label;
           }
 
-          if (label.includes(f.filterValue)) return true; // straight test (optimization)
+          if (label.includes(f.filterValue)) continue; // straight test (optimization)
 
           const filter = f.filterValue.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase();
           if (!label.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase().includes(filter)) return false;
@@ -69,7 +69,7 @@ export class RecordListComponent<T> extends AuthenticationBase implements OnChan
             typeof r[f.recordProperty] === 'string' ?
               r[f.recordProperty] as any :
               `${r[f.recordProperty]}` : '';
-          if (baseValue.includes(f.filterValue)) return true; // straight test (optimization)
+          if (baseValue.includes(f.filterValue)) continue; // straight test (optimization)
 
           const val = baseValue.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase();
           const filter = f.filterValue.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase();
