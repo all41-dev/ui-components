@@ -16,7 +16,7 @@ import { RecordLayout } from '../../model/record-layout';
   styleUrls: ['./record-list.component.css']
 })
 export class RecordListComponent<T> extends AuthenticationBase implements OnChanges {
-  @Input() public layout: RecordListLayout<T> & Partial<RecordLayout<T>>;
+  @Input() public layout?: RecordListLayout<T> & Partial<RecordLayout<T>>;
   @Input() public selectedRecords: T[] = [];
   @Input() public url: string;
   @Input() public set authCompleted(value: boolean) {
@@ -37,7 +37,7 @@ export class RecordListComponent<T> extends AuthenticationBase implements OnChan
 
   public get filteredRecords(): T[] {
     if (!this.records) { return []; }
-    const activeFilters = this.layout.columns.filter((c): boolean => c.filterValue && c.filterValue !== '');
+    const activeFilters = this.layout?.columns.filter((c): boolean => c.filterValue && c.filterValue !== '');
     const cachedOptions: any = {};
     const res = this.records.filter((r): boolean => {
       for (const f of activeFilters) {
@@ -103,7 +103,7 @@ export class RecordListComponent<T> extends AuthenticationBase implements OnChan
     }
     const recs = this.filteredRecords.slice(this.chunkSize * this.currentChunk, this.chunkSize * (this.currentChunk + 1));
     // new records (unsaved)
-    const nr = this.records.filter((r): boolean => !r[this.layout.primaryKeyProperty] && recs.indexOf(r) === -1);
+    const nr = this.records.filter((r): boolean => !r[this.layout?.primaryKeyProperty] && recs.indexOf(r) === -1);
     return recs.concat(nr);
   }
   public get lastCurrentRecord(): number {
@@ -122,8 +122,8 @@ export class RecordListComponent<T> extends AuthenticationBase implements OnChan
   public postRestricted = false;
   public get listColumns(): Column<T>[] { return this.layout?.columns.filter((c) => c.listDisplay !== 'none' && c.width !== '0') || []; }
 
-  public get getUrl(): string | undefined { return this.layout.getUrl || this.url || this.layout.entityUrl; }
-  public get postUrl(): string | undefined { return this.layout.postUrl || this.url || this.layout.entityUrl; }
+  public get getUrl(): string | undefined { return this.layout?.getUrl || this.url || this.layout?.entityUrl; }
+  public get postUrl(): string | undefined { return this.layout?.postUrl || this.url || this.layout?.entityUrl; }
 
   private _loadOnAuthCompleted = false;
 
@@ -134,12 +134,12 @@ export class RecordListComponent<T> extends AuthenticationBase implements OnChan
     this.recordsChange.emit(this.records);
   }
 
-  public patchUrl(pk: string): string | undefined { return this._urlInsertPk(this.layout.patchUrl || this.url || this.layout.entityUrl, pk); }
-  public deleteUrl(pk: string): string | undefined { return this._urlInsertPk(this.layout.deleteUrl || this.url || this.layout.entityUrl, pk); }
+  public patchUrl(pk: string): string | undefined { return this._urlInsertPk(this.layout?.patchUrl || this.url || this.layout?.entityUrl, pk); }
+  public deleteUrl(pk: string): string | undefined { return this._urlInsertPk(this.layout?.deleteUrl || this.url || this.layout?.entityUrl, pk); }
 
   // eslint-disable-next-line @typescript-eslint/no-parameter-properties
   public gridTemplateColumns(): string {
-    return this.layout.columns.filter((c) => c.listDisplay !== 'none').map((c): string => c.width).reduce((a, b): string => a + ' ' + b) + ' 24px'; // last col for context menu
+    return this.layout?.columns.filter((c) => c.listDisplay !== 'none').map((c): string => c.width).reduce((a, b): string => a + ' ' + b) + ' 24px'; // last col for context menu
   }
 
   public getWidth(): number {
@@ -151,8 +151,8 @@ export class RecordListComponent<T> extends AuthenticationBase implements OnChan
   public get outerWidth(): string {
     let res = this.getWidth();
     if (['left', 'right'].includes(this.layout?.detailPosition || '')) {
-      const detailWidth =  parseInt(this.layout.labelsWidth.replace('px', ''), 10) +
-        parseInt(this.layout.valuesWidth.replace('px', ''), 10);
+      const detailWidth =  parseInt(this.layout?.labelsWidth.replace('px', ''), 10) +
+        parseInt(this.layout?.valuesWidth.replace('px', ''), 10);
   
       res += detailWidth + 42;
     } 
@@ -160,22 +160,22 @@ export class RecordListComponent<T> extends AuthenticationBase implements OnChan
   }
 
   public checkScopes(): void {
-    if (this.layout.postScope !== undefined && !this.access.hasAccess([this.layout.entityScope, this.layout.postScope])) {
+    if (this.layout?.postScope !== undefined && !this.access.hasAccess([this.layout?.entityScope, this.layout?.postScope])) {
       this.postRestricted = true;
-      this.layout.isAddEnabled = false;
+      this.layout?.isAddEnabled = false;
     }
 
-    if (this.layout.patchScope !== undefined && !this.access.hasAccess([this.layout.entityScope, this.layout.patchScope])) {
+    if (this.layout?.patchScope !== undefined && !this.access.hasAccess([this.layout?.entityScope, this.layout?.patchScope])) {
       this.patchRestricted = true;
     }
 
-    if (this.layout.getScope !== undefined && !this.access.hasAccess([this.layout.entityScope, this.layout.getScope])) {
+    if (this.layout?.getScope !== undefined && !this.access.hasAccess([this.layout?.entityScope, this.layout?.getScope])) {
       this.getRestricted = true;
     }
 
-    if (this.layout.deleteScope !== undefined && !this.access.hasAccess([this.layout.entityScope, this.layout.deleteScope])) {
+    if (this.layout?.deleteScope !== undefined && !this.access.hasAccess([this.layout?.entityScope, this.layout?.deleteScope])) {
       this.deleteRestricted = true;
-      this.layout.isDeleteEnabled = false;
+      this.layout?.isDeleteEnabled = false;
     }
   }
 
@@ -183,19 +183,19 @@ export class RecordListComponent<T> extends AuthenticationBase implements OnChan
   public async afterAuthInit(): Promise<void> {
     super.afterAuthInit();
     // this.layout = new Proxy(this.layout, {set: this.layoutUpdated})
-    // this.layout.reload = this.load;
+    // this.layout?.reload = this.load;
     // this.layoutChange.emit(this.layout);
     this.records = [];
-    if (this.layout.selectionType === undefined) { this.layout.selectionType = 'single'; }
-    if (this.layout.isDeleteEnabled === undefined) { this.layout.isDeleteEnabled = false; }
-    if (this.layout.isAddEnabled === undefined) { this.layout.isAddEnabled = false; }
-    if (this.layout.newRecTemplate === undefined) { this.layout.newRecTemplate = {}; }
-    // if (this.layout.title !== undefined) {this.title = this.layout.title; }
-    if (this.layout.loadOnInit !== undefined) {this.loadOnInit = this.layout.loadOnInit; }
+    if (this.layout?.selectionType === undefined) { this.layout?.selectionType = 'single'; }
+    if (this.layout?.isDeleteEnabled === undefined) { this.layout?.isDeleteEnabled = false; }
+    if (this.layout?.isAddEnabled === undefined) { this.layout?.isAddEnabled = false; }
+    if (this.layout?.newRecTemplate === undefined) { this.layout?.newRecTemplate = {}; }
+    // if (this.layout?.title !== undefined) {this.title = this.layout?.title; }
+    if (this.layout?.loadOnInit !== undefined) {this.loadOnInit = this.layout?.loadOnInit; }
 
     this.checkScopes();
 
-    this.chunkSize = this.layout.chunkSize || 100;
+    this.chunkSize = this.layout?.chunkSize || 100;
     this.currentChunk = 0;
 
     if (this.loadOnInit) {
@@ -208,7 +208,7 @@ export class RecordListComponent<T> extends AuthenticationBase implements OnChan
         this._loadOnAuthCompleted = true;
       }
     }
-    if (this.layout.click !== undefined) {
+    if (this.layout?.click !== undefined) {
       this.cursorStyle = 'pointer';
     }
   }
@@ -227,7 +227,7 @@ export class RecordListComponent<T> extends AuthenticationBase implements OnChan
           break;
         case 'records' :
           if (this.records) {
-            this.records.forEach((rec): T[keyof T] => (rec as any).__primaryKey = rec[this.layout.primaryKeyProperty]);
+            this.records.forEach((rec): T[keyof T] => (rec as any).__primaryKey = rec[this.layout?.primaryKeyProperty]);
           }
           break;
       }
@@ -241,11 +241,11 @@ export class RecordListComponent<T> extends AuthenticationBase implements OnChan
         async (resp: T[]): Promise<void> => {
           resp.map(async (rec: T): Promise<void> => {
             let res = rec;
-            if (this.layout.initRecord) { res = await this.layout.initRecord(rec)}
-            (res as any).__primaryKey = res[this.layout.primaryKeyProperty];
+            if (this.layout?.initRecord) { res = await this.layout?.initRecord(rec)}
+            (res as any).__primaryKey = res[this.layout?.primaryKeyProperty];
           });
 
-          this.records = this.layout.load ? this.layout.load(resp) : resp;
+          this.records = this.layout?.load ? this.layout?.load(resp) : resp;
           this.recordsChange.emit(this.records);
 
           this.filterRecords = this.filteredRecords || [];
@@ -274,7 +274,7 @@ export class RecordListComponent<T> extends AuthenticationBase implements OnChan
     if (record === undefined) {
       return false;
     }
-    return this.layout.columns
+    return this.layout?.columns
       .map((c): any => record[c.recordProperty + 'Modified'])
       .some((m): boolean => m === true);
   }
@@ -282,13 +282,13 @@ export class RecordListComponent<T> extends AuthenticationBase implements OnChan
   public modifiedRecords(): T[] {
     if (!this.records) return [];
     return this.records.filter((r): boolean =>
-      this.layout.columns.map((c): any => r[c.recordProperty + 'Modified']).some((c): boolean => c));
+      this.layout?.columns.map((c): any => r[c.recordProperty + 'Modified']).some((c): boolean => c));
   }
 
   public getDataHeight(headerRow: HTMLElement, controlsRow: HTMLElement): number {
     const hh =  headerRow === undefined ? 0 : headerRow.clientHeight;
     const ch = controlsRow === undefined ? 0 : controlsRow.clientHeight;
-    return this.layout.height - hh - ch;
+    return this.layout?.height - hh - ch;
   }
 
   // noinspection JSMethodCanBeStatic
@@ -300,8 +300,8 @@ export class RecordListComponent<T> extends AuthenticationBase implements OnChan
     saveButton.click();
   }
   public save(/*event = null*/): void {
-    if (this.layout.save) {
-      return this.layout.save(this.modifiedRecords());
+    if (this.layout?.save) {
+      return this.layout?.save(this.modifiedRecords());
     }
 
     this.modifiedRecords().forEach((r): void => {
@@ -309,8 +309,8 @@ export class RecordListComponent<T> extends AuthenticationBase implements OnChan
         if(!this.postRestricted){
           this.http.post(this.postUrl, r)
             .subscribe(async (newRecord: T): Promise<void> => {
-              if (this.layout.initRecord) { newRecord = await this.layout.initRecord(newRecord)}
-              (newRecord as any).__primaryKey = [this.layout.primaryKeyProperty];
+              if (this.layout?.initRecord) { newRecord = await this.layout?.initRecord(newRecord)}
+              (newRecord as any).__primaryKey = [this.layout?.primaryKeyProperty];
               this._updateObj(this.records[this.records.indexOf(r)], newRecord);
             }, (e): void => {
               if(e.status === 403) { this.postRestricted = true; }
@@ -357,17 +357,17 @@ export class RecordListComponent<T> extends AuthenticationBase implements OnChan
 
     const mr = this.modifiedRecords();
     // confirm that new records will be removed
-    if (mr.filter((r): boolean => r[this.layout.primaryKeyProperty] === undefined).length > 0 && !confirm('new unsaved record(s) will be removed, do you want to continue?')) {
+    if (mr.filter((r): boolean => r[this.layout?.primaryKeyProperty] === undefined).length > 0 && !confirm('new unsaved record(s) will be removed, do you want to continue?')) {
       return;
     }
 
     mr.forEach((r: T): void => {
-      if (r[this.layout.primaryKeyProperty] === undefined) {
+      if (r[this.layout?.primaryKeyProperty] === undefined) {
         // new record
         this.records.splice(this.records.indexOf(r), 1);
       } else {
         if(!this.getRestricted){
-          this.http.get(`${this.layout.entityUrl}/${r[this.layout.primaryKeyProperty]}`)
+          this.http.get(`${this.layout?.entityUrl}/${r[this.layout?.primaryKeyProperty]}`)
           // .subscribe((r2: T[]) => this.replaceRecords(r2));
             .subscribe(this.replaceRecords.bind(this),
               (e): void => {
@@ -383,9 +383,9 @@ export class RecordListComponent<T> extends AuthenticationBase implements OnChan
     const recs = this.records;
     const nRecs = Array.isArray(newRecords) ? newRecords : [newRecords];
     nRecs.forEach(async (r: T): Promise<void> => {
-      if (this.layout.initRecord) { r = await this.layout.initRecord(r)}
-      (r as any).__primaryKey = r[this.layout.primaryKeyProperty];
-      const index = this.records.map((r2): any => r2[this.layout.primaryKeyProperty]).indexOf(r[this.layout.primaryKeyProperty]);
+      if (this.layout?.initRecord) { r = await this.layout?.initRecord(r)}
+      (r as any).__primaryKey = r[this.layout?.primaryKeyProperty];
+      const index = this.records.map((r2): any => r2[this.layout?.primaryKeyProperty]).indexOf(r[this.layout?.primaryKeyProperty]);
       this._updateObj(recs[index], r);
     });
   }
@@ -445,7 +445,7 @@ export class RecordListComponent<T> extends AuthenticationBase implements OnChan
 
   public new(): void {
     if (!this.records) { this.records = []; }
-    const templateCopy = JSON.parse(JSON.stringify(this.layout.newRecTemplate));
+    const templateCopy = JSON.parse(JSON.stringify(this.layout?.newRecTemplate));
     this.records.push(templateCopy as T);
     setTimeout((): void => {
       const elem: HTMLElement = this.grid.nativeElement;
@@ -480,7 +480,7 @@ export class RecordListComponent<T> extends AuthenticationBase implements OnChan
 
   public deleteRecord(r: T): void {
     if(!this.deleteRestricted){
-      this.http.delete(this.deleteUrl(r[this.layout.primaryKeyProperty].toString()))
+      this.http.delete(this.deleteUrl(r[this.layout?.primaryKeyProperty].toString()))
         .subscribe((): void => {
           this.records.splice(this.records.indexOf(r), 1);
           if (this.selectedRecords.includes(r)) {
@@ -497,7 +497,7 @@ export class RecordListComponent<T> extends AuthenticationBase implements OnChan
   public toggleSelection(r: T): void {
     const idx = this.selectedRecords.indexOf(r);
 
-    switch (this.layout.selectionType) {
+    switch (this.layout?.selectionType) {
       case 'none':
         return;
       case 'multiple':
@@ -524,25 +524,25 @@ export class RecordListComponent<T> extends AuthenticationBase implements OnChan
   }
   public click(r: T): void {
     // console.info('click');
-    if (this.layout.click) {
-      this.layout.click(r);
+    if (this.layout?.click) {
+      this.layout?.click(r);
       return;
     }
-    if((typeof this.layout.selectionTrigger === 'string' && ['dblclick', 'contextmenu'].includes(this.layout.selectionTrigger))) return;
+    if((typeof this.layout?.selectionTrigger === 'string' && ['dblclick', 'contextmenu'].includes(this.layout?.selectionTrigger))) return;
 
-    if(!this.layout.selectionTrigger || this.layout.selectionTrigger.includes('click')) {
+    if(!this.layout?.selectionTrigger || this.layout?.selectionTrigger.includes('click')) {
       this.toggleSelection(r);
     }
   }
   public dblclick(r: T): void {
     // console.info('dblclick');
-    if (this.layout.dblClick) {
-      this.layout.dblClick(r);
+    if (this.layout?.dblClick) {
+      this.layout?.dblClick(r);
       return;
     }
-    if(!this.layout.selectionTrigger || (typeof this.layout.selectionTrigger === 'string' && ['click', 'contextmenu'].includes(this.layout.selectionTrigger))) return;
+    if(!this.layout?.selectionTrigger || (typeof this.layout?.selectionTrigger === 'string' && ['click', 'contextmenu'].includes(this.layout?.selectionTrigger))) return;
 
-    if(this.layout.selectionTrigger.includes('dblclick')) {
+    if(this.layout?.selectionTrigger.includes('dblclick')) {
       this.toggleSelection(r);
     }
   }
@@ -563,9 +563,9 @@ export class RecordListComponent<T> extends AuthenticationBase implements OnChan
     }, 300);
   }
   public isReadOnly(): boolean {
-    return !(this.layout.isAddEnabled ||
-      this.layout.isDeleteEnabled ||
-      this.layout.columns.some((c): boolean => ['create', 'update'].includes(c.listDisplay)));
+    return !(this.layout?.isAddEnabled ||
+      this.layout?.isDeleteEnabled ||
+      this.layout?.columns.some((c): boolean => ['create', 'update'].includes(c.listDisplay)));
   }
 
   private _urlInsertPk = (url: string, pk: string): string => {
