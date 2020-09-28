@@ -3,9 +3,9 @@
     *ngIf="['left', 'right', 'top'].includes(layout?.detailPosition) && selectedRecords.length === 1"
     [record]="selectedRecords[0]"
     [layout]="layout"
-    [style.float]="['left', 'right'].includes(layout?.detailPosition) ? layout.detailPosition : 'inherit'">
+    [style.float]="['left', 'right'].includes(layout?.detailPosition) ? layout?.detailPosition : 'inherit'">
   </ift-record>
-  <div class="header" [style.width]="'' + (getWidth()+19) + 'px'"><h3>{{layout.title}}</h3></div>
+  <div class="header" [style.width]="'' + (getWidth()+19) + 'px'"><h3>{{layout?.title}}</h3></div>
   <div #headerRow class="row header"
       [style.width]="'' + (getWidth()+19) + 'px'"
       [style.gridTemplateColumns]="gridTemplateColumns()">
@@ -37,7 +37,7 @@
               [(modified)]="record[col.recordProperty + 'Modified']"
               [(value)]="record[col.recordProperty]"
               (modifiedChange)="col.onChange ? col.onChange(record, records) : undefined;
-                layout.onRecChange ? layout.onRecChange(record, records) : undefined"
+                layout?.onRecChange ? layout?.onRecChange(record, records) : undefined"
               [parentComponent]="inst"
               [record]="record"
               [columnLayout]="col"
@@ -49,7 +49,7 @@
               [(modified)]="record[col.recordProperty + 'Modified']"
               [(value)]="record[col.recordProperty]"
               (modifiedChange)="col.onChange ? col.onChange(record, records) : undefined;
-                layout.onRecChange ? layout.onRecChange(record, records) : undefined"
+                layout?.onRecChange ? layout?.onRecChange(record, records) : undefined"
               [parentComponent]="inst"
               [record]="record"
               [columnLayout]="col"
@@ -61,7 +61,7 @@
               [(modified)]="record[col.recordProperty + 'Modified']"
               [(value)]="record[col.recordProperty]"
               (modifiedChange)="col.onChange ? col.onChange(record, records) : undefined;
-                layout.onRecChange ? layout.onRecChange(record, records) : undefined"
+                layout?.onRecChange ? layout?.onRecChange(record, records) : undefined"
                 [parentComponent]="inst"
                 [record]="record"
                 [columnLayout]="col"
@@ -72,7 +72,7 @@
               [(modified)]="record[col.recordProperty + 'Modified']"
               [(value)]="record[col.recordProperty]"
               (modifiedChange)="col.onChange ? col.onChange(record, records) : undefined;
-                layout.onRecChange ? layout.onRecChange(record, records) : undefined"
+                layout?.onRecChange ? layout?.onRecChange(record, records) : undefined"
               [options] = "col.options"
               [parentComponent]="inst"
               [record]="record"
@@ -84,7 +84,7 @@
               [(modified)]="record[col.recordProperty + 'Modified']"
               [(value)]="record[col.recordProperty]"
               (modifiedChange)="col.onChange ? col.onChange(record, records) : undefined;
-                layout.onRecChange ? layout.onRecChange(record, records) : undefined"
+                layout?.onRecChange ? layout?.onRecChange(record, records) : undefined"
               [options] = "col.options"
               [parentComponent]="inst"
               [record]="record"
@@ -96,7 +96,7 @@
               [(modified)]="record[col.recordProperty + 'Modified']"
               [(value)]="record[col.recordProperty]"
               (modifiedChange)="col.onChange ? col.onChange(record, records) : undefined;
-                layout.onRecChange ? layout.onRecChange(record, records) : undefined"
+                layout?.onRecChange ? layout?.onRecChange(record, records) : undefined"
                 [parentComponent]="inst"
                 [record]="record"
                 [columnLayout]="col"
@@ -107,7 +107,7 @@
               [(modified)]="record[col.recordProperty + 'Modified']"
               [(value)]="record[col.recordProperty]"
               (modifiedChange)="col.onChange ? col.onChange(record, records) : undefined;
-                layout.onRecChange ? layout.onRecChange(record, records) : undefined"
+                layout?.onRecChange ? layout?.onRecChange(record, records) : undefined"
               [parentComponent]="inst"
               [record]="record"
               [columnLayout]="col"
@@ -118,7 +118,7 @@
               [(modified)]="record[col.recordProperty + 'Modified']"
               [(value)]="record[col.recordProperty]"
               (modifiedChange)="col.onChange ? col.onChange(record, records) : undefined;
-                layout.onRecChange ? layout.onRecChange(record, records) : undefined"
+                layout?.onRecChange ? layout?.onRecChange(record, records) : undefined"
                 [parentComponent]="inst"
                 [record]="record"
                 [columnLayout]="col"
@@ -126,11 +126,11 @@
           </ng-template>
         </ng-container>
       </ng-container>
-      <span #rowCommand class="row-command" [style.visibility]="layout.isDeleteEnabled || layout.selectionTrigger?.includes('contextmenu') ? 'visible' : 'hidden'"> <!--[style.left]="'' + (rowCommand.parentElement.clientWidth - rowCommand.clientWidth) + 'px'">-->
+      <span #rowCommand class="row-command" [style.visibility]="layout?.isDeleteEnabled || layout?.selectionTrigger?.includes('contextmenu') ? 'visible' : 'hidden'"> <!--[style.left]="'' + (rowCommand.parentElement.clientWidth - rowCommand.clientWidth) + 'px'">-->
         <button role="button" (click)="toggleContextMenu($event)">...</button>
         <div #rowMenu style="display: none;" (blur)="hideContextMenu($event)" tabindex="0">
-          <button (click)="deleteRecord(record)" [style.visibility]="layout.isDeleteEnabled ? 'visible' : 'hidden'" title="delete">delete</button>
-          <button (click)="toggleSelection(record)" [style.visibility]="layout.selectionType === 'none' || !layout.selectionTrigger?.includes('contextmenu') ? 'hidden' : 'visible'" title="select">select</button>
+          <button (click)="deleteRecord(record)" [style.visibility]="layout?.isDeleteEnabled ? 'visible' : 'hidden'" title="delete">delete</button>
+          <button (click)="toggleSelection(record)" [style.visibility]="layout?.selectionType === 'none' || !layout?.selectionTrigger?.includes('contextmenu') ? 'hidden' : 'visible'" title="select">select</button>
         </div>
       </span>
     </div>
@@ -143,7 +143,7 @@
     <span [hidden]="isReadOnly()">
       <button #saveButton [style.visibility]="modifiedRecords().length > 0 ? 'visible' : 'hidden'" role="button" (click)="save()">Save {{modifiedRecords().length}} record(s)</button>
       <button #cancelButton [style.visibility]="modifiedRecords().length > 0 ? 'visible' : 'hidden'" role="button" (click)="cancelChanges()">Revert changes</button>
-      <button #newButton [style.visibility]="layout.isAddEnabled ? 'visible' : 'hidden'" role="button" (click)="new()">New</button>
+      <button #newButton [style.visibility]="layout?.isAddEnabled ? 'visible' : 'hidden'" role="button" (click)="new()">New</button>
     </span>
   </div>
   <ift-record 
