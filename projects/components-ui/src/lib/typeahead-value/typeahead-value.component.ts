@@ -1,6 +1,7 @@
 import {Component, EventEmitter, Input, Output} from '@angular/core';
 import {ValueComponent} from '../value/value.component';
 import { Option } from '../../model/column';
+import scrollIntoView from "scroll-into-view-if-needed";
 
 @Component({
   selector: 'ift-typeahead-value',
@@ -116,7 +117,7 @@ export class TypeaheadValueComponent extends ValueComponent {
   }
 
   public ensureVisible(elem): void {
-    elem.scrollIntoView({
+    scrollIntoView(elem, {
       behavior: 'smooth',
       block: 'nearest',
     });
