@@ -150,7 +150,7 @@ export class RecordListComponent<T> extends AuthenticationBase implements OnChan
 
   public get outerWidth(): string {
     let res = this.getWidth();
-    if (['left', 'right'].includes(this.layout.detailPosition)) {
+    if (['left', 'right'].includes(this.layout?.detailPosition || '')) {
       const detailWidth =  parseInt(this.layout.labelsWidth.replace('px', ''), 10) +
         parseInt(this.layout.valuesWidth.replace('px', ''), 10);
   
