@@ -1,4 +1,4 @@
-import {Component, EventEmitter, Input, Output} from '@angular/core';
+import {Component, ElementRef, EventEmitter, Input, Output, ViewChild} from '@angular/core';
 import {ValueComponent} from '../value/value.component';
 import { Option } from '../../model/column';
 import scrollIntoView from "scroll-into-view-if-needed";
@@ -12,6 +12,7 @@ export class TypeaheadValueComponent extends ValueComponent {
   @Input() public value: any;
   @Output() public valueChange: EventEmitter<string> = new EventEmitter<any>();
   @Input() public options: Option[]|(() => Option[]) = [];
+  @ViewChild('optionsDom') optionsDom: ElementRef;
 
   public get optionsArr(): Option[] {
     return (Array.isArray(this.options) ?
@@ -49,11 +50,11 @@ export class TypeaheadValueComponent extends ValueComponent {
     this.matchingOptions = undefined;
   }
   public updOptionsFilter(event: KeyboardEvent, options: Option[]): void {
-    if ([13].indexOf(event.keyCode) !== -1 && this.filterHighlightIdx !== undefined) {
+    if (event.key === 'enter' && this.filterHighlightIdx !== undefined) {
       // enter
       this.switchToFilterOption(this.filterHighlightIdx);
       event.stopPropagation();
-    } else if (event.keyCode === 38) {
+    } else if (event.key === 'up arrow') {
       // up arrow
       // console.debug(`up matchingPkg:${JSON.stringify(this.matchingPkg)} filterHighlighIdx:${JSON.stringify(this.filterHighlightIdx)}`);
       if (Array.isArray(this.matchingOptions) && this.matchingOptions.length > 0) {
@@ -64,7 +65,7 @@ export class TypeaheadValueComponent extends ValueComponent {
         }
       }
       event.stopPropagation();
-    } else if (event.keyCode === 40) {
+    } else if (event.key === 'down arrow') {
       // down arrow
       // console.debug(`down matchingPkg:${JSON.stringify(this.matchingPkg)} filterHighlighIdx:${JSON.stringify(this.filterHighlightIdx)}`);
       if (Array.isArray(this.matchingOptions) && this.matchingOptions.length > 0) {
@@ -79,7 +80,7 @@ export class TypeaheadValueComponent extends ValueComponent {
       this.matchingOptions = this.optionsArr.filter((p): boolean => p.label.toLowerCase().indexOf(this.optionFilter.toLowerCase()) !== -1).slice(0, 10);
       this.filterHighlightIdx = this.matchingOptions && this.matchingOptions.length > 0 ? 0 : undefined;
       setTimeout((): void => {
-        this.ensureVisible(options);
+        this.ensureVisible(this.optionsDom);
       }, 100);
     }
   }

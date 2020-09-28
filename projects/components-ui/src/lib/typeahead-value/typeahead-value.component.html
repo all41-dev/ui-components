@@ -3,7 +3,7 @@
        [(ngModel)]="optionFilter" (blur)="blur();" (keydown.shift.tab)="tab($event)" (keydown.tab)="tab($event)"
        (keyup)="updOptionsFilter($event, optionsArr)" (focus)="updOptionsFilter($event, optionsArr);"
        #input title="To be added" [title]="filterHighlightIdx">
-<div #options 
+<div #optionsDom 
      style="position: relative;background-color:rgba(220, 220, 220);z-index: 3;padding: 5px;"
      [hidden]="!matchingOptions || matchingOptions.length === 0">
   <div *ngFor="let mOpt of matchingOptions; let i = index"
