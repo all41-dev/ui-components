@@ -162,7 +162,7 @@ export class RecordListComponent<T> extends AuthenticationBase implements OnChan
   public checkScopes(): void {
     if (this.layout?.postScope !== undefined && !this.access.hasAccess([this.layout?.entityScope, this.layout?.postScope])) {
       this.postRestricted = true;
-      this.layout?.isAddEnabled = false;
+      this.layout.isAddEnabled = false;
     }
 
     if (this.layout?.patchScope !== undefined && !this.access.hasAccess([this.layout?.entityScope, this.layout?.patchScope])) {
@@ -175,7 +175,7 @@ export class RecordListComponent<T> extends AuthenticationBase implements OnChan
 
     if (this.layout?.deleteScope !== undefined && !this.access.hasAccess([this.layout?.entityScope, this.layout?.deleteScope])) {
       this.deleteRestricted = true;
-      this.layout?.isDeleteEnabled = false;
+      this.layout.isDeleteEnabled = false;
     }
   }
 
@@ -186,10 +186,10 @@ export class RecordListComponent<T> extends AuthenticationBase implements OnChan
     // this.layout?.reload = this.load;
     // this.layoutChange.emit(this.layout);
     this.records = [];
-    if (this.layout?.selectionType === undefined) { this.layout?.selectionType = 'single'; }
-    if (this.layout?.isDeleteEnabled === undefined) { this.layout?.isDeleteEnabled = false; }
-    if (this.layout?.isAddEnabled === undefined) { this.layout?.isAddEnabled = false; }
-    if (this.layout?.newRecTemplate === undefined) { this.layout?.newRecTemplate = {}; }
+    if (this.layout && this.layout?.selectionType === undefined) { this.layout.selectionType = 'single'; }
+    if (this.layout && this.layout?.isDeleteEnabled === undefined) { this.layout.isDeleteEnabled = false; }
+    if (this.layout && this.layout?.isAddEnabled === undefined) { this.layout.isAddEnabled = false; }
+    if (this.layout && this.layout?.newRecTemplate === undefined) { this.layout.newRecTemplate = {}; }
     // if (this.layout?.title !== undefined) {this.title = this.layout?.title; }
     if (this.layout?.loadOnInit !== undefined) {this.loadOnInit = this.layout?.loadOnInit; }
 
