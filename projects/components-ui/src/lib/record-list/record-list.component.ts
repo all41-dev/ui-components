@@ -120,16 +120,13 @@ export class RecordListComponent<T> extends AuthenticationBase implements OnChan
   public patchRestricted = false;
   public deleteRestricted = false;
   public postRestricted = false;
-  public get listColumns(): Column<T>[] { return this.layout.columns.filter((c) => c.listDisplay !== 'none' && c.width !== '0'); }
+  public get listColumns(): Column<T>[] { return this.layout?.columns.filter((c) => c.listDisplay !== 'none' && c.width !== '0') || []; }
 
   public get getUrl(): string | undefined { return this.layout.getUrl || this.url || this.layout.entityUrl; }
   public get postUrl(): string | undefined { return this.layout.postUrl || this.url || this.layout.entityUrl; }
-  public patchUrl(pk: string): string | undefined { return this._urlInsertPk(this.layout.patchUrl || this.url || this.layout.entityUrl, pk); }
-  public deleteUrl(pk: string): string | undefined { return this._urlInsertPk(this.layout.deleteUrl || this.url || this.layout.entityUrl, pk); }
 
   private _loadOnAuthCompleted = false;
 
-  // eslint-disable-next-line @typescript-eslint/no-parameter-properties
   public constructor(private http: HttpClient, protected access: AccessFunctions, protected oauthService: OAuthService, protected config: Config ) {
     super(oauthService, config);
     this.inst = this;
@@ -137,6 +134,10 @@ export class RecordListComponent<T> extends AuthenticationBase implements OnChan
     this.recordsChange.emit(this.records);
   }
 
+  public patchUrl(pk: string): string | undefined { return this._urlInsertPk(this.layout.patchUrl || this.url || this.layout.entityUrl, pk); }
+  public deleteUrl(pk: string): string | undefined { return this._urlInsertPk(this.layout.deleteUrl || this.url || this.layout.entityUrl, pk); }
+
+  // eslint-disable-next-line @typescript-eslint/no-parameter-properties
   public gridTemplateColumns(): string {
     return this.layout.columns.filter((c) => c.listDisplay !== 'none').map((c): string => c.width).reduce((a, b): string => a + ' ' + b) + ' 24px'; // last col for context menu
   }
@@ -572,8 +573,8 @@ export class RecordListComponent<T> extends AuthenticationBase implements OnChan
     return `${urlParts[0]}/${pk}?${urlParts[1] || ''}`;
   }
 
-  private _updateObj(from: Object, to: Object) {
-    for (var prop in from) { if (from.hasOwnProperty(prop)) { delete from[prop]; } }
+  private _updateObj(from: object, to: object): void {
+    for (const prop in from) { if (from.hasOwnProperty(prop)) { delete from[prop]; } }
     Object.assign(from, to);
   }
 }
