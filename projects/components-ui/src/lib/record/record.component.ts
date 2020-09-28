@@ -30,30 +30,30 @@ export class RecordComponent<T> implements OnInit, OnChanges {
   public componentHeight = 'inherit';
   public title = '';
   public currentUrl: string = undefined;
-  public get detailColumns(): Column<T>[] { return this.layout.columns.filter((c) => c.detailDisplay !== 'none'); }
-  public get listColumns(): Column<T>[] { return this.layout.columns.filter((c) => c.listDisplay !== 'none' && c.width !== '0'); }
+  public get detailColumns(): Column<T>[] { return this.layout?.columns.filter((c) => c.detailDisplay !== 'none'); }
+  public get listColumns(): Column<T>[] { return this.layout?.columns.filter((c) => c.listDisplay !== 'none' && c.width !== '0'); }
 
-  public get getUrl(): string | undefined { return this.layout.getUrl || this.url || this.layout.entityUrl; }
-  public get postUrl(): string | undefined { return this.layout.postUrl || this.url || this.layout.entityUrl; }
+  public get getUrl(): string | undefined { return this.layout?.getUrl || this.url || this.layout?.entityUrl; }
+  public get postUrl(): string | undefined { return this.layout?.postUrl || this.url || this.layout?.entityUrl; }
   // eslint-disable-next-line @typescript-eslint/no-parameter-properties
   public constructor(private http: HttpClient, private access: AccessFunctions) {
     this.inst = this;
   }
 
-  public patchUrl(pk: string): string | undefined { return this._urlInsertPk(this.layout.patchUrl || this.url || this.layout.entityUrl, pk); }
-  public deleteUrl(pk: string): string | undefined { return this._urlInsertPk(this.layout.deleteUrl || this.url || this.layout.entityUrl, pk); }
+  public patchUrl(pk: string): string | undefined { return this._urlInsertPk(this.layout?.patchUrl || this.url || this.layout?.entityUrl, pk); }
+  public deleteUrl(pk: string): string | undefined { return this._urlInsertPk(this.layout?.deleteUrl || this.url || this.layout?.entityUrl, pk); }
 
   public checkScopes(): void {
-    if(this.layout.postScope !== undefined && !this.access.hasAccess([this.layout.postScope])) this.postRestricted = true;
+    if(this.layout?.postScope !== undefined && !this.access.hasAccess([this.layout?.postScope])) this.postRestricted = true;
 
-    if(this.layout.patchScope !== undefined && !this.access.hasAccess([this.layout.patchScope])) this.patchRestricted=true;
+    if(this.layout?.patchScope !== undefined && !this.access.hasAccess([this.layout?.patchScope])) this.patchRestricted=true;
 
-    if(this.layout.getScope !== undefined && !this.access.hasAccess([this.layout.getScope])) this.getRestricted=true;
+    if(this.layout?.getScope !== undefined && !this.access.hasAccess([this.layout?.getScope])) this.getRestricted=true;
   }
 
   public cancelChanges(): void {
     if(!this.getRestricted){
-      this.http.get(`${this.layout.entityUrl}/${this.record[this.layout.primaryKeyProperty]}`)
+      this.http.get(`${this.layout?.entityUrl}/${this.record[this.layout?.primaryKeyProperty]}`)
         .subscribe((resp: T[]): T => this.record = resp[0],
           (e): void => {
             if(e.status == 403) this.getRestricted = true;
@@ -77,7 +77,7 @@ export class RecordComponent<T> implements OnInit, OnChanges {
       return false;
     }
     // test all editable fields of the entity here
-    const modifiedProps = this.layout.columns
+    const modifiedProps = this.layout?.columns
       .filter((c): boolean =>
         this.record[c.recordProperty + 'Modified'] === true
       );
@@ -89,37 +89,37 @@ export class RecordComponent<T> implements OnInit, OnChanges {
     if (this.record === undefined) {
       return false;
     }
-    return this.layout.columns.filter((c): boolean => {
+    return this.layout?.columns.filter((c): boolean => {
       return c.isValid !== undefined && !c.isValid(this.record);
     }).length === 0;
   }
 
   public ngOnInit(): void {
 
-    if (this.layout.labelsWidth !== undefined) {
-      this.labelsWidth = this.layout.labelsWidth;
+    if (this.layout?.labelsWidth !== undefined) {
+      this.labelsWidth = this.layout?.labelsWidth;
     }
-    if (this.layout.valuesWidth !== undefined) {
-      this.valuesWidth = this.layout.valuesWidth;
+    if (this.layout?.valuesWidth !== undefined) {
+      this.valuesWidth = this.layout?.valuesWidth;
     }
-    if (!this.layout.detailPosition || ['left', 'right'].includes(this.layout.detailPosition)) {
-      if (this.layout.labelsWidth !== undefined && this.layout.valuesWidth !== undefined) {
-        const width =  parseInt(this.layout.labelsWidth.replace('px', ''), 10) +
-          parseInt(this.layout.valuesWidth.replace('px', ''), 10);
+    if (!this.layout?.detailPosition || ['left', 'right'].includes(this.layout?.detailPosition)) {
+      if (this.layout?.labelsWidth !== undefined && this.layout?.valuesWidth !== undefined) {
+        const width =  parseInt(this.layout?.labelsWidth.replace('px', ''), 10) +
+          parseInt(this.layout?.valuesWidth.replace('px', ''), 10);
         this.componentWidth = `${width + 19}px`;
-        this.componentHeight = `${this.layout.height + 4}px`;
+        this.componentHeight = `${this.layout?.height + 4}px`;
       }  
     } else {
       this.componentWidth = `${this.getWidth() + 19}px`;
       //height is kept as default
     }
-    if (this.layout.title) {
-      this.title = this.layout.title;
+    if (this.layout?.title) {
+      this.title = this.layout?.title;
     }
 
     this.checkScopes();
 
-    if (this.layout.loadOnInit === undefined || this.layout.loadOnInit) {
+    if (this.layout?.loadOnInit === undefined || this.layout?.loadOnInit) {
       this.load();
     }
   }
@@ -149,8 +149,8 @@ export class RecordComponent<T> implements OnInit, OnChanges {
   }
 
   public load(): void {
-    // console.debug(`detailPosition: ${this.layout.detailPosition}`);
-    if (this.layout.detailPosition || this.layout.detailPosition !== 'none') {
+    // console.debug(`detailPosition: ${this.layout?.detailPosition}`);
+    if (this.layout?.detailPosition || this.layout?.detailPosition !== 'none') {
       // if detailPosition is set then gets the record from recordList parent, no own loading
       return;
     }
@@ -161,10 +161,10 @@ export class RecordComponent<T> implements OnInit, OnChanges {
         this.http.get<T[]>(`${this.getUrl}`)
           .subscribe( async (resp: T[]): Promise<void> => {
             this.record = resp[0] === undefined ? undefined : 
-              this.layout.load ? this.layout.load(resp[0]) : resp[0];
+              this.layout?.load ? this.layout?.load(resp[0]) : resp[0];
             if (this.record) {
-              if (this.layout.initRecord) { this.record = await this.layout.initRecord(this.record)}
-              (this.record as any).__primaryKey = this.record[this.layout.primaryKeyProperty];
+              if (this.layout?.initRecord) { this.record = await this.layout?.initRecord(this.record)}
+              (this.record as any).__primaryKey = this.record[this.layout?.primaryKeyProperty];
             }
             this.recordChange.emit(this.record);
           }, (e): void => {
@@ -185,10 +185,10 @@ export class RecordComponent<T> implements OnInit, OnChanges {
         this.http.get<T[]>(this.currentUrl)
           .subscribe(async (resp: T[]): Promise<void> => {
             this.record = resp[0] === undefined ? undefined : 
-              this.layout.load ? this.layout.load(resp[0]) : resp[0];
+              this.layout?.load ? this.layout?.load(resp[0]) : resp[0];
             if (this.record) {
-              if (this.layout.initRecord) { this.record = await this.layout.initRecord(this.record)}
-              (this.record as any).__primaryKey = this.record[this.layout.primaryKeyProperty];
+              if (this.layout?.initRecord) { this.record = await this.layout?.initRecord(this.record)}
+              (this.record as any).__primaryKey = this.record[this.layout?.primaryKeyProperty];
             }
             this.recordChange.emit(this.record);
           }, (e): void => {
@@ -201,9 +201,9 @@ export class RecordComponent<T> implements OnInit, OnChanges {
 
 
   public async save(): Promise<void> {
-    if (this.layout.save !== undefined) {
-      const res = await this.layout.save(this.record);
-      this.record = this.layout.load ? this.layout.load(res) : res;
+    if (this.layout?.save !== undefined) {
+      const res = await this.layout?.save(this.record);
+      this.record = this.layout?.load ? this.layout?.load(res) : res;
       return;
     }
 
@@ -214,8 +214,8 @@ export class RecordComponent<T> implements OnInit, OnChanges {
         this.http.patch(this.patchUrl(pk), this.record)
           .subscribe(async (resp: T | T[]): Promise<void> => {
             this._updateObj(this.record, Array.isArray(resp) ? resp[0] : resp);
-            if (this.layout.initRecord) { this.record = await this.layout.initRecord(this.record)}
-            (this.record as any).__primaryKey = this.record[this.layout.primaryKeyProperty];
+            if (this.layout?.initRecord) { this.record = await this.layout?.initRecord(this.record)}
+            (this.record as any).__primaryKey = this.record[this.layout?.primaryKeyProperty];
             this.recordChange.emit(this.record);
           }, (e): void => {
             if(e.status === 403) { this.patchRestricted = true; }
@@ -227,8 +227,8 @@ export class RecordComponent<T> implements OnInit, OnChanges {
         this.http.post(this.postUrl, this.record)
           .subscribe( async (resp: T): Promise<void> => {
             this._updateObj(this.record, resp);
-            if (this.layout.initRecord) { this.record = await this.layout.initRecord(this.record)}
-            (this.record as any).__primaryKey = this.record[this.layout.primaryKeyProperty];
+            if (this.layout?.initRecord) { this.record = await this.layout?.initRecord(this.record)}
+            (this.record as any).__primaryKey = this.record[this.layout?.primaryKeyProperty];
             this.recordChange.emit(this.record);
           }, (e): void => {
             if(e.status === 403) { this.postRestricted = true; }
