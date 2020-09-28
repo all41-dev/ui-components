@@ -13,7 +13,7 @@ import { Column } from '../../model/column';
 })
 export class RecordComponent<T> implements OnInit, OnChanges {
   @Input() public id?: any;
-  @Input() public layout: RecordLayout<T> & RecordListLayout<T>;
+  @Input() public layout?: RecordLayout<T> & RecordListLayout<T>;
   @Input() public record: T|undefined;
   @Output() public recordChange: EventEmitter<T> = new EventEmitter<T>();
   @Input() public url: string;
@@ -35,13 +35,13 @@ export class RecordComponent<T> implements OnInit, OnChanges {
 
   public get getUrl(): string | undefined { return this.layout.getUrl || this.url || this.layout.entityUrl; }
   public get postUrl(): string | undefined { return this.layout.postUrl || this.url || this.layout.entityUrl; }
-  public patchUrl(pk: string): string | undefined { return this._urlInsertPk(this.layout.patchUrl || this.url || this.layout.entityUrl, pk); }
-  public deleteUrl(pk: string): string | undefined { return this._urlInsertPk(this.layout.deleteUrl || this.url || this.layout.entityUrl, pk); }
-
   // eslint-disable-next-line @typescript-eslint/no-parameter-properties
   public constructor(private http: HttpClient, private access: AccessFunctions) {
     this.inst = this;
   }
+
+  public patchUrl(pk: string): string | undefined { return this._urlInsertPk(this.layout.patchUrl || this.url || this.layout.entityUrl, pk); }
+  public deleteUrl(pk: string): string | undefined { return this._urlInsertPk(this.layout.deleteUrl || this.url || this.layout.entityUrl, pk); }
 
   public checkScopes(): void {
     if(this.layout.postScope !== undefined && !this.access.hasAccess([this.layout.postScope])) this.postRestricted = true;
@@ -95,6 +95,7 @@ export class RecordComponent<T> implements OnInit, OnChanges {
   }
 
   public ngOnInit(): void {
+
     if (this.layout.labelsWidth !== undefined) {
       this.labelsWidth = this.layout.labelsWidth;
     }
@@ -293,8 +294,8 @@ export class RecordComponent<T> implements OnInit, OnChanges {
     return `${urlParts[0]}/${pk}?${urlParts[1] || ''}`;
   }
 
-  private _updateObj(from: Object, to: Object) {
-    for (var prop in from) { if (from.hasOwnProperty(prop)) { delete from[prop]; } }
+  private _updateObj(from: T, to: T): void {
+    for (const prop in from) { if (from.hasOwnProperty(prop)) { delete from[prop]; } }
     Object.assign(from, to);
   }
 }

@@ -1,9 +1,9 @@
 <div [style.width]="outerWidth">
   <ift-record 
-    *ngIf="['left', 'right', 'top'].includes(layout.detailPosition) && selectedRecords.length === 1"
+    *ngIf="['left', 'right', 'top'].includes(layout?.detailPosition) && selectedRecords.length === 1"
     [record]="selectedRecords[0]"
     [layout]="layout"
-    [style.float]="['left', 'right'].includes(layout.detailPosition) ? layout.detailPosition : 'inherit'">
+    [style.float]="['left', 'right'].includes(layout?.detailPosition) ? layout.detailPosition : 'inherit'">
   </ift-record>
   <div class="header" [style.width]="'' + (getWidth()+19) + 'px'"><h3>{{layout.title}}</h3></div>
   <div #headerRow class="row header"
@@ -147,7 +147,7 @@
     </span>
   </div>
   <ift-record 
-    *ngIf="layout.detailPosition === 'bottom' && selectedRecords.length === 1"
+    *ngIf="layout?.detailPosition === 'bottom' && selectedRecords.length === 1"
     [(record)]="selectedRecords[0]"
     [layout]="layout">
   </ift-record>
