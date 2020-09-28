@@ -573,7 +573,7 @@ export class RecordListComponent<T> extends AuthenticationBase implements OnChan
     return `${urlParts[0]}/${pk}?${urlParts[1] || ''}`;
   }
 
-  private _updateObj(from: object, to: object): void {
+  private _updateObj(from: T, to: T): void {
     for (const prop in from) { if (from.hasOwnProperty(prop)) { delete from[prop]; } }
     Object.assign(from, to);
   }
