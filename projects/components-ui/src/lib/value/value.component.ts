@@ -6,7 +6,7 @@ import { RecordComponent } from '../record/record.component';
 export abstract class ValueComponent implements OnInit {
   public get isEdit(): boolean {
     let displaySetting = this.parentIsList ? this.columnLayout.listDisplay : this.columnLayout.detailDisplay;
-    if (typeof displaySetting === 'function') displaySetting = displaySetting(this.value);
+    if (typeof displaySetting === 'function') displaySetting = displaySetting(this.record);
     const recordIsNew = !this.record['__primaryKey'];
 
     switch (displaySetting) {
