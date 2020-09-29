@@ -443,9 +443,10 @@ export class RecordListComponent<T> extends AuthenticationBase implements OnChan
     event.preventDefault();
   }
 
-  public new(): void {
+  public async new(): Promise<void> {
     if (!this.records) { this.records = []; }
-    const templateCopy = JSON.parse(JSON.stringify(this.layout?.newRecTemplate));
+    let templateCopy = JSON.parse(JSON.stringify(this.layout?.newRecTemplate));
+    if (this.layout?.initRecord) { templateCopy = await this.layout?.initRecord(templateCopy)}
     this.records.push(templateCopy as T);
     setTimeout((): void => {
       const elem: HTMLElement = this.grid.nativeElement;
