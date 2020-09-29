@@ -50,6 +50,7 @@ export class TypeaheadValueComponent extends ValueComponent {
     this.matchingOptions = undefined;
   }
   public updOptionsFilter(event: KeyboardEvent, options: Option[]): void {
+    console.debug(event.key);
     if (event.key === 'enter' && this.filterHighlightIdx !== undefined) {
       // enter
       this.switchToFilterOption(this.filterHighlightIdx);
@@ -122,6 +123,6 @@ export class TypeaheadValueComponent extends ValueComponent {
       behavior: 'smooth',
       block: 'nearest',
     });
-    console.info('pop');
+    // console.info('pop');
   }
 }
