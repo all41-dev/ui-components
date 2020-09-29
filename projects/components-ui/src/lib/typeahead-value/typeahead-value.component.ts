@@ -80,7 +80,7 @@ export class TypeaheadValueComponent extends ValueComponent {
       this.matchingOptions = this.optionsArr.filter((p): boolean => p.label.toLowerCase().indexOf(this.optionFilter.toLowerCase()) !== -1).slice(0, 10);
       this.filterHighlightIdx = this.matchingOptions && this.matchingOptions.length > 0 ? 0 : undefined;
       setTimeout((): void => {
-        this.ensureVisible(this.optionsDom);
+        this.ensureVisible(this.optionsDom.nativeElement);
       }, 100);
     }
   }
