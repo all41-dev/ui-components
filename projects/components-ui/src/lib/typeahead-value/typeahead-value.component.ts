@@ -51,11 +51,11 @@ export class TypeaheadValueComponent extends ValueComponent {
   }
   public updOptionsFilter(event: KeyboardEvent, options: Option[]): void {
     console.debug(event.key);
-    if (event.key === 'enter' && this.filterHighlightIdx !== undefined) {
+    if (event.key === 'Enter' && this.filterHighlightIdx !== undefined) {
       // enter
       this.switchToFilterOption(this.filterHighlightIdx);
       event.stopPropagation();
-    } else if (event.key === 'up arrow') {
+    } else if (event.key === 'ArrowUp') {
       // up arrow
       // console.debug(`up matchingPkg:${JSON.stringify(this.matchingPkg)} filterHighlighIdx:${JSON.stringify(this.filterHighlightIdx)}`);
       if (Array.isArray(this.matchingOptions) && this.matchingOptions.length > 0) {
@@ -66,7 +66,7 @@ export class TypeaheadValueComponent extends ValueComponent {
         }
       }
       event.stopPropagation();
-    } else if (event.key === 'down arrow') {
+    } else if (event.key === 'ArrowDown') {
       // down arrow
       // console.debug(`down matchingPkg:${JSON.stringify(this.matchingPkg)} filterHighlighIdx:${JSON.stringify(this.filterHighlightIdx)}`);
       if (Array.isArray(this.matchingOptions) && this.matchingOptions.length > 0) {
