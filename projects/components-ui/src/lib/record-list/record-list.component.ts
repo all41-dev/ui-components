@@ -566,7 +566,13 @@ export class RecordListComponent<T> extends AuthenticationBase implements OnChan
   public isReadOnly(): boolean {
     return !(this.layout?.isAddEnabled ||
       this.layout?.isDeleteEnabled ||
-      this.layout?.columns.some((c): boolean => ['create', 'update'].includes(c.listDisplay)));
+      this.layout?.columns.some((c): boolean => ['create', 'update'].includes(typeof c.listDisplay === 'function' ? 'update' : c.listDisplay)));
+    // if a column listDisplay is a function, we assume that it can be editable in some scenario(s)
+  }
+  public isEdit(col: Column<T>, rec: T): boolean {
+    if (this.patchRestricted) return false;
+    const listDisplay = typeof col.listDisplay === 'function' ? col.listDisplay(rec) : col.listDisplay;
+    return !(['none', 'read'].includes(listDisplay) || (listDisplay === 'create' && rec['__primaryKey']));
   }
 
   private _urlInsertPk = (url: string, pk: string): string => {

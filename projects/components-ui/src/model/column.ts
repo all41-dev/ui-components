@@ -5,10 +5,10 @@ import { RecordListComponent } from '../lib/record-list/record-list.component';
 export interface BaseColumn<T> {
   label: string;
   recordProperty: keyof T|undefined;
-  listDisplay: 'none' | 'read' | 'create' | 'update';
-  detailDisplay: 'none' | 'read' | 'create' | 'update';
+  listDisplay: 'none' | 'read' | 'create' | 'update' | ((rec: T) => 'none' | 'read' | 'create' | 'update');
+  detailDisplay: 'none' | 'read' | 'create' | 'update' | ((rec: T) => 'none' | 'read' | 'create' | 'update');
   width?: string;
-  isValid?: (record: any) => boolean;
+  isValid?: (record: T) => boolean;
   filterValue?: string;
   isFilterVisible?: boolean;
   onChange?: (rec: T, recList: T[]) => void;
