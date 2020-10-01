@@ -39,7 +39,7 @@ export class BaseColumn<T> {
     this._orderDirection = value;
   }
 
-  constructor(base: Partial<BaseColumn<T>>) {
+  constructor(base: Partial<Column<T>>) {
     Object.assign(this, base);
   }
 }
