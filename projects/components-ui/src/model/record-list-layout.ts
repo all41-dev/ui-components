@@ -1,4 +1,4 @@
-import { Column } from '@all41-dev/ui-components';
+import { Column } from './column';
 import {RecordBaseLayout} from './record-base-layout';
 
 // eslint-disable-next-line @typescript-eslint/interface-name-prefix

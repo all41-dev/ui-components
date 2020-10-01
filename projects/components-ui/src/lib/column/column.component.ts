@@ -1,4 +1,3 @@
-import { Column } from '@all41-dev/ui-components';
 import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 
 @Component({
