@@ -1,3 +1,4 @@
+import { Column } from '@all41-dev/ui-components';
 import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 
 @Component({
@@ -10,6 +11,9 @@ export class ColumnComponent implements OnInit {
   @Input() public isFilterVisible?: boolean;
   @Input() public filterValue?: any;
   @Output() public filterValueChange: EventEmitter<any> = new EventEmitter<any>();
+  @Input() public orderDirection?: 'ASC' | 'DESC' | 'NONE';
+  @Output() public orderDirectionChange: EventEmitter<'ASC' | 'DESC' | 'NONE'> = new EventEmitter<'ASC' | 'DESC' | 'NONE'>();
+  @Input() public orderIndex?: number;
 
   public get filter(): any {
     return this.filterValue;
@@ -20,9 +24,33 @@ export class ColumnComponent implements OnInit {
     // console.info(`filter value sent: ${this.filterValue}`);
   }
 
-  public constructor() { }
+  public get orderDir(): 'ASC' | 'DESC' | 'NONE' {
+    return this.orderDir;
+  }
+  public set orderDir(value: 'ASC' | 'DESC' | 'NONE') {
+    this.orderDirection = value;
+    this.orderDirectionChange.emit(value);
+  }
+  public toggleOrderDirection(): void {
+    switch (this.orderDir) {
+      case 'NONE':
+        this.orderDir = 'ASC';
+        break;
+      case 'ASC':
+        this.orderDir = 'DESC';
+        break;
+      case 'DESC':
+        this.orderDir = 'NONE';
+        break;    
+      default:
+        break;
+    }
+  }
+
+  // public constructor() { }
 
   public ngOnInit(): void {
+    // nothing to do
   }
 
 }

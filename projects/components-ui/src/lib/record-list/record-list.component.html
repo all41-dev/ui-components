@@ -10,7 +10,7 @@
       [style.width]="'' + (getWidth()+19) + 'px'"
       [style.gridTemplateColumns]="gridTemplateColumns()">
     <ng-container *ngFor="let col of listColumns">
-      <div><ift-column [label]="col.label" [isFilterVisible]="col.isFilterVisible" [(filterValue)]="col.filterValue"></ift-column></div>
+      <div><ift-column [label]="col.label" [isFilterVisible]="col.isFilterVisible" [(filterValue)]="col.filterValue" [(orderDirection)]="col.orderDirection" [orderIndex]="getOrderIndex(col)"></ift-column></div>
     </ng-container>
   </div>
   <div *ngIf="getRestricted" class="error"

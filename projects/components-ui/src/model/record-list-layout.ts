@@ -1,3 +1,4 @@
+import { Column } from '@all41-dev/ui-components';
 import {RecordBaseLayout} from './record-base-layout';
 
 // eslint-disable-next-line @typescript-eslint/interface-name-prefix
@@ -24,4 +25,5 @@ export interface RecordListLayout<T> extends RecordBaseLayout<T> {
    * @default none
    * */
   detailPosition?: 'none' | 'bottom' | 'right' | 'top' | 'left';
+  order?: [{column: Column<T>; direction: 'ASC' | 'DESC' }];
 }

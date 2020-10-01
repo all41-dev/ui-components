@@ -574,7 +574,11 @@ export class RecordListComponent<T> extends AuthenticationBase implements OnChan
     const listDisplay = typeof col.listDisplay === 'function' ? col.listDisplay(rec) : col.listDisplay;
     return !(['none', 'read'].includes(listDisplay) || (listDisplay === 'create' && rec['__primaryKey']));
   }
-
+  public getOrderIndex(col: Column<T>): number | undefined {
+    if (!this.layout?.order) return;
+    const idx = this.layout.order.findIndex((oe) => oe.column === col);
+    return idx === -1 ? undefined : idx;
+  }
   private _urlInsertPk = (url: string, pk: string): string => {
     const urlParts = url.split('?');
     return `${urlParts[0]}/${pk}?${urlParts[1] || ''}`;
