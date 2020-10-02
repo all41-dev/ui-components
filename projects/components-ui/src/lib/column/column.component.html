@@ -1,7 +1,7 @@
 <div class="label" [title]="filter ? label+'(' + filter + ')' : label">
+    <div *ngIf="!orderDir || orderDir === 'NONE'" (click)="toggleOrderDirection()" style="float:left;padding-left: 1em;cursor: pointer;">&#8597;</div>
+    <div *ngIf="orderDir === 'ASC'" (click)="toggleOrderDirection()" style="float:left;padding-left: 1em;cursor: pointer;">&#8593;{{ orderIndex + 1 }}</div>
+    <div *ngIf="orderDir === 'DESC'" (click)="toggleOrderDirection()" style="float:left;padding-left: 1em;cursor: pointer;">&#8595;{{ orderIndex + 1 }}</div>
     {{label}}
-    <div *ngIf="!orderDir || orderDir === 'NONE'" (click)="toggleOrderDirection()" style="float:right;padding-right: 1em;cursor: pointer;">&#8597;</div>
-    <div *ngIf="orderDir === 'ASC'" (click)="toggleOrderDirection()" style="float:right;padding-right: 1em;cursor: pointer;">&#8593;{{ orderIndex + 1 }}</div>
-    <div *ngIf="orderDir === 'DESC'" (click)="toggleOrderDirection()" style="float:right;padding-right: 1em;cursor: pointer;">&#8595;{{ orderIndex + 1 }}</div>
 </div>
 <input style="width:95%" type="text" *ngIf="isFilterVisible" [(ngModel)]="filter">
