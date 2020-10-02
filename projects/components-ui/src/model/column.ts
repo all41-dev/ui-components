@@ -21,6 +21,7 @@ export class BaseColumn<T> {
   public set orderDirection(value: 'ASC' | 'DESC' | 'NONE') {
     if (value === this._orderDirection) return;
     if (!this.parent) throw new Error('parent is not set');
+    if (!this.parent.order) {this.parent.order = [];}
     if (this._orderDirection && this._orderDirection !== 'NONE') {
       const orderElement = this.parent.order.find((oe) => oe.column === this);
       if (value === 'NONE') {

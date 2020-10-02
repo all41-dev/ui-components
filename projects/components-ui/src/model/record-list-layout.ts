@@ -25,5 +25,5 @@ export interface RecordListLayout<T> extends RecordBaseLayout<T> {
    * @default none
    * */
   detailPosition?: 'none' | 'bottom' | 'right' | 'top' | 'left';
-  order?: [{column: Column<T>; direction: 'ASC' | 'DESC' }];
+  order?: {column: Column<T>; direction: 'ASC' | 'DESC' }[];
 }

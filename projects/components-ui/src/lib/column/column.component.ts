@@ -24,26 +24,27 @@ export class ColumnComponent implements OnInit {
   }
 
   public get orderDir(): 'ASC' | 'DESC' | 'NONE' {
-    return this.orderDir;
+    return this.orderDirection;
   }
   public set orderDir(value: 'ASC' | 'DESC' | 'NONE') {
     this.orderDirection = value;
     this.orderDirectionChange.emit(value);
   }
   public toggleOrderDirection(): void {
+    // console.debug(`from ${this.orderDir}`);
     switch (this.orderDir) {
-      case 'NONE':
-        this.orderDir = 'ASC';
-        break;
       case 'ASC':
         this.orderDir = 'DESC';
         break;
       case 'DESC':
         this.orderDir = 'NONE';
         break;    
+      case 'NONE':
       default:
+        this.orderDir = 'ASC';
         break;
     }
+    // console.debug(`to ${this.orderDir}`);
   }
 
   // public constructor() { }

@@ -30,11 +30,27 @@ export class RecordListComponent<T> extends AuthenticationBase implements OnChan
     }
   };
   @Output() public selectedRecordsChange: EventEmitter<T[]> = new EventEmitter<T[]>();
-  @Input() public records: T[] = [];
+  @Input() public get records(): T[] {
+    if (!this.layout?.order || this.layout.order.length === 0 || this._records.length === 0) return this._records;
+    const order = this.layout.order;
+    return this._records.sort((a, b) => {
+      for (const ctRule of order) {
+        const va = a[ctRule.column.recordProperty];
+        const vb = b[ctRule.column.recordProperty];
+        if (va === vb) continue;
+        return va > vb ? 1 : -1;
+      }
+      return 0;//records are identical from an ordering perspective
+    })
+  };
+  public set records(value: T[]) {
+    this._records = value;
+  }
   @Output() public recordsChange: EventEmitter<T[]> = new EventEmitter<T[]>();
   @Input() public filterRecords: T[] = [];
   @Output() public filterRecordsChange: EventEmitter<T[]> = new EventEmitter<T[]>();
 
+  private _records: T[] = []
   public get filteredRecords(): T[] {
     if (!this.records) { return []; }
     const activeFilters = this.layout?.columns.filter((c): boolean => c.filterValue && c.filterValue !== '');

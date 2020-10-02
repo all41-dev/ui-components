@@ -1,6 +1,6 @@
 import {Component, OnInit} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
-import {Column, RecordLayout, RecordListLayout, RecordListComponent, RecordComponent} from '@all41-dev/ui-components';
+import {Column, RecordLayout, RecordListLayout, RecordListComponent, RecordComponent, ReadonlyColumn, EditableColumn} from '@all41-dev/ui-components';
 import { Subscription } from 'rxjs';
 
 @Component({
@@ -13,7 +13,7 @@ export class AppComponent implements OnInit {
   public records = [];
   public fRecs;
 
-  public columns: Column<any>[] = [{
+  public columns: Column<any>[] = [new ReadonlyColumn({
     listDisplay: 'read',
     detailDisplay: 'read',
     label: 'col without data',
@@ -43,7 +43,7 @@ export class AppComponent implements OnInit {
   //   ],
   //   //filterValue: 'is',
   //   //isFilterVisible: true,
-  }, {
+  }), new ReadonlyColumn({
     label: 'country',
     // editType: EditType.Text,
     recordProperty: 'country',
@@ -87,7 +87,7 @@ export class AppComponent implements OnInit {
   //     {value: 2, label: 'Second'},
   //     {value: 3, label: 'Third'},
   //   ]
-  },{
+  }), new EditableColumn({
     //   label: 'id',
     //   recordProperty: 'id',
     //   isEditable: false,
@@ -107,7 +107,7 @@ export class AppComponent implements OnInit {
       { label: 'terminé', value: 'finished' },
     ],
     isFilterVisible: true,
-  }];
+  })];
 
   // public sampleEntityUrl = 'http://localhost:3010/api/samples';
   // public sampleEntityUrl = 'https://jsonplaceholder.typicode.com/posts';
@@ -133,7 +133,7 @@ export class AppComponent implements OnInit {
   
   public emotionRecord: any;
   public emotionProjectLayout: RecordLayout<any> = {
-    columns: [{
+    columns: [new EditableColumn({
       //   label: 'id',
       //   recordProperty: 'id',
       //   isEditable: false,
@@ -151,25 +151,25 @@ export class AppComponent implements OnInit {
         { label: 'annulé', value: 'cancelled' },
         { label: 'terminé', value: 'finished' },
       ]
-    }, {
+    }), new EditableColumn({
       label: 'titre',
       recordProperty: 'title',
       listDisplay: 'update',
       detailDisplay: 'update',
       editType: 'text',
-    }, {
+    }), new EditableColumn({
       label: 'description',
       recordProperty: 'description',
       listDisplay: 'update',
       detailDisplay: 'update',
       editType: 'textarea',
-    }, {
+    }), new EditableColumn({
       label: 'lien',
       recordProperty: 'link',
       listDisplay: 'update',
       detailDisplay: 'update',  
       editType: 'text',
-    }, {
+    }), new ReadonlyColumn({
       label: '',
       recordProperty: undefined,
       listDisplay: 'read',
@@ -178,7 +178,7 @@ export class AppComponent implements OnInit {
         if(record.link) { return `<a href='${record.link}' target='_blank'>go</a>`}
         return '';
       },
-    }],
+    })],
     entityUrl: `http://localhost:8080/api/project`,
     getUrl: `http://localhost:8080/api/project/d9b7ea0a-3455-481c-86e6-39abea632dd2`,
     labelsWidth: '80px',
@@ -202,23 +202,24 @@ export class AppComponent implements OnInit {
       country: 'foobar'
     },
     selectionTrigger: 'click',
+    // order: [{column: this.columns[0], direction: 'ASC'}],
   };
 
-  public columns2: Column<any>[] = [{
+  public columns2: Column<any>[] = [new ReadonlyColumn({
     label: 'Id',
     editType: 'number',
     recordProperty: 'id',
     listDisplay: 'read',
     detailDisplay: 'read',
     width: '30px',
-  }, {
+  }), new EditableColumn({
     label: 'Title',
     editType: 'text',
     recordProperty: 'title',
     listDisplay: 'update',
     detailDisplay: 'update',
     width: '300px',
-  }, {
+  }), new EditableColumn({
     label: 'User',
     editType: 'dropdown',
     recordProperty: 'userId',
@@ -234,14 +235,14 @@ export class AppComponent implements OnInit {
     // {value: 1, label: 'First'},
     // {value: 2, label: 'Second'},
     // {value: 3, label: 'Third'},
-  }, {
+  }), new ReadonlyColumn({
     label: 'Completed',
     editType: 'text',
     recordProperty: 'completed',
     listDisplay: 'read',
     detailDisplay: 'read',
     width: '50px',
-  }];
+  })];
   public entityUrl2 = 'https://jsonplaceholder.typicode.com/todos';
 
   public recordListLayout2: RecordListLayout<any> = {
@@ -257,7 +258,7 @@ export class AppComponent implements OnInit {
     chunkSize: 10,
     primaryKeyProperty: '',
     isAddEnabled: true,
-    columns: [{
+    columns: [new ReadonlyColumn({
       listDisplay: 'read',
       detailDisplay: 'read',
       label: 'col without data',
@@ -269,7 +270,7 @@ export class AppComponent implements OnInit {
         // to be implemented
       },
 
-    }]
+    })]
   }
 
   // eslint-disable-next-line @typescript-eslint/no-parameter-properties
@@ -280,7 +281,7 @@ export class AppComponent implements OnInit {
     //   .subscribe((resp: any[]) => this.columns2.find(c => c.recordProperty === 'userId').options = resp.map(r => {
     //     return {value: r.id, label: r.name};
     //   }));
-
+    this.recordListLayout.columns.forEach(c => c.parent = this.recordListLayout);
     this.http.get(this.sampleEntityUrl).toPromise().then((res: any) => this.records = res.data.map((r) => {
       r.status = 'open';
       return r;
