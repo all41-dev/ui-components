@@ -52,7 +52,7 @@ export class RecordListComponent<T> extends AuthenticationBase implements OnChan
         } else if (options) {
           const optionsArr = (typeof options === 'function' ? options() : options);
           va = optionsArr.find((opt) => opt.value === a[ctRule.column.recordProperty])?.label || a[ctRule.column.recordProperty] as any;// value if no matching option
-          vb = optionsArr.find((opt) => opt.value === a[ctRule.column.recordProperty])?.label || a[ctRule.column.recordProperty] as any;// value if no matching option
+          vb = optionsArr.find((opt) => opt.value === b[ctRule.column.recordProperty])?.label || b[ctRule.column.recordProperty] as any;// value if no matching option
         } else {
           va = a[ctRule.column.recordProperty];
           vb = b[ctRule.column.recordProperty];
