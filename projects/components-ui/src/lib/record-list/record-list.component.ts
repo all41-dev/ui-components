@@ -44,7 +44,8 @@ export class RecordListComponent<T> extends AuthenticationBase implements OnChan
         const va = a[ctRule.column.recordProperty];
         const vb = b[ctRule.column.recordProperty];
         if (va === vb) continue;
-        return va > vb ? 1 : -1;
+        const res = va > vb ? 1 : -1;
+        return ctRule.direction === 'ASC' ? res : -res;
       }
       return 0;//records are identical from an ordering perspective
     })
