@@ -57,6 +57,8 @@ export class RecordListComponent<T> extends AuthenticationBase implements OnChan
           va = a[ctRule.column.recordProperty];
           vb = b[ctRule.column.recordProperty];
         }
+        if (typeof va === 'string') va = va.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, '') as any;
+        if (typeof vb === 'string') vb = vb.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, '') as any;
 
         if (va === vb) continue;
         const res = va > vb ? 1 : -1;
