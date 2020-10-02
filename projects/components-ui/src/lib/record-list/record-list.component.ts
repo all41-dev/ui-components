@@ -38,6 +38,7 @@ export class RecordListComponent<T> extends AuthenticationBase implements OnChan
   @Input() public get records(): T[] {
     if (!this.layout?.order || this.layout.order.length === 0 || this._records.length === 0) return this._records;
     const order = this.layout.order;
+    console.debug('sorting');
     return this._records.sort((a, b) => {
       for (const ctRule of order) {
         const va = a[ctRule.column.recordProperty];

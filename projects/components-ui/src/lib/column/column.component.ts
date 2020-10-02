@@ -13,6 +13,7 @@ export class ColumnComponent implements OnInit {
   @Input() public orderDirection?: 'ASC' | 'DESC' | 'NONE';
   @Output() public orderDirectionChange: EventEmitter<'ASC' | 'DESC' | 'NONE'> = new EventEmitter<'ASC' | 'DESC' | 'NONE'>();
   @Input() public orderIndex?: number;
+  @Input() public showOrder?: boolean;
 
   public get filter(): any {
     return this.filterValue;
