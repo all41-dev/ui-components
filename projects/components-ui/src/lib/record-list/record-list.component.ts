@@ -16,7 +16,12 @@ import { RecordLayout } from '../../model/record-layout';
   styleUrls: ['./record-list.component.css']
 })
 export class RecordListComponent<T> extends AuthenticationBase implements OnChanges {
-  @Input() public layout?: RecordListLayout<T> & Partial<RecordLayout<T>>;
+  @Input()
+  public get layout(): RecordListLayout<T> & Partial<RecordLayout<T>> | undefined { return this._layout; };
+  public set layout(value: RecordListLayout<T> & Partial<RecordLayout<T>>) {
+    value.columns.forEach((c) => c.parent = value);
+    this._layout = value;
+  }
   @Input() public selectedRecords: T[] = [];
   @Input() public url: string;
   @Input() public set authCompleted(value: boolean) {
@@ -49,8 +54,6 @@ export class RecordListComponent<T> extends AuthenticationBase implements OnChan
   @Output() public recordsChange: EventEmitter<T[]> = new EventEmitter<T[]>();
   @Input() public filterRecords: T[] = [];
   @Output() public filterRecordsChange: EventEmitter<T[]> = new EventEmitter<T[]>();
-
-  private _records: T[] = []
   public get filteredRecords(): T[] {
     if (!this.records) { return []; }
     const activeFilters = this.layout?.columns.filter((c): boolean => c.filterValue && c.filterValue !== '');
@@ -141,6 +144,9 @@ export class RecordListComponent<T> extends AuthenticationBase implements OnChan
   public get getUrl(): string | undefined { return this.layout?.getUrl || this.url || this.layout?.entityUrl; }
   public get postUrl(): string | undefined { return this.layout?.postUrl || this.url || this.layout?.entityUrl; }
 
+
+  private _layout?: RecordListLayout<T> & Partial<RecordLayout<T>>;
+  private _records: T[] = []
   private _loadOnAuthCompleted = false;
 
   public constructor(private http: HttpClient, protected access: AccessFunctions, protected oauthService: OAuthService, protected config: Config ) {

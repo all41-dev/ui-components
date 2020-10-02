@@ -281,7 +281,6 @@ export class AppComponent implements OnInit {
     //   .subscribe((resp: any[]) => this.columns2.find(c => c.recordProperty === 'userId').options = resp.map(r => {
     //     return {value: r.id, label: r.name};
     //   }));
-    this.recordListLayout.columns.forEach(c => c.parent = this.recordListLayout);
     this.http.get(this.sampleEntityUrl).toPromise().then((res: any) => this.records = res.data.map((r) => {
       r.status = 'open';
       return r;
