@@ -2,7 +2,7 @@ import {Component, ElementRef, EventEmitter, Input, OnChanges, Output, SimpleCha
 import {HttpClient, HttpErrorResponse} from '@angular/common/http';
 import scrollIntoView from 'scroll-into-view-if-needed';
 import {RecordListLayout} from '../../model/record-list-layout';
-import { Option, EditableColumn, Column } from '../../model/column';
+import { Option, EditableColumn, Column, ReadonlyColumn } from '../../model/column';
 import {AccessFunctions} from '../access-functions';
 import { OptionsEditableColumn } from '../../model/column';
 import { AuthenticationBase } from '../authentication-base';
@@ -38,11 +38,26 @@ export class RecordListComponent<T> extends AuthenticationBase implements OnChan
   @Input() public get records(): T[] {
     if (!this.layout?.order || this.layout.order.length === 0 || this._records.length === 0) return this._records;
     const order = this.layout.order;
-    console.debug('sorting');
+    // console.debug('sorting');
     return this._records.sort((a, b) => {
       for (const ctRule of order) {
-        const va = a[ctRule.column.recordProperty];
-        const vb = b[ctRule.column.recordProperty];
+        let va: T[keyof T];
+        let vb: T[keyof T];
+
+        const htmlVal = (ctRule.column as ReadonlyColumn<T>).html
+        const options = (ctRule.column as OptionsEditableColumn<T>).options;
+        if (htmlVal) {
+          va = typeof htmlVal === 'string' ? htmlVal : htmlVal(this, a) as any;
+          vb = typeof htmlVal === 'string' ? htmlVal : htmlVal(this, b) as any;
+        } else if (options) {
+          const optionsArr = (typeof options === 'function' ? options() : options);
+          va = optionsArr.find((opt) => opt.value === a[ctRule.column.recordProperty])?.label || a[ctRule.column.recordProperty] as any;// value if no matching option
+          vb = optionsArr.find((opt) => opt.value === a[ctRule.column.recordProperty])?.label || a[ctRule.column.recordProperty] as any;// value if no matching option
+        } else {
+          va = a[ctRule.column.recordProperty];
+          vb = b[ctRule.column.recordProperty];
+        }
+
         if (va === vb) continue;
         const res = va > vb ? 1 : -1;
         return ctRule.direction === 'ASC' ? res : -res;
