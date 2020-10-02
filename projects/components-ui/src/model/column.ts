@@ -43,6 +43,13 @@ export class BaseColumn<T> {
   constructor(base: Partial<Column<T>>) {
     Object.assign(this, base);
   }
+
+  public toJSON(): string {
+    const res: any = {};
+    Object.assign(res, this);
+    delete res.parent;
+    return JSON.stringify(res);
+  }
 }
 
 export class ReadonlyColumn<T> extends BaseColumn<T> {
