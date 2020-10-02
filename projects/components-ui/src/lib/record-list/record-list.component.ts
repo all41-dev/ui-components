@@ -17,9 +17,9 @@ import { RecordLayout } from '../../model/record-layout';
 })
 export class RecordListComponent<T> extends AuthenticationBase implements OnChanges {
   @Input()
-  public get layout(): RecordListLayout<T> & Partial<RecordLayout<T>> { return this._layout; };
-  public set layout(value: RecordListLayout<T> & Partial<RecordLayout<T>>) {
-    value.columns.forEach((c) => c.parent = value);
+  public get layout(): RecordListLayout<T> & Partial<RecordLayout<T>> | undefined { return this._layout; };
+  public set layout(value: RecordListLayout<T> & Partial<RecordLayout<T>> | undefined) {
+    if (value) value.columns.forEach((c) => c.parent = value);
     this._layout = value;
   }
   @Input() public selectedRecords: T[] = [];
