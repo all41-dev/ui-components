@@ -444,7 +444,7 @@ export class RecordListComponent<T> extends AuthenticationBase implements OnChan
     }
     let nextValue = target;
     do {
-      const nv = !!event.shiftKey ? nextValue.previousSibling : nextValue.nextSibling;
+      const nv = !!event.shiftKey ? nextValue.previousElementSibling : nextValue.nextElementSibling;
 
       if (nv !== null) {
         nextValue = nv;

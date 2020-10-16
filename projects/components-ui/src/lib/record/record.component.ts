@@ -263,7 +263,7 @@ export class RecordComponent<T> implements OnInit, OnChanges {
     }
     let nextValue = target;
     do {
-      nextValue = !!event.shiftKey ? nextValue.previousSibling : nextValue.nextSibling;
+      nextValue = !!event.shiftKey ? nextValue.previousElementSibling : nextValue.nextElementSibling;
       // console.debug(nextValue)
     } while (nextValue !== null &&
     (nextValue.tagName === undefined // It is the case for html comments
