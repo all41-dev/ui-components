@@ -5,5 +5,5 @@ import { Injectable } from '@angular/core';
 })
 export class ComponentsUiService {
 
-  public constructor() { }
+  public constructor() { /**/ }
 }

@@ -12,6 +12,7 @@ export * from './lib/textarea-value/textarea-value.component';
 export * from './lib/dropdown-value/dropdown-value.component';
 export * from './lib/typeahead-value/typeahead-value.component';
 export * from './lib/number-value/number-value.component';
+export * from './lib/checkbox-value/checkbox-value.component';
 export * from './lib/date-value/date-value.component';
 export * from './lib/record/record.component';
 export * from './lib/record-list/record-list.component';

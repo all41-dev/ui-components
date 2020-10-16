@@ -120,6 +120,18 @@
               [columnLayout]="col"
               (tabEvent)="tab($event)"></ift-number-value>
           </ng-template>
+          <ng-template ngSwitchCase="checkbox">
+            <ift-checkbox-value
+              [attr.edit]="isEdit(col, record) ? '' : null"
+              [(modified)]="record[col.recordProperty + 'Modified']"
+              [(value)]="record[col.recordProperty]"
+              (modifiedChange)="col.onChange ? col.onChange(record, records) : undefined;
+                layout?.onRecChange ? layout?.onRecChange(record, records) : undefined"
+              [parentComponent]="inst"
+              [record]="record"
+              [columnLayout]="col"
+              (tabEvent)="tab($event)"></ift-checkbox-value>
+          </ng-template>
           <ng-template ngSwitchCase="date">
             <ift-date-value
               [attr.edit]="isEdit(col, record) ? '' : null"

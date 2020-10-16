@@ -7,6 +7,7 @@ import { ColumnComponent } from './column/column.component';
 import { TextValueComponent } from './text-value/text-value.component';
 import { TextareaValueComponent } from './textarea-value/textarea-value.component';
 import { NumberValueComponent } from './number-value/number-value.component';
+import { CheckboxValueComponent } from './checkbox-value/checkbox-value.component';
 import { DateValueComponent } from './date-value/date-value.component';
 import { RecordComponent } from './record/record.component';
 import { RecordListComponent } from './record-list/record-list.component';
@@ -27,6 +28,7 @@ import { PasswordValueComponent } from './password-value/password-value.componen
     PasswordValueComponent,
     TextareaValueComponent,
     NumberValueComponent,
+    CheckboxValueComponent,
     DateValueComponent,
     RecordComponent,
     RecordListComponent,
@@ -39,6 +41,8 @@ import { PasswordValueComponent } from './password-value/password-value.componen
     TextValueComponent,
     PasswordValueComponent,
     TextareaValueComponent,
+    NumberValueComponent,
+    CheckboxValueComponent,
     DateValueComponent,
     RecordComponent,
     RecordListComponent,

@@ -60,7 +60,7 @@ export class ReadonlyColumn<T> extends BaseColumn<T> {
 }
 
 export class EditableColumn<T> extends BaseColumn<T> {
-  editType: 'text' | 'number' | 'date' | 'textarea' | 'dropdown' | 'typeahead' | 'password';
+  editType: 'text' | 'number' | 'checkbox' | 'date' | 'textarea' | 'dropdown' | 'typeahead' | 'password';
 }
 
 export class OptionsEditableColumn<T> extends EditableColumn<T> {
