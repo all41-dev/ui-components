@@ -102,6 +102,19 @@
           [columnLayout]="col"
           (tabEvent)="tab($event)"></ift-number-value>
       </ng-template>
+      <ng-template ngSwitchCase="checkbox">
+        <ift-checkbox-value
+          [attr.edit]="patchRestricted || [undefined, 'none', 'read'].includes(col.detailDisplay) ? null : ''"
+          [(modified)]="record[col.recordProperty + 'Modified']"
+          [(value)]="record[col.recordProperty]"
+          (valueChange)="col.onChange ? col.onChange(record, [record]) : undefined;
+            layout?.onChange ? layout?.onChange(record) : undefined"
+          [style.width]="valuesWidth"
+          [parentComponent]="inst"
+          [record]="record"
+          [columnLayout]="col"
+          (tabEvent)="tab($event)"></ift-checkbox-value>
+      </ng-template>
       <ng-template ngSwitchCase="date">
         <ift-date-value
           [attr.edit]="patchRestricted || [undefined, 'none', 'read'].includes(col.detailDisplay) ? null : ''"
