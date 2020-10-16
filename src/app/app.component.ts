@@ -11,6 +11,7 @@ import { Subscription } from 'rxjs';
 export class AppComponent implements OnInit {
   public title = 'base-ui';
   public records = [];
+  public sr = [];
   public fRecs;
 
   public columns: Column<any>[] = [new ReadonlyColumn({
@@ -220,6 +221,20 @@ export class AppComponent implements OnInit {
     detailDisplay: 'update',
     width: '300px',
   }), new EditableColumn({
+    label: 'ChkBx',
+    editType: 'checkbox',
+    recordProperty: 'mybool',
+    listDisplay: 'update',
+    detailDisplay: 'update',
+    width: '50px',
+  }), new ReadonlyColumn({
+    label: 'ChkBx text',
+    editType: 'text',
+    recordProperty: 'mybool',
+    listDisplay: 'read',
+    detailDisplay: 'read',
+    width: '100px',
+  }), new EditableColumn({
     label: 'User',
     editType: 'dropdown',
     recordProperty: 'userId',
@@ -283,6 +298,7 @@ export class AppComponent implements OnInit {
     //   }));
     this.http.get(this.sampleEntityUrl).toPromise().then((res: any) => this.records = res.data.map((r) => {
       r.status = 'open';
+      r.mybool = false;
       return r;
     }));
 

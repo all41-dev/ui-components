@@ -8,9 +8,14 @@
   <!--</div>-->
   <!--<div style="width:820px;float:left">-->
   <ift-record-list
-    [layout]="recordListLayout" [(records)]="records" [(filterRecords)]="fRecs"></ift-record-list>
+    [layout]="recordListLayout2"
+    [(records)]="records"
+    [(selectedRecords)]="sr"
+    [(filterRecords)]="fRecs">
+  </ift-record-list>
   <ift-record-list
     [layout]="rlColWithoutProp"></ift-record-list>
   <!-- <ift-record [layout]="emotionProjectLayout" [(record)]="emotionRecord"></ift-record> -->
   <pre>{{ fRecs ? fRecs.length: 0 }}</pre>
+  <pre>{{sr|json}}</pre>
 </div>

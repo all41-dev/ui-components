@@ -59,8 +59,10 @@ export abstract class ValueComponent implements OnInit {
       (this.columnLayout as ReadonlyColumn<any>).onClick(this.parentComponent, this.record);
       return;
     }
-    event.stopPropagation();
-    event.preventDefault();
+    if (event.explicitOriginalTarget !== event.currentTarget || !((this.columnLayout as any)?.editType === 'checkbox')) {
+      event.stopPropagation();
+      event.preventDefault();  
+    }
 
     if (!this.isValueInitialized) {
       this.initialValue = this.value;

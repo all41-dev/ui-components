@@ -7,10 +7,10 @@ import {ValueComponent} from '../value/value.component';
   styleUrls: ['./checkbox-value.component.css']
 })
 export class CheckboxValueComponent extends ValueComponent {
-  @Input() public value: number;
-  @Output() public valueChange: EventEmitter<number> = new EventEmitter<number>();
+  @Input() public value: boolean;
+  @Output() public valueChange: EventEmitter<boolean> = new EventEmitter<boolean>();
 
-  protected initialValue: number;
+  protected initialValue: boolean;
 
   public constructor() {
     super();
@@ -24,5 +24,8 @@ export class CheckboxValueComponent extends ValueComponent {
       this.modifiedChange.emit(this.modified);
     }
     this.valueChange.emit(this.value);
+  }
+  public log(msg: any): void {
+    console.log(msg);
   }
 }
