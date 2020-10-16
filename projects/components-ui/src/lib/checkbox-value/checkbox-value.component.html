@@ -1,6 +1,8 @@
 <input type="checkbox"
     [hidden]="isEdit === false"
     [(ngModel)]="value" (blur)="blur()" (keydown.shift.tab)="tab($event)" (keydown.tab)="tab($event)"
+    [class.edit]="isEdit === true"
+    [class.modified]="modified === true"
     (click)="focus(input, $event)"
     #input [title]="columnLayout.label">
 <input type="checkbox"
