@@ -1,9 +1,9 @@
 <input type="checkbox"
-    [hidden]="isEdit === false || hasFocus === false"
+    [hidden]="isEdit === false"
     [(ngModel)]="value" (blur)="blur()" (keydown.shift.tab)="tab($event)" (keydown.tab)="tab($event)"
     #input [title]="columnLayout.label">
 <input type="checkbox"
-    [hidden]="isEdit === true && hasFocus === true"
+    [hidden]="isEdit === true"
     [class.edit]="isEdit === true"
     [(ngModel)]="value"
     [class.modified]="modified === true"
