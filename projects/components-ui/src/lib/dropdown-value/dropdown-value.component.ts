@@ -14,6 +14,7 @@ export class DropdownValueComponent extends ValueComponent {
   @Output() public valueChange: EventEmitter<number> = new EventEmitter<any>();
 
   public get optionsArr(): Option[] {
+    if (!this.options) this.options = [];
     return (Array.isArray(this.options) ?
       this.options : this.options());
   }

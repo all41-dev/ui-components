@@ -15,6 +15,7 @@ export class TypeaheadValueComponent extends ValueComponent {
   @ViewChild('optionsDom') optionsDom: ElementRef;
 
   public get optionsArr(): Option[] {
+    if (!this.options) this.options = [];
     return (Array.isArray(this.options) ?
       this.options : this.options());
   }
