@@ -115,6 +115,7 @@ export class AppComponent implements OnInit {
   public sampleEntityUrl = 'https://api.airvisual.com/v2/countries?key=b0b877d8-1c61-41fc-a228-933e729bd97e';// key expires on Apr 15 2021
 
   public recordLayout: RecordLayout<any> = {
+    type: Object,
     columns: this.columns,
     entityUrl: this.sampleEntityUrl,
     labelsWidth: '80px',
@@ -134,6 +135,7 @@ export class AppComponent implements OnInit {
   
   public emotionRecord: any;
   public emotionProjectLayout: RecordLayout<any> = {
+    type: Object,
     columns: [new EditableColumn({
       //   label: 'id',
       //   recordProperty: 'id',
@@ -189,6 +191,7 @@ export class AppComponent implements OnInit {
   };
   
   public recordListLayout: RecordListLayout<any> = {
+    type: Object,
     height: 500,
     columns: this.columns,
     primaryKeyProperty: 'country',
@@ -261,6 +264,7 @@ export class AppComponent implements OnInit {
   public entityUrl2 = 'https://jsonplaceholder.typicode.com/todos';
 
   public recordListLayout2: RecordListLayout<any> = {
+    type: Object,
     height: 600,
     columns: this.columns2,
     entityUrl: this.entityUrl2,
@@ -268,6 +272,7 @@ export class AppComponent implements OnInit {
   };
 
   public rlColWithoutProp: RecordListLayout<any> = {
+    type: Object,
     height:150,
     entityUrl: '',
     chunkSize: 10,

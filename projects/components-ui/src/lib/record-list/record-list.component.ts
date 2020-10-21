@@ -68,7 +68,7 @@ export class RecordListComponent<T> extends AuthenticationBase implements OnChan
     })
   };
   public set records(value: T[]) {
-    this._records = value;
+    this._records = value.map((v) => v instanceof this.layout.type ? v : new this.layout.type(v));
   }
   @Output() public recordsChange: EventEmitter<T[]> = new EventEmitter<T[]>();
   @Input() public filterRecords: T[] = [];
@@ -281,7 +281,7 @@ export class RecordListComponent<T> extends AuthenticationBase implements OnChan
       this.http.get<T[]>(this.getUrl).subscribe(
         async (resp: T[]): Promise<void> => {
           resp.map(async (rec: T): Promise<void> => {
-            let res = rec;
+            let res = new this.layout.type(rec);
             if (this.layout?.initRecord) { res = await this.layout?.initRecord(rec)}
             (res as any).__primaryKey = res[this.layout?.primaryKeyProperty];
           });

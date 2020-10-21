@@ -13,6 +13,8 @@
     "e2e": "ng e2e",
     "copy:npmrc": "cp-cli ./.npmrc ./dist/components-ui/.npmrc",
     "publish:lib": "node ./update-lib-version.js && cd dist/components-ui && npm publish --access public",
+    "version:alpha": "npm version prerelease --preid=alpha",
+    "version:beta": "npm version prerelease --preid=beta",
     "preversion": "run-p test lint build:lib",
     "postversion": "git push && git push --tags && npm run publish:lib",
     "ncu:view": "ncu -x typescript",
