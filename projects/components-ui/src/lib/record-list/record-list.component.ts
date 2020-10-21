@@ -68,11 +68,14 @@ export class RecordListComponent<T> extends AuthenticationBase implements OnChan
     })
   };
   public set records(value: T[]) {
+    // console.debug(`setting recs ${this.layout.title}`);
     if (!value) {
       delete this._records;
       return;
     }
-    this._initRecs(value, false).then((recs) => this.records = recs);
+    this._initRecs(value, false).then((recs) => {
+      this._records = recs;
+    });
   }
   @Output() public recordsChange: EventEmitter<T[]> = new EventEmitter<T[]>();
   @Input() public filterRecords: T[] = [];
@@ -629,6 +632,7 @@ export class RecordListComponent<T> extends AuthenticationBase implements OnChan
     Object.assign(from, to);
   }
   private async _initRecs(recs: T[], isLoad = false): Promise<T[]> {
+    // console.debug(`initializing recs ${this.layout.title}`);
     let res = recs.map((v) => {
       const r = v instanceof this.layout.type ? v : new this.layout.type(v);
       if (!(r as any).__primaryKey) (r as any).__primaryKey = r[this.layout.primaryKeyProperty];
