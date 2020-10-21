@@ -68,7 +68,11 @@ export class RecordListComponent<T> extends AuthenticationBase implements OnChan
     })
   };
   public set records(value: T[]) {
-    this._records = value.map((v) => v instanceof this.layout.type ? v : new this.layout.type(v));
+    if (!value) {
+      delete this._records;
+      return;
+    }
+    this._initRecs(value, false).then((recs) => this.records = recs);
   }
   @Output() public recordsChange: EventEmitter<T[]> = new EventEmitter<T[]>();
   @Input() public filterRecords: T[] = [];
@@ -244,7 +248,7 @@ export class RecordListComponent<T> extends AuthenticationBase implements OnChan
       // if ([undefined, true].includes(this._authCompleted)) {
       if (this.isAuthCompleted) {
         // console.info('load from afterAuthInit');
-        this.load();
+        await this.load();
       } else {
         this._loadOnAuthCompleted = true;
       }
@@ -275,18 +279,13 @@ export class RecordListComponent<T> extends AuthenticationBase implements OnChan
     }
   }
 
-  public load(): void {
+  public async load(): Promise<void> {
     // console.info('loading ' + this.url);
     if (this.getUrl && !this.getRestricted) {
       this.http.get<T[]>(this.getUrl).subscribe(
         async (resp: T[]): Promise<void> => {
-          resp.map(async (rec: T): Promise<void> => {
-            let res = new this.layout.type(rec);
-            if (this.layout?.initRecord) { res = await this.layout?.initRecord(rec)}
-            (res as any).__primaryKey = res[this.layout?.primaryKeyProperty];
-          });
-
-          this.records = this.layout?.load ? this.layout?.load(resp) : resp;
+          // bypass this.records setter that triggers this._initRecs without isLoad option
+          this._records = await this._initRecs(resp, true);
           this.recordsChange.emit(this.records);
 
           this.filterRecords = this.filteredRecords || [];
@@ -628,5 +627,20 @@ export class RecordListComponent<T> extends AuthenticationBase implements OnChan
   private _updateObj(from: T, to: T): void {
     for (const prop in from) { if (from.hasOwnProperty(prop)) { delete from[prop]; } }
     Object.assign(from, to);
+  }
+  private async _initRecs(recs: T[], isLoad = false): Promise<T[]> {
+    let res = recs.map((v) => {
+      const r = v instanceof this.layout.type ? v : new this.layout.type(v);
+      if (!(r as any).__primaryKey) (r as any).__primaryKey = r[this.layout.primaryKeyProperty];
+      return r;
+    });
+    if (this.layout.initRecord) {
+      res = await Promise.all(res.map((r) => this.layout?.initRecord(r)));
+    }
+
+    if (isLoad && this.layout.load) {
+      res = this.layout.load(res);
+    }
+    return res;
   }
 }
