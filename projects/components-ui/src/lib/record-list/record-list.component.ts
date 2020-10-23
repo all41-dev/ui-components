@@ -20,7 +20,7 @@ export class RecordListComponent<T> extends AuthenticationBase implements OnChan
   public set layout(value: RecordListLayout<T> | undefined) {
     if (value) {
       value.columns.forEach((c) => c.parent = value);
-      value.actualGetUrlChange.subscribe((_value: string) => {
+      value.actualGetUrlChange.subscribe(() => {
         this.load();
       });
     }
@@ -138,7 +138,6 @@ export class RecordListComponent<T> extends AuthenticationBase implements OnChan
     }
     return res;
   }
-
   @ViewChild('grid', {static: false}) public grid: ElementRef;
   public inst: RecordListComponent<T>;
 
@@ -324,19 +323,16 @@ export class RecordListComponent<T> extends AuthenticationBase implements OnChan
       .map((c): any => record[c.recordProperty + 'Modified'])
       .some((m): boolean => m === true);
   }
-
   public modifiedRecords(): T[] {
     if (!this.records) return [];
     return this.records.filter((r): boolean =>
       this.layout?.columns.map((c): any => r[c.recordProperty + 'Modified']).some((c): boolean => c));
   }
-
   public getDataHeight(headerRow: HTMLElement, controlsRow: HTMLElement): number {
     const hh =  headerRow === undefined ? 0 : headerRow.clientHeight;
     const ch = controlsRow === undefined ? 0 : controlsRow.clientHeight;
     return this.layout?.height - hh - ch;
   }
-
   // noinspection JSMethodCanBeStatic
   public saveShortcut(event, saveButton: HTMLElement): void {
     event.preventDefault();
@@ -378,7 +374,6 @@ export class RecordListComponent<T> extends AuthenticationBase implements OnChan
       }
     });
   }
-
   public cancelShortcut(event, cancelButton: HTMLElement): void {
     event.preventDefault();
     event.stopPropagation();
@@ -386,7 +381,6 @@ export class RecordListComponent<T> extends AuthenticationBase implements OnChan
     cancelButton.focus();
     cancelButton.click();
   }
-
   public newShortcut(event, newButton: HTMLElement): void {
     event.preventDefault();
     event.stopPropagation();
@@ -394,7 +388,6 @@ export class RecordListComponent<T> extends AuthenticationBase implements OnChan
     newButton.focus();
     newButton.click();
   }
-
   public cancelChanges(event = null): void {
     if (event !== null) {
       event.preventDefault();
@@ -424,7 +417,6 @@ export class RecordListComponent<T> extends AuthenticationBase implements OnChan
       }
     });
   }
-
   public replaceRecords(newRecords: T | T[]): void {
     const recs = this.records;
     const nRecs = Array.isArray(newRecords) ? newRecords : [newRecords];
@@ -435,7 +427,6 @@ export class RecordListComponent<T> extends AuthenticationBase implements OnChan
       this._updateObj(recs[index], r);
     });
   }
-
   // noinspection JSMethodCanBeStatic
   public tab(event): void {
     let target = event.target;
@@ -488,7 +479,6 @@ export class RecordListComponent<T> extends AuthenticationBase implements OnChan
     event.stopPropagation();
     event.preventDefault();
   }
-
   public async new(): Promise<void> {
     if (!this.records) { this.records = []; }
     let templateCopy = JSON.parse(JSON.stringify(this.layout?.newRecTemplate));
@@ -524,7 +514,6 @@ export class RecordListComponent<T> extends AuthenticationBase implements OnChan
 
     }, 0);
   }
-
   public deleteRecord(r: T): void {
     if(!this.deleteRestricted){
       this.http.delete(this.deleteUrl(r[this.layout?.primaryKeyProperty].toString()))
@@ -540,7 +529,6 @@ export class RecordListComponent<T> extends AuthenticationBase implements OnChan
         });
     }
   }
-
   public toggleSelection(r: T): void {
     const idx = this.selectedRecords.indexOf(r);
 
@@ -629,7 +617,6 @@ export class RecordListComponent<T> extends AuthenticationBase implements OnChan
     const urlParts = url.split('?');
     return `${urlParts[0]}/${pk}?${urlParts[1] || ''}`;
   }
-
   private _updateObj(from: T, to: T): void {
     for (const prop in from) { if (from.hasOwnProperty(prop)) { delete from[prop]; } }
     Object.assign(from, to);
@@ -641,7 +628,7 @@ export class RecordListComponent<T> extends AuthenticationBase implements OnChan
       if (!(r as any).__primaryKey) (r as any).__primaryKey = r[this.layout.primaryKeyProperty];
       return r;
     });
-    if (this.layout.initRecord) {
+    if (this.layout?.initRecord) {
       res = await Promise.all(res.map((r) => this.layout?.initRecord(r)));
     }
 
