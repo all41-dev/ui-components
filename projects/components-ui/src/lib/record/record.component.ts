@@ -1,6 +1,5 @@
 import { HttpClient } from '@angular/common/http';
 import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChange } from '@angular/core';
-import { RecordLayout } from '../../model/record-layout';
 import { AccessFunctions } from '../access-functions';
 import { RecordListLayout } from '../../model/record-list-layout';
 import { Column } from '../../model/column';
@@ -13,7 +12,7 @@ import { Column } from '../../model/column';
 })
 export class RecordComponent<T> implements OnInit, OnChanges {
   @Input() public id?: any;
-  @Input() public layout?: RecordLayout<T> & RecordListLayout<T>;
+  @Input() public layout?: RecordListLayout<T>;
   @Input() public record: T|undefined;
   @Output() public recordChange: EventEmitter<T> = new EventEmitter<T>();
   @Input() public url: string;
@@ -161,7 +160,7 @@ export class RecordComponent<T> implements OnInit, OnChanges {
         this.http.get<T[]>(`${this.getUrl}`)
           .subscribe( async (resp: T[]): Promise<void> => {
             this.record = resp[0] === undefined ? undefined : 
-              this.layout?.load ? this.layout?.load(resp[0]) : resp[0];
+              (this.layout?.load ? this.layout?.load(resp) : resp)[0];
             if (this.record) {
               if (this.layout?.initRecord) { this.record = await this.layout?.initRecord(this.record)}
               (this.record as any).__primaryKey = this.record[this.layout?.primaryKeyProperty];
@@ -185,7 +184,7 @@ export class RecordComponent<T> implements OnInit, OnChanges {
         this.http.get<T[]>(this.currentUrl)
           .subscribe(async (resp: T[]): Promise<void> => {
             this.record = resp[0] === undefined ? undefined : 
-              this.layout?.load ? this.layout?.load(resp[0]) : resp[0];
+              (this.layout?.load ? this.layout?.load(resp) : resp)[0];
             if (this.record) {
               if (this.layout?.initRecord) { this.record = await this.layout?.initRecord(this.record)}
               (this.record as any).__primaryKey = this.record[this.layout?.primaryKeyProperty];
@@ -202,8 +201,8 @@ export class RecordComponent<T> implements OnInit, OnChanges {
 
   public async save(): Promise<void> {
     if (this.layout?.save !== undefined) {
-      const res = await this.layout?.save(this.record);
-      this.record = this.layout?.load ? this.layout?.load(res) : res;
+      const res = await this.layout?.save([this.record]);
+      this.record = (this.layout?.load ? this.layout?.load(res) : res)[0];
       return;
     }
 

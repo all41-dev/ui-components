@@ -17,7 +17,7 @@ export * from './lib/date-value/date-value.component';
 export * from './lib/record/record.component';
 export * from './lib/record-list/record-list.component';
 export * from './lib/column/column.component';
-export * from './model/record-layout';
+// export * from './model/record-layout';
 export * from './model/record-list-layout';
 export * from './model/column';
 export {RecordBaseLayout} from './model/record-base-layout';

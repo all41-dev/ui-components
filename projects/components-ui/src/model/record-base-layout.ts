@@ -3,7 +3,7 @@ import { EventEmitter } from '@angular/core';
 import {Column} from './column';
 
 // eslint-disable-next-line @typescript-eslint/interface-name-prefix
-export class RecordBaseLayout<T> {
+export abstract class RecordBaseLayout<T> {
   type: { new(partial?: Partial<T>): T };
   columns: Column<T>[];
   entityUrl?: string;
@@ -30,6 +30,10 @@ export class RecordBaseLayout<T> {
   entityScope?: string|string[];
   loadOnInit?: boolean;
   initRecord?: (args: T) => Promise<T>;
-  
+
+  // from RecordLayout
+  labelsWidth: string | undefined;
+  valuesWidth: string | undefined;
+
   public actualGetUrlChange: EventEmitter<string|undefined> = new EventEmitter<string|undefined>();
 }

@@ -1,6 +1,6 @@
 import { Column } from './column';
 import { RecordBaseLayout } from './record-base-layout';
-import { RecordLayout } from './record-layout';
+// import { RecordLayout } from './record-layout';
 
 // eslint-disable-next-line @typescript-eslint/interface-name-prefix
 export class RecordListLayout<T> extends RecordBaseLayout<T> {
@@ -13,7 +13,7 @@ export class RecordListLayout<T> extends RecordBaseLayout<T> {
   isDeleteEnabled?: boolean;
   /** @default false */
   isAddEnabled?: boolean;
-  save?: (record: T[]) => void;
+  save?: (record: T[]) => Promise<T[]>;
   newRecTemplate?: any;
   dblClick?: (record: T) => void;
   click?: (record: T) => void;

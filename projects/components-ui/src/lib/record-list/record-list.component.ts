@@ -8,7 +8,6 @@ import { OptionsEditableColumn } from '../../model/column';
 import { AuthenticationBase } from '../authentication-base';
 import { OAuthService } from 'angular-oauth2-oidc';
 import { Config } from '../config';
-import { RecordLayout } from '../../model/record-layout';
 
 @Component({
   selector: 'ift-record-list',
@@ -17,8 +16,8 @@ import { RecordLayout } from '../../model/record-layout';
 })
 export class RecordListComponent<T> extends AuthenticationBase implements OnChanges {
   @Input()
-  public get layout(): RecordListLayout<T> & Partial<RecordLayout<T>> | undefined { return this._layout; };
-  public set layout(value: RecordListLayout<T> & Partial<RecordLayout<T>> | undefined) {
+  public get layout(): RecordListLayout<T> | undefined { return this._layout; };
+  public set layout(value: RecordListLayout<T> | undefined) {
     if (value) {
       value.columns.forEach((c) => c.parent = value);
       value.actualGetUrlChange.subscribe((_value: string) => {
@@ -175,7 +174,7 @@ export class RecordListComponent<T> extends AuthenticationBase implements OnChan
   public get getUrl(): string | undefined { return this.layout.actualGetUrl; }
   public get postUrl(): string | undefined { return this.layout?.postUrl || this.url || this.layout?.entityUrl; }
 
-  private _layout?: RecordListLayout<T> & Partial<RecordLayout<T>>;
+  private _layout?: RecordListLayout<T>;
   private _records: T[] = []
   private _loadOnAuthCompleted = false;
 
@@ -346,7 +345,7 @@ export class RecordListComponent<T> extends AuthenticationBase implements OnChan
     saveButton.focus();
     saveButton.click();
   }
-  public save(/*event = null*/): void {
+  public save(/*event = null*/): Promise<T[]> {
     if (this.layout?.save) {
       return this.layout?.save(this.modifiedRecords());
     }
