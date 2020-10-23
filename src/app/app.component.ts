@@ -114,7 +114,7 @@ export class AppComponent implements OnInit {
   // public sampleEntityUrl = 'https://jsonplaceholder.typicode.com/posts';
   public sampleEntityUrl = 'https://api.airvisual.com/v2/countries?key=b0b877d8-1c61-41fc-a228-933e729bd97e';// key expires on Apr 15 2021
 
-  public recordLayout: RecordLayout<any> = {
+  public recordLayout = new RecordLayout<any>({
     type: Object,
     columns: this.columns,
     entityUrl: this.sampleEntityUrl,
@@ -131,10 +131,10 @@ export class AppComponent implements OnInit {
           .subscribe((resp: any): any => resp);
       }
     }
-  };
+  });
   
   public emotionRecord: any;
-  public emotionProjectLayout: RecordLayout<any> = {
+  public emotionProjectLayout = new RecordLayout<any>({
     type: Object,
     columns: [new EditableColumn({
       //   label: 'id',
@@ -188,9 +188,9 @@ export class AppComponent implements OnInit {
     valuesWidth: '250px',
     title: 'record title',
     primaryKeyProperty: 'id',
-  };
+  });
   
-  public recordListLayout: RecordListLayout<any> = {
+  public recordListLayout = new RecordListLayout<any>({
     type: Object,
     height: 500,
     columns: this.columns,
@@ -207,7 +207,7 @@ export class AppComponent implements OnInit {
     },
     selectionTrigger: 'click',
     // order: [{column: this.columns[0], direction: 'ASC'}],
-  };
+  });
 
   public columns2: Column<any>[] = [new ReadonlyColumn({
     label: 'Id',
@@ -263,15 +263,15 @@ export class AppComponent implements OnInit {
   })];
   public entityUrl2 = 'https://jsonplaceholder.typicode.com/todos';
 
-  public recordListLayout2: RecordListLayout<any> = {
+  public recordListLayout2 = new RecordListLayout<any>({
     type: Object,
     height: 600,
     columns: this.columns2,
     entityUrl: this.entityUrl2,
     primaryKeyProperty: 'id'
-  };
+  });
 
-  public rlColWithoutProp: RecordListLayout<any> = {
+  public rlColWithoutProp = new RecordListLayout<any>({
     type: Object,
     height:150,
     entityUrl: '',
@@ -291,7 +291,7 @@ export class AppComponent implements OnInit {
       },
 
     })]
-  }
+  });
 
   // eslint-disable-next-line @typescript-eslint/no-parameter-properties
   public constructor(public http: HttpClient) {}

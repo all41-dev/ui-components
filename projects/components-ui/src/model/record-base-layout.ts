@@ -1,12 +1,24 @@
+/* eslint-disable @typescript-eslint/member-ordering */
+import { EventEmitter } from '@angular/core';
 import {Column} from './column';
 
 // eslint-disable-next-line @typescript-eslint/interface-name-prefix
-export interface RecordBaseLayout<T> {
+export class RecordBaseLayout<T> {
   type: { new(partial?: Partial<T>): T };
   columns: Column<T>[];
   entityUrl?: string;
   primaryKeyProperty: keyof T;
-  getUrl?: string;
+
+  private _getUrl?: string;
+  public get getUrl(): string|undefined { return this._getUrl; }
+  public set getUrl(value: string|undefined) {
+    const actualGetUrl = this.actualGetUrl;
+    this._getUrl = value;
+    if (this.actualGetUrl !== actualGetUrl) this.actualGetUrlChange.emit(value);
+  }
+
+  public get actualGetUrl(): string|undefined { return this?.getUrl || this.entityUrl; }
+
   postUrl?: string;
   patchUrl?: string;
   deleteUrl?: string;
@@ -18,4 +30,6 @@ export interface RecordBaseLayout<T> {
   entityScope?: string|string[];
   loadOnInit?: boolean;
   initRecord?: (args: T) => Promise<T>;
+  
+  public actualGetUrlChange: EventEmitter<string|undefined> = new EventEmitter<string|undefined>();
 }

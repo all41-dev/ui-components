@@ -19,7 +19,12 @@ export class RecordListComponent<T> extends AuthenticationBase implements OnChan
   @Input()
   public get layout(): RecordListLayout<T> & Partial<RecordLayout<T>> | undefined { return this._layout; };
   public set layout(value: RecordListLayout<T> & Partial<RecordLayout<T>> | undefined) {
-    if (value) value.columns.forEach((c) => c.parent = value);
+    if (value) {
+      value.columns.forEach((c) => c.parent = value);
+      value.actualGetUrlChange.subscribe((_value: string) => {
+        this.load();
+      });
+    }
     this._layout = value;
   }
   @Input() public selectedRecords: T[] = [];
@@ -167,9 +172,8 @@ export class RecordListComponent<T> extends AuthenticationBase implements OnChan
   public postRestricted = false;
   public get listColumns(): Column<T>[] { return this.layout?.columns.filter((c) => c.listDisplay !== 'none' && c.width !== '0') || []; }
 
-  public get getUrl(): string | undefined { return this.layout?.getUrl || this.url || this.layout?.entityUrl; }
+  public get getUrl(): string | undefined { return this.layout.actualGetUrl; }
   public get postUrl(): string | undefined { return this.layout?.postUrl || this.url || this.layout?.entityUrl; }
-
 
   private _layout?: RecordListLayout<T> & Partial<RecordLayout<T>>;
   private _records: T[] = []

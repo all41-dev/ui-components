@@ -1,8 +1,9 @@
 import { Column } from './column';
-import {RecordBaseLayout} from './record-base-layout';
+import { RecordBaseLayout } from './record-base-layout';
+import { RecordLayout } from './record-layout';
 
 // eslint-disable-next-line @typescript-eslint/interface-name-prefix
-export interface RecordListLayout<T> extends RecordBaseLayout<T> {
+export class RecordListLayout<T> extends RecordBaseLayout<T> {
   height: number;
   /** @default None */
   selectionType?: 'none' | 'single' | 'multiple';
@@ -26,4 +27,9 @@ export interface RecordListLayout<T> extends RecordBaseLayout<T> {
    * */
   detailPosition?: 'none' | 'bottom' | 'right' | 'top' | 'left';
   order?: {column: Column<T>; direction: 'ASC' | 'DESC' }[];
+
+  constructor(initValue: Partial<RecordListLayout<T>>) {
+    super();
+    Object.assign(this, initValue);
+  }
 }
