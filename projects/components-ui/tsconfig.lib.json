@@ -2,19 +2,19 @@
   "extends": "../../tsconfig.json",
   "compilerOptions": {
     "outDir": "../../out-tsc/lib",
-    "target": "es2015",
-    "module": "ESNext",
-    "moduleResolution": "node",
-    "declaration": false,
     "sourceMap": true,
     "inlineSources": true,
+    "declaration": false,
+    "downlevelIteration": true,
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
+    "moduleResolution": "node",
     "importHelpers": true,
-    "types": [],
+    "target": "es2015",
+    "module": "ES2020",
     "lib": [
-      "dom",
-      "es2018"
+      "es2018",
+      "dom"
     ]
   },
   "angularCompilerOptions": {

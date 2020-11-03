@@ -1,6 +1,6 @@
 import {Component, OnInit} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
-import {Column, RecordLayout, RecordListLayout, RecordListComponent, RecordComponent, ReadonlyColumn, EditableColumn} from '@all41-dev/ui-components';
+import {Column, RecordListLayout, RecordListComponent, RecordComponent, ReadonlyColumn, EditableColumn} from '@all41-dev/ui-components';
 import { Subscription } from 'rxjs';
 
 @Component({
@@ -114,7 +114,7 @@ export class AppComponent implements OnInit {
   // public sampleEntityUrl = 'https://jsonplaceholder.typicode.com/posts';
   public sampleEntityUrl = 'https://api.airvisual.com/v2/countries?key=b0b877d8-1c61-41fc-a228-933e729bd97e';// key expires on Apr 15 2021
 
-  public recordLayout = new RecordLayout<any>({
+  public recordLayout = new RecordListLayout<any>({
     type: Object,
     columns: this.columns,
     entityUrl: this.sampleEntityUrl,
@@ -122,19 +122,22 @@ export class AppComponent implements OnInit {
     valuesWidth: '250px',
     title: 'record title',
     primaryKeyProperty: 'id',
-    save: async (record): Promise<Subscription> => {
-      if (record.id !== undefined) {
-        return await this.http.put(`${this.recordLayout.entityUrl}/${record.id}`, record)
-          .subscribe((resp: any[]): any => resp[0]);
-      } else {
-        return await this.http.post(`${this.recordLayout.entityUrl}/`, record)
-          .subscribe((resp: any): any => resp);
+    save: async (records): Promise<Subscription[]> => {
+      const saveOne = async (record): Promise<Subscription> => {
+        if (record.id !== undefined) {
+          return await this.http.put(`${this.recordLayout.entityUrl}/${record.id}`, record)
+            .subscribe((resp: any[]): any => resp[0]);
+        } else {
+          return await this.http.post(`${this.recordLayout.entityUrl}/`, record)
+            .subscribe((resp: any): any => resp);
+        }
       }
+      return Promise.all(records.map((r) => saveOne(r)));
     }
   });
   
   public emotionRecord: any;
-  public emotionProjectLayout = new RecordLayout<any>({
+  public emotionProjectLayout = new RecordListLayout<any>({
     type: Object,
     columns: [new EditableColumn({
       //   label: 'id',
