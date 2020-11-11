@@ -624,7 +624,7 @@ export class RecordListComponent<T> extends AuthenticationBase implements OnChan
   private async _initRecs(recs: T[], isLoad = false): Promise<T[]> {
     // console.debug(`initializing recs ${this.layout.title}`);
     let res = recs.map((v) => {
-      const r = v instanceof this.layout.type ? v : new this.layout.type(v);
+      const r = !this.layout.type || v instanceof this.layout.type ? v : new this.layout.type(v);
       if (!(r as any).__primaryKey) (r as any).__primaryKey = r[this.layout.primaryKeyProperty];
       return r;
     });

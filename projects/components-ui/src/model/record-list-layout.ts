@@ -1,9 +1,39 @@
 import { Column } from './column';
-import { RecordBaseLayout } from './record-base-layout';
-// import { RecordLayout } from './record-layout';
+import { EventEmitter } from '@angular/core';
 
 // eslint-disable-next-line @typescript-eslint/interface-name-prefix
-export class RecordListLayout<T> extends RecordBaseLayout<T> {
+export class RecordListLayout<T> {
+  type!: { new(partial?: Partial<T>): T } | false;
+  columns!: Column<T>[];
+  entityUrl?: string;
+  primaryKeyProperty!: keyof T;
+  postUrl?: string;
+  patchUrl?: string;
+  deleteUrl?: string;
+  title?: string;
+  getScope?: string | string[];
+  postScope?: string | string[];
+  patchScope?: string | string[];
+  deleteScope?: string | string[];
+  entityScope?: string | string[];
+  loadOnInit?: boolean;
+
+  public get getUrl(): string | undefined { return this._getUrl; }
+  public set getUrl(value: string | undefined) {
+    const actualGetUrl = this.actualGetUrl;
+    this._getUrl = value;
+    if (this.actualGetUrl !== actualGetUrl) this.actualGetUrlChange.emit(value);
+  }
+
+  public get actualGetUrl(): string | undefined { return this?.getUrl || this.entityUrl; }
+
+  initRecord?: (args: T) => Promise<T>;
+
+  // from RecordLayout
+  labelsWidth!: string | undefined;
+  valuesWidth!: string | undefined;
+
+  public actualGetUrlChange: EventEmitter<string | undefined> = new EventEmitter<string | undefined>();
   height: number;
   /** @default None */
   selectionType?: 'none' | 'single' | 'multiple';
@@ -28,8 +58,9 @@ export class RecordListLayout<T> extends RecordBaseLayout<T> {
   detailPosition?: 'none' | 'bottom' | 'right' | 'top' | 'left';
   order?: {column: Column<T>; direction: 'ASC' | 'DESC' }[];
 
+  private _getUrl?: string;
+
   constructor(initValue: Partial<RecordListLayout<T>>) {
-    super();
     Object.assign(this, initValue);
   }
 }
