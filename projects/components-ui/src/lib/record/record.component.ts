@@ -283,8 +283,7 @@ export class RecordComponent<T> implements OnInit, OnChanges {
   }
 
   public getWidth(): number {
-    return (this.listColumns.map((c): number =>
-      parseInt(c.width?.replace('px', '').trim() || '0', 10))
+    return (this.listColumns.map((c): number => (c as any)._actualWidth)
       .reduce((a, b): number => a + b, 0)) + 22 /* 22 for context menu*/;
   }
 

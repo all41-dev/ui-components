@@ -224,7 +224,7 @@ export class RecordListComponent<T> extends AuthenticationBase implements OnChan
     } else {
       throw new Error('componentWidth handle only px and percentage at the moment');
     }
-    const gridWidth = isSideDetail ? componentWidthPx - detailLabelsWidthPx - detailValuesWidthPx - 44 - 32 : componentWidthPx;
+    const gridWidth = isSideDetail ? componentWidthPx - detailLabelsWidthPx - detailValuesWidthPx - 76 : componentWidthPx -43;
 
     const percentageCols = this.layout.columns.filter((c) => c.width.endsWith('%'));
     const totalPercentageBased = percentageCols.length === 0 ? 0 : percentageCols.map((c) => Number(c.width.slice(0, -1))).reduce((l, r) => l + r);
