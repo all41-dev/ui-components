@@ -308,7 +308,7 @@ export class AppComponent implements OnInit {
 
   public recordListLayout2 = new RecordListLayout<any>({
     // type: Object,
-    // title: 'ceci est un titre',
+    title: 'ceci est un titre',
     height: 600,
     componentWidth: '1000px',
     detailPosition: 'right',

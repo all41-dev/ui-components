@@ -198,11 +198,12 @@ export class RecordListComponent<T> extends AuthenticationBase implements OnChan
   public getWidth(): number {
     if (!this.componentElement) return 0;
     if (!this.layout.componentWidth) {
-      return (this.listColumns.map((c): number => {
+      const res = (this.listColumns.map((c): number => {
         const widthPx = Number(c.width.slice(0, -2));
         (c as any)._actualWidth = widthPx;
         return widthPx;
       }).reduce((a, b): number => a + b, 0)) + 22 /* 22 for context menu*/;
+      return res;
     }
     const cElem: HTMLElement = this.componentElement.nativeElement.parentElement.parentElement;//offsetWidth is outer
     const availableWidth = cElem.clientWidth - 22 - 22;
@@ -253,7 +254,7 @@ export class RecordListComponent<T> extends AuthenticationBase implements OnChan
       const detailWidth =  parseInt(this.layout?.labelsWidth.replace('px', ''), 10) +
         parseInt(this.layout?.valuesWidth.replace('px', ''), 10);
   
-      res += detailWidth + 42;
+      res += detailWidth + 55;
     } 
     return `${res}px`;
   }

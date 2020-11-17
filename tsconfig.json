@@ -26,6 +26,9 @@
       "components-ui/*": [
         "dist/components-ui/*"
       ]
-    }
+    },
+  },
+  "angularCompilerOptions": {
+    "enableIvy": false,
   }
-}
+  }
