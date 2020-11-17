@@ -138,7 +138,8 @@ export class RecordListComponent<T> extends AuthenticationBase implements OnChan
     }
     return res;
   }
-  @ViewChild('grid', {static: false}) public grid: ElementRef;
+  @ViewChild('grid', { static: false }) public grid: ElementRef;
+  @ViewChild('componentElement', { static: false }) public componentElement: ElementRef;
   public inst: RecordListComponent<T>;
 
   public cursorStyle = 'inherit';
@@ -189,16 +190,64 @@ export class RecordListComponent<T> extends AuthenticationBase implements OnChan
 
   // eslint-disable-next-line @typescript-eslint/no-parameter-properties
   public gridTemplateColumns(): string {
-    return this.layout?.columns.filter((c) => c.listDisplay !== 'none').map((c): string => c.width).reduce((a, b): string => a + ' ' + b) + ' 24px'; // last col for context menu
+    const res = this.layout?.columns.filter((c) => c.listDisplay !== 'none').map((c): string => `${(c as any)._actualWidth}px`).reduce((a, b): string => a + ' ' + b) + ' 24px'; // last col for context menu
+    // console.debug(res);
+    return res;
   }
 
   public getWidth(): number {
-    return (this.listColumns.map((c): number =>
-      parseInt(c.width.replace('px', '').trim(), 10))
-      .reduce((a, b): number => a + b, 0)) + 22 /* 22 for context menu*/;
+    if (!this.componentElement) return 0;
+    if (!this.layout.componentWidth) {
+      return (this.listColumns.map((c): number => {
+        const widthPx = Number(c.width.slice(0, -2));
+        (c as any)._actualWidth = widthPx;
+        return widthPx;
+      }).reduce((a, b): number => a + b, 0)) + 22 /* 22 for context menu*/;
+    }
+    const cElem: HTMLElement = this.componentElement.nativeElement.parentElement.parentElement;//offsetWidth is outer
+    const availableWidth = cElem.clientWidth - 22 - 22;
+    const isSideDetail = ['left', 'right'].includes(this.layout.detailPosition);
+
+    // TODO don't consider percentage values, to be added
+    let detailLabelsWidthPx = this.layout.labelsWidth ? Number(this.layout.labelsWidth.endsWith('px') ? this.layout.labelsWidth.slice(0, -2) : this.layout.labelsWidth) : NaN;
+    if (isNaN(detailLabelsWidthPx)) detailLabelsWidthPx = 0;
+    let detailValuesWidthPx = this.layout.valuesWidth ? Number(this.layout.valuesWidth.endsWith('px') ? this.layout.valuesWidth.slice(0, -2) : this.layout.valuesWidth) : NaN;
+    if (isNaN(detailValuesWidthPx)) detailValuesWidthPx = 0;
+
+    let componentWidthPx: number;
+    if (this.layout.componentWidth.endsWith('%')) {
+      const percentValue = Number(this.layout.componentWidth.slice(0, -1));
+      componentWidthPx = availableWidth * percentValue / 100;
+    } else if (this.layout.componentWidth.endsWith('px')) {
+      componentWidthPx = Number(this.layout.componentWidth.slice(0, -2));
+    } else {
+      throw new Error('componentWidth handle only px and percentage at the moment');
+    }
+    const gridWidth = isSideDetail ? componentWidthPx - detailLabelsWidthPx - detailValuesWidthPx - 44 - 32 : componentWidthPx;
+
+    const percentageCols = this.layout.columns.filter((c) => c.width.endsWith('%'));
+    const totalPercentageBased = percentageCols.length === 0 ? 0 : percentageCols.map((c) => Number(c.width.slice(0, -1))).reduce((l, r) => l + r);
+
+    if (totalPercentageBased > 100) throw new Error(`cols width percentages total is over 100% (${totalPercentageBased})`);
+    percentageCols.forEach((c) => {
+      (c as any)._actualWidth = gridWidth * Number(c.width.slice(0, -1)) / 100;
+    })
+
+    const pixBasedWidth = gridWidth * (100 - totalPercentageBased) / 100;
+    const pxCols = this.layout.columns.filter((c) => c.width.endsWith('px'));
+    const pxColsTotal = pxCols.map((c) => Number(c.width.slice(0, -2))).reduce((l, r) => l + r);
+    const pxColsFactor = pixBasedWidth / pxColsTotal;
+    pxCols.forEach((c) => {
+      (c as any)._actualWidth = Number(c.width.slice(0, -2)) * pxColsFactor;
+    })
+
+    if (gridWidth <= 0) throw new Error('Grid width is lower or equal to zero');
+    return gridWidth + 22;
   }
 
   public get outerWidth(): string {
+    if (this.layout.componentWidth) return this.layout.componentWidth;
+
     let res = this.getWidth();
     if (['left', 'right'].includes(this.layout?.detailPosition || '')) {
       const detailWidth =  parseInt(this.layout?.labelsWidth.replace('px', ''), 10) +
@@ -229,7 +278,6 @@ export class RecordListComponent<T> extends AuthenticationBase implements OnChan
     }
   }
 
-  // todo: introduce filters
   public async afterAuthInit(): Promise<void> {
     super.afterAuthInit();
     // this.layout = new Proxy(this.layout, {set: this.layoutUpdated})
@@ -304,17 +352,6 @@ export class RecordListComponent<T> extends AuthenticationBase implements OnChan
         });
     }
   }
-
-  // layoutUpdated(target: any, p: PropertyKey, value: any, receiver: any): boolean {
-  //   console.info('entityUrl updated (inside record-list)');
-  //   switch (p) {
-  //     case 'entityUrl' :
-  //       this.load();
-  //       break;
-  //   }
-  //   return true;
-  // }
-
   public isModified(record: T): boolean {
     if (record === undefined) {
       return false;

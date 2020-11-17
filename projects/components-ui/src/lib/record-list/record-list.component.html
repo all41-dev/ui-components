@@ -1,4 +1,4 @@
-<div [style.width]="outerWidth">
+<div [style.width]="outerWidth" #componentElement>
   <ift-record 
     *ngIf="['left', 'right', 'top'].includes(layout?.detailPosition) && selectedRecords.length === 1"
     [record]="selectedRecords[0]"

@@ -105,8 +105,8 @@ export class RecordComponent<T> implements OnInit, OnChanges {
       if (this.layout?.labelsWidth !== undefined && this.layout?.valuesWidth !== undefined) {
         const width =  parseInt(this.layout?.labelsWidth.replace('px', ''), 10) +
           parseInt(this.layout?.valuesWidth.replace('px', ''), 10);
-        this.componentWidth = `${width + 19}px`;
-        this.componentHeight = `${this.layout?.height + 4}px`;
+        this.componentWidth = `${width + 30}px`;
+        this.componentHeight = `${this.layout?.height + (this.layout.title ? 2 : -19)}px`;
       }  
     } else {
       this.componentWidth = `${this.getWidth() + 19}px`;

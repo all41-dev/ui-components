@@ -14,109 +14,107 @@ export class AppComponent implements OnInit {
   public sr = [];
   public fRecs;
 
-  public columns: Column<any>[] = [new ReadonlyColumn({
-    listDisplay: 'read',
-    detailDisplay: 'read',
-    label: 'col without data',
-    recordProperty: undefined,
-    width: '200px',
-    html: (parent, record): string => `<span>I am the <a href='/foo/${record.country}'>${record.country}</a>!`,
-    onClick: (parentComponent: RecordListComponent<any>, record): void => {
-      alert(record.title);
-      // to be implemented
-    }
-  // }, {
-  //   label: 'Id',
-  //   editType: EditType.Number,
-  //   recordProperty: 'id',
-  //   isEditable: false,
-  //   width: '30px',
-  // }, {
-  //   label: 'User',
-  //   editType: EditType.Typeahead,
-  //   recordProperty: 'userId',
-  //   isEditable: true,
-  //   width: '300px',
-  //   options: [
-  //     { label: 'foo', value: 'foo'},
-  //     { label: 'bar', value: 'bar'},
-  //     { label: 'baz', value: 'baz'},
-  //   ],
-  //   //filterValue: 'is',
-  //   //isFilterVisible: true,
-  }), new ReadonlyColumn({
-    label: 'country',
-    // editType: EditType.Text,
-    recordProperty: 'country',
-    listDisplay: 'read',
-    detailDisplay: 'read',
-    isFilterVisible: true,
-    // filterValue: 'ess',
-    width: '300px'
-  // }, {
-  //   label: 'Body',
-  //   editType: EditType.Textarea, // multiline
-  //   recordProperty: 'body',
-  //   isEditable: true,
-  //   width: '500px'
-  // }, {
-  //   label: 'L4',
-  //   editType: EditType.Date, // date
-  //   recordProperty: 'recordDate',
-  //   isEditable: true,
-  //   isModifiedProperty: 'recordDateModified',
-  //   width: '60px'
-  // }, {
-  //   label: 'L5',
-  //   editType: EditType.Text, // dropdown
-  //   recordProperty: 'hardOption',
-  //   isEditable: true,
-  //   isModifiedProperty: 'hardOptionModified',
-  //   width: '100px',
-  //   isValid: (record: any): boolean => {
-  //     return record.hardOption !== null && record.hardOption.length >= 6;
-  //   }
-  // }, {
-  //   label: 'L6 monster very fucking long label plus',
-  //   editType: EditType.Dropdown,
-  //   recordProperty: 'quantity',
-  //   isEditable: true,
-  //   isModifiedProperty: 'quantityModified',
-  //   width: '70px',
-  //   options: [
-  //     {value: 1, label: 'First'},
-  //     {value: 2, label: 'Second'},
-  //     {value: 3, label: 'Third'},
-  //   ]
-  }), new EditableColumn({
-    //   label: 'id',
-    //   recordProperty: 'id',
-    //   isEditable: false,
-    //   editType: EditType.Text,
-    //  }, {
-    label: 'status',
-    recordProperty: 'status',
-    listDisplay: 'update',
-    detailDisplay: 'update',
-    editType: 'dropdown',
-    width: '100px',
-    options: (): any => [
-      { label: 'nouveau', value: 'new' },
-      { label: 'en cours', value: 'open' },
-      { label: 'en attente', value: 'on-hold' },
-      { label: 'annulé', value: 'cancelled' },
-      { label: 'terminé', value: 'finished' },
-    ],
-    isFilterVisible: true,
-  })];
-
   // public sampleEntityUrl = 'http://localhost:3010/api/samples';
   // public sampleEntityUrl = 'https://jsonplaceholder.typicode.com/posts';
   public sampleEntityUrl = 'https://api.airvisual.com/v2/countries?key=b0b877d8-1c61-41fc-a228-933e729bd97e';// key expires on Apr 15 2021
 
   public recordLayout = new RecordListLayout<any>({
     type: Object,
-    columns: this.columns,
+    columns: [new ReadonlyColumn({
+      listDisplay: 'read',
+      detailDisplay: 'read',
+      label: 'col without data',
+      recordProperty: undefined,
+      width: '200px',
+      html: (parent, record): string => `<span>I am the <a href='/foo/${record.country}'>${record.country}</a>!`,
+      onClick: (parentComponent: RecordListComponent<any>, record): void => {
+        alert(record.title);
+        // to be implemented
+      }
+      // }, {
+      //   label: 'Id',
+      //   editType: EditType.Number,
+      //   recordProperty: 'id',
+      //   isEditable: false,
+      //   width: '30px',
+      // }, {
+      //   label: 'User',
+      //   editType: EditType.Typeahead,
+      //   recordProperty: 'userId',
+      //   isEditable: true,
+      //   width: '300px',
+      //   options: [
+      //     { label: 'foo', value: 'foo'},
+      //     { label: 'bar', value: 'bar'},
+      //     { label: 'baz', value: 'baz'},
+      //   ],
+      //   //filterValue: 'is',
+      //   //isFilterVisible: true,
+    }), new ReadonlyColumn({
+      label: 'country',
+      // editType: EditType.Text,
+      recordProperty: 'country',
+      listDisplay: 'read',
+      detailDisplay: 'read',
+      isFilterVisible: true,
+      // filterValue: 'ess',
+      width: '300px'
+      // }, {
+      //   label: 'Body',
+      //   editType: EditType.Textarea, // multiline
+      //   recordProperty: 'body',
+      //   isEditable: true,
+      //   width: '500px'
+      // }, {
+      //   label: 'L4',
+      //   editType: EditType.Date, // date
+      //   recordProperty: 'recordDate',
+      //   isEditable: true,
+      //   isModifiedProperty: 'recordDateModified',
+      //   width: '60px'
+      // }, {
+      //   label: 'L5',
+      //   editType: EditType.Text, // dropdown
+      //   recordProperty: 'hardOption',
+      //   isEditable: true,
+      //   isModifiedProperty: 'hardOptionModified',
+      //   width: '100px',
+      //   isValid: (record: any): boolean => {
+      //     return record.hardOption !== null && record.hardOption.length >= 6;
+      //   }
+      // }, {
+      //   label: 'L6 monster very fucking long label plus',
+      //   editType: EditType.Dropdown,
+      //   recordProperty: 'quantity',
+      //   isEditable: true,
+      //   isModifiedProperty: 'quantityModified',
+      //   width: '70px',
+      //   options: [
+      //     {value: 1, label: 'First'},
+      //     {value: 2, label: 'Second'},
+      //     {value: 3, label: 'Third'},
+      //   ]
+    }), new EditableColumn({
+      //   label: 'id',
+      //   recordProperty: 'id',
+      //   isEditable: false,
+      //   editType: EditType.Text,
+      //  }, {
+      label: 'status',
+      recordProperty: 'status',
+      listDisplay: 'update',
+      detailDisplay: 'update',
+      editType: 'dropdown',
+      width: '100px',
+      options: (): any => [
+        { label: 'nouveau', value: 'new' },
+        { label: 'en cours', value: 'open' },
+        { label: 'en attente', value: 'on-hold' },
+        { label: 'annulé', value: 'cancelled' },
+        { label: 'terminé', value: 'finished' },
+      ],
+      isFilterVisible: true,
+    })],
     entityUrl: this.sampleEntityUrl,
     labelsWidth: '80px',
     valuesWidth: '250px',
@@ -196,7 +194,101 @@ export class AppComponent implements OnInit {
   public recordListLayout = new RecordListLayout<any>({
     type: Object,
     height: 500,
-    columns: this.columns,
+    columns: [new ReadonlyColumn({
+      listDisplay: 'read',
+      detailDisplay: 'read',
+      label: 'col without data',
+      recordProperty: undefined,
+      width: '200px',
+      html: (parent, record): string => `<span>I am the <a href='/foo/${record.country}'>${record.country}</a>!`,
+      onClick: (parentComponent: RecordListComponent<any>, record): void => {
+        alert(record.title);
+        // to be implemented
+      }
+      // }, {
+      //   label: 'Id',
+      //   editType: EditType.Number,
+      //   recordProperty: 'id',
+      //   isEditable: false,
+      //   width: '30px',
+      // }, {
+      //   label: 'User',
+      //   editType: EditType.Typeahead,
+      //   recordProperty: 'userId',
+      //   isEditable: true,
+      //   width: '300px',
+      //   options: [
+      //     { label: 'foo', value: 'foo'},
+      //     { label: 'bar', value: 'bar'},
+      //     { label: 'baz', value: 'baz'},
+      //   ],
+      //   //filterValue: 'is',
+      //   //isFilterVisible: true,
+    }), new ReadonlyColumn({
+      label: 'country',
+      // editType: EditType.Text,
+      recordProperty: 'country',
+      listDisplay: 'read',
+      detailDisplay: 'read',
+      isFilterVisible: true,
+      // filterValue: 'ess',
+      width: '300px'
+      // }, {
+      //   label: 'Body',
+      //   editType: EditType.Textarea, // multiline
+      //   recordProperty: 'body',
+      //   isEditable: true,
+      //   width: '500px'
+      // }, {
+      //   label: 'L4',
+      //   editType: EditType.Date, // date
+      //   recordProperty: 'recordDate',
+      //   isEditable: true,
+      //   isModifiedProperty: 'recordDateModified',
+      //   width: '60px'
+      // }, {
+      //   label: 'L5',
+      //   editType: EditType.Text, // dropdown
+      //   recordProperty: 'hardOption',
+      //   isEditable: true,
+      //   isModifiedProperty: 'hardOptionModified',
+      //   width: '100px',
+      //   isValid: (record: any): boolean => {
+      //     return record.hardOption !== null && record.hardOption.length >= 6;
+      //   }
+      // }, {
+      //   label: 'L6 monster very fucking long label plus',
+      //   editType: EditType.Dropdown,
+      //   recordProperty: 'quantity',
+      //   isEditable: true,
+      //   isModifiedProperty: 'quantityModified',
+      //   width: '70px',
+      //   options: [
+      //     {value: 1, label: 'First'},
+      //     {value: 2, label: 'Second'},
+      //     {value: 3, label: 'Third'},
+      //   ]
+    }), new EditableColumn({
+      //   label: 'id',
+      //   recordProperty: 'id',
+      //   isEditable: false,
+      //   editType: EditType.Text,
+      //  }, {
+      label: 'status',
+      recordProperty: 'status',
+      listDisplay: 'update',
+      detailDisplay: 'update',
+      editType: 'dropdown',
+      width: '100px',
+      options: (): any => [
+        { label: 'nouveau', value: 'new' },
+        { label: 'en cours', value: 'open' },
+        { label: 'en attente', value: 'on-hold' },
+        { label: 'annulé', value: 'cancelled' },
+        { label: 'terminé', value: 'finished' },
+      ],
+      isFilterVisible: true,
+    })],
     primaryKeyProperty: 'country',
     entityUrl: this.sampleEntityUrl,
     selectionType: 'single',
@@ -212,64 +304,68 @@ export class AppComponent implements OnInit {
     // order: [{column: this.columns[0], direction: 'ASC'}],
   });
 
-  public columns2: Column<any>[] = [new ReadonlyColumn({
-    label: 'Id',
-    editType: 'number',
-    recordProperty: 'id',
-    listDisplay: 'read',
-    detailDisplay: 'read',
-    width: '30px',
-  }), new EditableColumn({
-    label: 'Title',
-    editType: 'text',
-    recordProperty: 'title',
-    listDisplay: 'update',
-    detailDisplay: 'update',
-    width: '300px',
-  }), new EditableColumn({
-    label: 'ChkBx',
-    editType: 'checkbox',
-    recordProperty: 'mybool',
-    listDisplay: 'update',
-    detailDisplay: 'update',
-    width: '50px',
-  }), new ReadonlyColumn({
-    label: 'ChkBx text',
-    editType: 'text',
-    recordProperty: 'mybool',
-    listDisplay: 'read',
-    detailDisplay: 'read',
-    width: '100px',
-  }), new EditableColumn({
-    label: 'User',
-    editType: 'dropdown',
-    recordProperty: 'userId',
-    listDisplay: 'update',
-    detailDisplay: 'update',
-    // isEditable: (rec) => {
-    //   const res = rec.completed !== true;
-    //   console.info(res);
-    //   return res;
-    // },
-    width: '200px',
-    options: []
-    // {value: 1, label: 'First'},
-    // {value: 2, label: 'Second'},
-    // {value: 3, label: 'Third'},
-  }), new ReadonlyColumn({
-    label: 'Completed',
-    editType: 'text',
-    recordProperty: 'completed',
-    listDisplay: 'read',
-    detailDisplay: 'read',
-    width: '50px',
-  })];
   public entityUrl2 = 'https://jsonplaceholder.typicode.com/todos';
 
   public recordListLayout2 = new RecordListLayout<any>({
-    type: Object,
+    // type: Object,
+    // title: 'ceci est un titre',
     height: 600,
-    columns: this.columns2,
+    componentWidth: '1000px',
+    detailPosition: 'right',
+    labelsWidth: '100px',
+    valuesWidth: '200px',
+    columns: [new ReadonlyColumn({
+      label: 'Id',
+      editType: 'number',
+      recordProperty: 'id',
+      listDisplay: 'read',
+      detailDisplay: 'read',
+      width: '30px',
+    }), new EditableColumn({
+      label: 'Title',
+      editType: 'text',
+      recordProperty: 'title',
+      listDisplay: 'update',
+      detailDisplay: 'update',
+      width: '50%',
+    }), new EditableColumn({
+      label: 'ChkBx',
+      editType: 'checkbox',
+      recordProperty: 'mybool',
+      listDisplay: 'update',
+      detailDisplay: 'update',
+      width: '50px',
+    }), new ReadonlyColumn({
+      label: 'ChkBx text',
+      editType: 'text',
+      recordProperty: 'mybool',
+      listDisplay: 'read',
+      detailDisplay: 'read',
+      width: '100px',
+    }), new EditableColumn({
+      label: 'User',
+      editType: 'dropdown',
+      recordProperty: 'userId',
+      listDisplay: 'update',
+      detailDisplay: 'update',
+      // isEditable: (rec) => {
+      //   const res = rec.completed !== true;
+      //   console.info(res);
+      //   return res;
+      // },
+      width: '200px',
+      options: []
+      // {value: 1, label: 'First'},
+      // {value: 2, label: 'Second'},
+      // {value: 3, label: 'Third'},
+    }), new ReadonlyColumn({
+      label: 'Completed',
+      editType: 'text',
+      recordProperty: 'completed',
+      listDisplay: 'read',
+      detailDisplay: 'read',
+      width: '50px',
+    })],
     entityUrl: this.entityUrl2,
     primaryKeyProperty: 'id'
   });

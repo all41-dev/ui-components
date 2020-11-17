@@ -3,10 +3,10 @@ import { EventEmitter } from '@angular/core';
 
 // eslint-disable-next-line @typescript-eslint/interface-name-prefix
 export class RecordListLayout<T> {
-  type!: { new(partial?: Partial<T>): T } | false;
-  columns!: Column<T>[];
+  type: { new(partial?: Partial<T>): T } | false;
+  columns: Column<T>[];
   entityUrl?: string;
-  primaryKeyProperty!: keyof T;
+  primaryKeyProperty: keyof T;
   postUrl?: string;
   patchUrl?: string;
   deleteUrl?: string;
@@ -29,9 +29,12 @@ export class RecordListLayout<T> {
 
   initRecord?: (args: T) => Promise<T>;
 
-  // from RecordLayout
-  labelsWidth!: string | undefined;
-  valuesWidth!: string | undefined;
+  /** @description if set, cols width will be spread (or shrinked) proportionaly. Value includes detail width if set left/right */
+  componentWidth?: string;
+  /** @description for record detail when displayed on the left/right */
+  labelsWidth?: string;
+  /** @description for record detail when displayed on the left/right */
+  valuesWidth?: string;
 
   public actualGetUrlChange: EventEmitter<string | undefined> = new EventEmitter<string | undefined>();
   height: number;
