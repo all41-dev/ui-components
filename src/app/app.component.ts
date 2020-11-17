@@ -310,7 +310,7 @@ export class AppComponent implements OnInit {
     // type: Object,
     title: 'ceci est un titre',
     height: 600,
-    componentWidth: '1000px',
+    componentWidth: '50%',
     detailPosition: 'right',
     labelsWidth: '100px',
     valuesWidth: '200px',

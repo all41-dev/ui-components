@@ -206,7 +206,7 @@ export class RecordListComponent<T> extends AuthenticationBase implements OnChan
       return res;
     }
     const cElem: HTMLElement = this.componentElement.nativeElement.parentElement.parentElement;//offsetWidth is outer
-    const availableWidth = cElem.clientWidth - 22 - 22;
+    const availableWidth = cElem.clientWidth;// - 22 - 22;
     const isSideDetail = ['left', 'right'].includes(this.layout.detailPosition);
 
     // TODO don't consider percentage values, to be added
