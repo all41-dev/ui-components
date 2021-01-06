@@ -14,6 +14,7 @@ import { RecordListComponent } from './record-list/record-list.component';
 import { DropdownValueComponent } from './dropdown-value/dropdown-value.component';
 import { TypeaheadValueComponent } from './typeahead-value/typeahead-value.component';
 import { PasswordValueComponent } from './password-value/password-value.component';
+import { TabulatorComponent } from './tabulator/tabulator.component';
 
 @NgModule({
   imports: [
@@ -33,7 +34,8 @@ import { PasswordValueComponent } from './password-value/password-value.componen
     RecordComponent,
     RecordListComponent,
     DropdownValueComponent,
-    TypeaheadValueComponent
+    TypeaheadValueComponent,
+    TabulatorComponent,
   ],
   exports: [
     ComponentsUiComponent,
@@ -48,7 +50,8 @@ import { PasswordValueComponent } from './password-value/password-value.componen
     RecordListComponent,
     HttpClientModule,
     DropdownValueComponent,
-    TypeaheadValueComponent
+    TypeaheadValueComponent,
+    TabulatorComponent,
   ],
 })
 export class ComponentsUiModule { }

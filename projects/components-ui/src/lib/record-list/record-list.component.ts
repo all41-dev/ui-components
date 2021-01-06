@@ -37,7 +37,7 @@ export class RecordListComponent<T> extends AuthenticationBase implements OnChan
       }
       this.setAuthCompleted();
     }
-  };
+  }
   @Output() public selectedRecordsChange: EventEmitter<T[]> = new EventEmitter<T[]>();
   @Input() public get records(): T[] {
     if (!this.layout?.order || this.layout.order.length === 0 || this._records.length === 0) return this._records;
@@ -70,7 +70,7 @@ export class RecordListComponent<T> extends AuthenticationBase implements OnChan
       }
       return 0;//records are identical from an ordering perspective
     })
-  };
+  }
   public set records(value: T[]) {
     // console.debug(`setting recs ${this.layout.title}`);
     if (!value) {

@@ -22,4 +22,5 @@ export * from './model/column';
 export * from './lib/add-headers';
 export {AuthenticationBase} from './lib/authentication-base';
 export {AccessFunctions} from './lib/access-functions';
-export {Config} from './lib/config';
+export { Config } from './lib/config';
+export { TabulatorComponent } from './lib/tabulator/tabulator.component';

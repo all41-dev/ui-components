@@ -1,0 +1,10 @@
+<div>
+  <div id="tabulator"></div>
+  <div>
+    <button role="button" (click)="add()">add</button>
+    <button role="button" *ngIf="nbRowsToSave > 0" (click)="save()">save ({{nbRowsToSave}})</button>
+    <button role="button" *ngIf="nbRowsToSave > 0" (click)="rollback()">rollback</button>
+    <button role="button" *ngIf="tabulator.getSelectedRows().length > 0" (click)="delete()">delete
+      ({{tabulator.getSelectedRows().length}})</button>
+  </div>
+</div>
