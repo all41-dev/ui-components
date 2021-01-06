@@ -5,6 +5,8 @@ import { AuthenticationBase } from "../authentication-base";
 import { AddHeadersInterceptor } from "../add-headers";
 import { Config } from "../config";
 import moment from 'moment';
+
+// if broken, add export default Tabulator at the top of @types/tabulator-tables/index.d.ts
 import Tabulator from "tabulator-tables";
 
 @Component({
