@@ -29,6 +29,13 @@ export class TabulatorComponent<T> extends AuthenticationBase {
       options.ajaxConfig.headers.Authorization = `Bearer ${AddHeadersInterceptor.idToken}`;
     }
 
+    if (!options.ajaxResponse) {
+      options.ajaxResponse = (_url, _params, recs: T[]) => {
+        // received recs are unserialized Actitity objects, needs to be instanciated
+        return recs.map((r) => new this.typeHelpers.factory(r));
+      }
+    }
+
     this.tabulator = new Tabulator('#tabulator', options);
   }
 
