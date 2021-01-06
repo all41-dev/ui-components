@@ -20,7 +20,7 @@ export class TabulatorComponent<T> extends AuthenticationBase {
   @Input() public get tabulatorOptions(): Tabulator.Options | undefined {
     return this._tabulatorOptions;
   }
-  public set tabulatorOptions(options: Tabulator.Options) {
+  public set tabulatorOptions(options: Tabulator.Options | undefined) {
     this._tabulatorOptions = options;
 
     if (options.ajaxConfig !== 'GET' && options.ajaxConfig !== 'POST') {
