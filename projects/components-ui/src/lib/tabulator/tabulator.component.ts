@@ -5,6 +5,7 @@ import { AuthenticationBase } from "../authentication-base";
 import { AddHeadersInterceptor } from "../add-headers";
 import { Config } from "../config";
 import moment from 'moment';
+import Tabulator from "tabulator-tables";
 
 @Component({
   selector: 'all41-tabulator',
