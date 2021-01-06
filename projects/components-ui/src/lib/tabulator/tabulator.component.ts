@@ -12,7 +12,7 @@ import moment from 'moment';
   styleUrls: ['./tabulator.component.css']
 })
 export class TabulatorComponent<T> extends AuthenticationBase {
-  @Input() public typeHelpers: { pkProp: string; factory: { new(partial?: Partial<T>)}};
+  @Input() public typeHelpers: TypeHelpers<T>;
   @Output() public tabulatorChange: EventEmitter<Tabulator> = new EventEmitter<Tabulator>();
   public tabulator?: Tabulator;
 
@@ -185,4 +185,10 @@ export class TabulatorComponent<T> extends AuthenticationBase {
   //   elem.appendChild(saveBtn);
   //   return elem;
   // }
+}
+export interface TypeHelpers<T> {
+  pkProp: string;
+  factory: {
+    new(partial?: Partial<T>)
+  };
 }
