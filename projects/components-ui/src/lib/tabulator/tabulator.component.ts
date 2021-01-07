@@ -26,16 +26,18 @@ export class TabulatorComponent<T> extends AuthenticationBase {
   public set tabulatorOptions(options: Tabulator.Options | undefined) {
     this._tabulatorOptions = options;
 
-    if (options.ajaxConfig !== 'GET' && options.ajaxConfig !== 'POST') {
-      if (!options.ajaxConfig) options.ajaxConfig = {};
-      if (!options.ajaxConfig.headers) options.ajaxConfig.headers = {};
-      options.ajaxConfig.headers.Authorization = `Bearer ${AddHeadersInterceptor.idToken}`;
-    }
+    if (options.ajaxURL) {
+      if (options.ajaxConfig !== 'GET' && options.ajaxConfig !== 'POST') {
+        if (!options.ajaxConfig) options.ajaxConfig = {};
+        if (!options.ajaxConfig.headers) options.ajaxConfig.headers = {};
+        options.ajaxConfig.headers.Authorization = `Bearer ${AddHeadersInterceptor.idToken}`;
+      }
 
-    if (!options.ajaxResponse) {
-      options.ajaxResponse = (_url, _params, recs: T[]) => {
-        // received recs are unserialized Actitity objects, needs to be instanciated
-        return recs.map((r) => new this.typeHelpers.factory(r));
+      if (!options.ajaxResponse) {
+        options.ajaxResponse = (_url, _params, recs: T[]) => {
+          // received recs are unserialized Actitity objects, needs to be instanciated
+          return recs.map((r) => new this.typeHelpers.factory(r));
+        }
       }
     }
 
