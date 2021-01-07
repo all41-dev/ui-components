@@ -41,7 +41,7 @@ export class TabulatorComponent<T> extends AuthenticationBase {
       }
     }
 
-    this.tabulator = new Tabulator('#tabulator', options);
+    this.tabulator = options ? new Tabulator('#tabulator', options) : undefined;
     this.tabulatorChange.emit(this.tabulator);
   }
 
