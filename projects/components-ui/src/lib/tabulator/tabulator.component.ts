@@ -17,7 +17,7 @@ import Tabulator from "tabulator-tables";
 export class TabulatorComponent<T> extends AuthenticationBase {
   @Input() public typeHelpers: TypeHelpers<T>;
   @Output() public tabulatorChange: EventEmitter<Tabulator> = new EventEmitter<Tabulator>();
-  public tabulator?: Tabulator;
+  @Input() public tabulator?: Tabulator;
 
   private _tabulatorOptions?: Tabulator.Options;
   @Input() public get tabulatorOptions(): Tabulator.Options | undefined {
@@ -191,6 +191,8 @@ export class TabulatorComponent<T> extends AuthenticationBase {
 }
 export interface TypeHelpers<T> {
   pkProp: string;
+  isDeleteEnabled: boolean;
+  isAddEnabled: boolean;
   factory: {
     new(partial?: Partial<T>)
   };
