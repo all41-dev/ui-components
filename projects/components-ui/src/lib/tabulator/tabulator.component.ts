@@ -26,7 +26,7 @@ export class TabulatorComponent<T> extends AuthenticationBase {
   public set tabulatorOptions(options: Tabulator.Options | undefined) {
     this._tabulatorOptions = options;
 
-    if (options?.ajaxURL) {
+    if (options && options.ajaxURL) {
       if (options.ajaxConfig !== 'GET' && options.ajaxConfig !== 'POST') {
         if (!options.ajaxConfig) options.ajaxConfig = {};
         if (!options.ajaxConfig.headers) options.ajaxConfig.headers = {};
