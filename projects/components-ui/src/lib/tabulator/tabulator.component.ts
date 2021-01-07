@@ -16,8 +16,8 @@ import Tabulator from "tabulator-tables";
 })
 export class TabulatorComponent<T> extends AuthenticationBase {
   @Input() public typeHelpers: TypeHelpers<T>;
-  @Output() public tabulatorChange: EventEmitter<Tabulator> = new EventEmitter<Tabulator>();
   @Input() public tabulator?: Tabulator;
+  @Output() public tabulatorChange: EventEmitter<Tabulator> = new EventEmitter<Tabulator>();
 
   private _tabulatorOptions?: Tabulator.Options;
   @Input() public get tabulatorOptions(): Tabulator.Options | undefined {
@@ -40,6 +40,7 @@ export class TabulatorComponent<T> extends AuthenticationBase {
     }
 
     this.tabulator = new Tabulator('#tabulator', options);
+    this.tabulatorChange.emit(this.tabulator);
   }
 
   public constructor(private http: HttpClient, protected oauthService: OAuthService, protected config: Config) {
@@ -191,8 +192,8 @@ export class TabulatorComponent<T> extends AuthenticationBase {
 }
 export interface TypeHelpers<T> {
   pkProp: string;
-  isDeleteEnabled: boolean;
-  isAddEnabled: boolean;
+  isDeleteEnabled?: boolean;
+  isAddEnabled?: boolean;
   factory: {
     new(partial?: Partial<T>)
   };
