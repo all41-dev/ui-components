@@ -15,7 +15,7 @@ import Tabulator from "tabulator-tables";
   styleUrls: ['./tabulator.component.css']
 })
 export class TabulatorComponent<T> extends AuthenticationBase {
-  @Input() public typeHelpers: TabulatorExtendedOptions<T>;
+  @Input() public extendedOptions: TabulatorExtendedOptions<T>;
   @Input() public tabulator?: Tabulator;
   @Output() public tabulatorChange: EventEmitter<Tabulator> = new EventEmitter<Tabulator>();
 
@@ -36,7 +36,7 @@ export class TabulatorComponent<T> extends AuthenticationBase {
       if (!options.ajaxResponse) {
         options.ajaxResponse = (_url, _params, recs: T[]) => {
           // received recs are unserialized Actitity objects, needs to be instanciated
-          return recs.map((r) => new this.typeHelpers.factory(r));
+          return recs.map((r) => new this.extendedOptions.factory(r));
         }
       }
     }
@@ -62,17 +62,17 @@ export class TabulatorComponent<T> extends AuthenticationBase {
     const tabulator = this.tabulator;
     if (!tabulator) return;
 
-    const baseUrl = this.typeHelpers.cudAjaxUrl || this.tabulatorOptions.ajaxURL;
+    const baseUrl = this.extendedOptions.cudAjaxUrl || this.tabulatorOptions.ajaxURL;
     const rowsToSave = tabulator.getRows().filter((r) => r.getCells().some((c) => c.isEdited()));
 
     rowsToSave.forEach((r) => {
       const value = r.getData() as T;
-      if (value[this.typeHelpers.pkProp]) {
+      if (value[this.extendedOptions.pkProp]) {
         // update
-        this.http.patch<T>(`${baseUrl}/${value[this.typeHelpers.pkProp]}`, value).toPromise()
+        this.http.patch<T>(`${baseUrl}/${value[this.extendedOptions.pkProp]}`, value).toPromise()
           .then((savedVal) => {
             r.getCells().forEach((c) => { if (c.isEdited()) tabulator.clearCellEdited(c) })
-            tabulator.updateRow(r, new this.typeHelpers.factory(savedVal));
+            tabulator.updateRow(r, new this.extendedOptions.factory(savedVal));
 
             this._rowFormatter(r);
           });
@@ -81,7 +81,7 @@ export class TabulatorComponent<T> extends AuthenticationBase {
         this.http.post<T>(baseUrl, value).toPromise()
           .then((savedVal) => {
             r.getCells().forEach((c) => { if (c.isEdited()) tabulator.clearCellEdited(c) })
-            tabulator.updateRow(r, new this.typeHelpers.factory(savedVal));
+            tabulator.updateRow(r, new this.extendedOptions.factory(savedVal));
             this._rowFormatter(r);
           });
       }
@@ -103,14 +103,14 @@ export class TabulatorComponent<T> extends AuthenticationBase {
     //   this._rowFormatter(r);
     // });
   }
-  public add = () => this.tabulator.addRow();
+  public add = async (value?: Partial<T>): Promise<Tabulator.RowComponent> => this.tabulator.addRow(value);
   public delete = (): void => {
     if (!this.tabulator) return;
-    const baseUrl = this.typeHelpers.cudAjaxUrl || this.tabulatorOptions.ajaxURL;
+    const baseUrl = this.extendedOptions.cudAjaxUrl || this.tabulatorOptions.ajaxURL;
     const rows = this.tabulator.getSelectedRows();
     rows.forEach((r) => {
       const value = r.getData() as T;
-      this.http.delete(`${baseUrl}/${value[this.typeHelpers.pkProp]}`).toPromise()
+      this.http.delete(`${baseUrl}/${value[this.extendedOptions.pkProp]}`).toPromise()
         .then(() => r.delete());
     });
   }
@@ -211,6 +211,7 @@ export interface TabulatorExtendedOptions<T> {
    * or if url is different
    */
   cudAjaxUrl?: string;
+  newRecordTemplate: Partial<T>;// | (() => Promise<Partial<T>>); not required so far
   factory: {
     new(partial?: Partial<T>)
   };

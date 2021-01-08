@@ -1,10 +1,10 @@
 <div>
   <div id="tabulator"></div>
   <div>
-    <button role="button" *ngIf="typeHelpers?.isAddEnabled" (click)="add()">add</button>
+    <button role="button" *ngIf="extendedOptions?.isAddEnabled" (click)="add(extendedOptions.newRecordTemplate)">add</button>
     <button role="button" *ngIf="nbRowsToSave > 0" (click)="save()">save ({{nbRowsToSave}})</button>
     <button role="button" *ngIf="nbRowsToSave > 0" (click)="rollback()">rollback</button>
-    <button role="button" *ngIf="typeHelpers?.isDeleteEnabled && tabulator.getSelectedRows().length > 0" (click)="delete()">delete
+    <button role="button" *ngIf="extendedOptions?.isDeleteEnabled && tabulator.getSelectedRows().length > 0" (click)="delete()">delete
       ({{tabulator.getSelectedRows().length}})</button>
   </div>
 </div>
