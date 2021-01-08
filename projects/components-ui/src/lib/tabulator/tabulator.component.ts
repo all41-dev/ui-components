@@ -15,10 +15,10 @@ import Tabulator from "tabulator-tables";
   styleUrls: ['./tabulator.component.css']
 })
 export class TabulatorComponent<T> extends AuthenticationBase {
-  @Input() public extendedOptions: TabulatorExtendedOptions<T>;
+  @Input() public extendedOptions?: TabulatorExtendedOptions<T>;
   @Input() public tabulator?: Tabulator;
   @Output() public tabulatorChange: EventEmitter<Tabulator> = new EventEmitter<Tabulator>();
-  @ViewChild('tabulator') public tabulatorElement?: ElementRef;
+  @ViewChild('tabulatorelem') public tabulatorElement?: ElementRef;
 
   private _tabulatorOptions?: Tabulator.Options;
   @Input() public get tabulatorOptions(): Tabulator.Options | undefined {
