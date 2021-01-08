@@ -46,7 +46,7 @@ export class TabulatorComponent<T> extends AuthenticationBase {
       c.mutatorEdit = this._cellMutator;
     })
 
-    this.tabulator = options ? new Tabulator('#tabulator', options) : undefined;
+    this.tabulator = options ? new Tabulator(`#${this.extendedOptions.elementId || 'tabulator'}`, options) : undefined;
     this.tabulatorChange.emit(this.tabulator);
   }
 
@@ -206,6 +206,7 @@ export interface TabulatorExtendedOptions<T> {
   pkProp: string;
   isDeleteEnabled?: boolean;
   isAddEnabled?: boolean;
+  elementId?: string;
   /**
    * @description to be used when tabulator data is not retrieved using AJAX, but create|update|delete (cud) are.
    * or if url is different
