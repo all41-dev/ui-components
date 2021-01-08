@@ -18,38 +18,21 @@ export class TabulatorComponent<T> extends AuthenticationBase {
   @Input() public extendedOptions?: TabulatorExtendedOptions<T>;
   @Input() public tabulator?: Tabulator;
   @Output() public tabulatorChange: EventEmitter<Tabulator> = new EventEmitter<Tabulator>();
-  @ViewChild('tabulatorelem') public tabulatorElement?: ElementRef;
+
+  private _tabulatorElement?: ElementRef;
+  @ViewChild('tabulatorelem') public get tabulatorElement(): ElementRef | undefined { return this._tabulatorElement; }
+  public set tabulatorElement(value: ElementRef | undefined) {
+    this._tabulatorElement = value;
+    this._initTabulator();
+  }
 
   private _tabulatorOptions?: Tabulator.Options;
   @Input() public get tabulatorOptions(): Tabulator.Options | undefined {
     return this._tabulatorOptions;
   }
   public set tabulatorOptions(options: Tabulator.Options | undefined) {
-    if (!options || !this.tabulatorElement) return;
     this._tabulatorOptions = options;
-
-    if (options && options.ajaxURL) {
-      if (options.ajaxConfig !== 'GET' && options.ajaxConfig !== 'POST') {
-        if (!options.ajaxConfig) options.ajaxConfig = {};
-        if (!options.ajaxConfig.headers) options.ajaxConfig.headers = {};
-        options.ajaxConfig.headers.Authorization = `Bearer ${AddHeadersInterceptor.idToken}`;
-      }
-
-      if (!options.ajaxResponse) {
-        options.ajaxResponse = (_url, _params, recs: T[]) => {
-          // received recs are unserialized Actitity objects, needs to be instanciated
-          return recs.map((r) => new this.extendedOptions.factory(r));
-        }
-      }
-    }
-
-    options?.columns?.forEach((c) => {
-      if (c.mutatorEdit) console.warn('mutatorEdit value has been replaced by default TabulatorComponent one.');
-      c.mutatorEdit = this._cellMutator;
-    })
-
-    this.tabulator = options ? new Tabulator(this.tabulatorElement.nativeElement, options) : undefined;
-    this.tabulatorChange.emit(this.tabulator);
+    this._initTabulator();
   }
 
   public constructor(private http: HttpClient, protected oauthService: OAuthService, protected config: Config) {
@@ -118,6 +101,34 @@ export class TabulatorComponent<T> extends AuthenticationBase {
   }
   protected async afterAuthInit(): Promise<void> {
     await super.afterAuthInit();
+  }
+  private _initTabulator = () => {
+    if (!this.tabulatorOptions || !this.tabulatorElement) return;
+    const options = this.tabulatorOptions;
+
+    if (options && options.ajaxURL) {
+      if (options.ajaxConfig !== 'GET' && options.ajaxConfig !== 'POST') {
+        if (!options.ajaxConfig) options.ajaxConfig = {};
+        if (!options.ajaxConfig.headers) options.ajaxConfig.headers = {};
+        options.ajaxConfig.headers.Authorization = `Bearer ${AddHeadersInterceptor.idToken}`;
+      }
+
+      if (!options.ajaxResponse) {
+        options.ajaxResponse = (_url, _params, recs: T[]) => {
+          // received recs are unserialized Actitity objects, needs to be instanciated
+          return recs.map((r) => new this.extendedOptions.factory(r));
+        }
+      }
+    }
+
+    options?.columns?.forEach((c) => {
+      if (c.mutatorEdit) console.warn('mutatorEdit value has been replaced by default TabulatorComponent one.');
+      c.mutatorEdit = this._cellMutator;
+    })
+
+    this.tabulator = options ? new Tabulator(this.tabulatorElement.nativeElement, options) : undefined;
+    this.tabulatorChange.emit(this.tabulator);
+
   }
   private _dateEditor = (cell: any, onRendered: any, success: any, cancel: any) => {
     //cell - the cell component for the editable cell

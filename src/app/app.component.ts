@@ -1,6 +1,6 @@
 import {Component, OnInit} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
-import {Column, RecordListLayout, RecordListComponent, RecordComponent, ReadonlyColumn, EditableColumn} from '@all41-dev/ui-components';
+import { RecordListLayout, RecordListComponent, RecordComponent, ReadonlyColumn, EditableColumn} from '@all41-dev/ui-components';
 import { Subscription } from 'rxjs';
 
 @Component({
