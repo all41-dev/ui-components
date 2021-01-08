@@ -211,7 +211,7 @@ export interface TabulatorExtendedOptions<T> {
    * or if url is different
    */
   cudAjaxUrl?: string;
-  newRecordTemplate: Partial<T>;// | (() => Promise<Partial<T>>); not required so far
+  newRecordTemplate?: Partial<T>;// | (() => Promise<Partial<T>>); not required so far
   factory: {
     new(partial?: Partial<T>)
   };
