@@ -1,5 +1,5 @@
 import { HttpClient } from "@angular/common/http";
-import { Component, EventEmitter, Input, Output, ViewChild } from "@angular/core";
+import { Component, ElementRef, EventEmitter, Input, Output, ViewChild } from "@angular/core";
 import { OAuthService } from "angular-oauth2-oidc";
 import { AuthenticationBase } from "../authentication-base";
 import { AddHeadersInterceptor } from "../add-headers";
@@ -18,7 +18,7 @@ export class TabulatorComponent<T> extends AuthenticationBase {
   @Input() public extendedOptions: TabulatorExtendedOptions<T>;
   @Input() public tabulator?: Tabulator;
   @Output() public tabulatorChange: EventEmitter<Tabulator> = new EventEmitter<Tabulator>();
-  @ViewChild('tabulator') public tabulatorElement?: HTMLElement;
+  @ViewChild('tabulator') public tabulatorElement?: ElementRef;
 
   private _tabulatorOptions?: Tabulator.Options;
   @Input() public get tabulatorOptions(): Tabulator.Options | undefined {
@@ -48,7 +48,7 @@ export class TabulatorComponent<T> extends AuthenticationBase {
       c.mutatorEdit = this._cellMutator;
     })
 
-    this.tabulator = options ? new Tabulator(this.tabulatorElement, options) : undefined;
+    this.tabulator = options ? new Tabulator(this.tabulatorElement.nativeElement, options) : undefined;
     this.tabulatorChange.emit(this.tabulator);
   }
 
