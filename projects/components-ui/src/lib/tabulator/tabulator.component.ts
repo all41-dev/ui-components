@@ -15,7 +15,7 @@ import Tabulator from "tabulator-tables";
   styleUrls: ['./tabulator.component.css']
 })
 export class TabulatorComponent<T> extends AuthenticationBase {
-  @Input() public typeHelpers: TypeHelpers<T>;
+  @Input() public typeHelpers: TabulatorExtendedOptions<T>;
   @Input() public tabulator?: Tabulator;
   @Output() public tabulatorChange: EventEmitter<Tabulator> = new EventEmitter<Tabulator>();
 
@@ -41,6 +41,11 @@ export class TabulatorComponent<T> extends AuthenticationBase {
       }
     }
 
+    options.columns?.forEach((c) => {
+      if (c.mutatorEdit) console.warn('mutatorEdit value has been replaced by default TabulatorComponent one.');
+      c.mutatorEdit = this._cellMutator;
+    })
+
     this.tabulator = options ? new Tabulator('#tabulator', options) : undefined;
     this.tabulatorChange.emit(this.tabulator);
   }
@@ -57,12 +62,14 @@ export class TabulatorComponent<T> extends AuthenticationBase {
     const tabulator = this.tabulator;
     if (!tabulator) return;
 
+    const baseUrl = this.typeHelpers.cudAjaxUrl || this.tabulatorOptions.ajaxURL;
     const rowsToSave = tabulator.getRows().filter((r) => r.getCells().some((c) => c.isEdited()));
+
     rowsToSave.forEach((r) => {
       const value = r.getData() as T;
       if (value[this.typeHelpers.pkProp]) {
         // update
-        this.http.patch<T>(`${this.tabulatorOptions.ajaxURL}/${value[this.typeHelpers.pkProp]}`, value).toPromise()
+        this.http.patch<T>(`${baseUrl}/${value[this.typeHelpers.pkProp]}`, value).toPromise()
           .then((savedVal) => {
             r.getCells().forEach((c) => { if (c.isEdited()) tabulator.clearCellEdited(c) })
             tabulator.updateRow(r, new this.typeHelpers.factory(savedVal));
@@ -71,7 +78,7 @@ export class TabulatorComponent<T> extends AuthenticationBase {
           });
       } else {
         // create
-        this.http.post<T>(this.tabulatorOptions.ajaxURL, value).toPromise()
+        this.http.post<T>(baseUrl, value).toPromise()
           .then((savedVal) => {
             r.getCells().forEach((c) => { if (c.isEdited()) tabulator.clearCellEdited(c) })
             tabulator.updateRow(r, new this.typeHelpers.factory(savedVal));
@@ -99,10 +106,11 @@ export class TabulatorComponent<T> extends AuthenticationBase {
   public add = () => this.tabulator.addRow();
   public delete = (): void => {
     if (!this.tabulator) return;
+    const baseUrl = this.typeHelpers.cudAjaxUrl || this.tabulatorOptions.ajaxURL;
     const rows = this.tabulator.getSelectedRows();
     rows.forEach((r) => {
       const value = r.getData() as T;
-      this.http.delete(`${this.tabulatorOptions.ajaxURL}/${value[this.typeHelpers.pkProp]}`).toPromise()
+      this.http.delete(`${baseUrl}/${value[this.typeHelpers.pkProp]}`).toPromise()
         .then(() => r.delete());
     });
   }
@@ -181,6 +189,8 @@ export class TabulatorComponent<T> extends AuthenticationBase {
       }, 1000);
     }
   };
+  private _cellMutator = (val: any, _d: any, _t: any, _p: any, cell?: Tabulator.CellComponent) => { if (cell) this._rowFormatter(cell.getRow()); return val; }
+
   // private _cellMutator = (val: any, _d: any, _t: any, _p: any, cell?: Tabulator.CellComponent) => { if (cell) this._rowFormatter(cell.getRow()); return val; }
   // private _getFooter = (tabulator: Tabulator): HTMLElement => {
   //   const $this = this;
@@ -192,10 +202,15 @@ export class TabulatorComponent<T> extends AuthenticationBase {
   //   return elem;
   // }
 }
-export interface TypeHelpers<T> {
+export interface TabulatorExtendedOptions<T> {
   pkProp: string;
   isDeleteEnabled?: boolean;
   isAddEnabled?: boolean;
+  /**
+   * @description to be used when tabulator data is not retrieved using AJAX, but create|update|delete (cud) are.
+   * or if url is different
+   */
+  cudAjaxUrl?: string;
   factory: {
     new(partial?: Partial<T>)
   };
