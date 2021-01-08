@@ -41,7 +41,7 @@ export class TabulatorComponent<T> extends AuthenticationBase {
       }
     }
 
-    options.columns?.forEach((c) => {
+    options?.columns?.forEach((c) => {
       if (c.mutatorEdit) console.warn('mutatorEdit value has been replaced by default TabulatorComponent one.');
       c.mutatorEdit = this._cellMutator;
     })
