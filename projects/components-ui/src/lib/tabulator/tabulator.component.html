@@ -1,5 +1,5 @@
 <div>
-  <div [id]="extendedOptions.elementId || 'tabulator'"></div>
+  <div [id]="extendedOptions?.elementId || 'tabulator'"></div>
   <div>
     <button role="button" *ngIf="extendedOptions?.isAddEnabled" (click)="add(extendedOptions.newRecordTemplate)">add</button>
     <button role="button" *ngIf="nbRowsToSave > 0" (click)="save()">save ({{nbRowsToSave}})</button>
