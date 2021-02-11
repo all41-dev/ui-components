@@ -10,6 +10,13 @@ export class TextareaValueComponent extends ValueComponent {
   @Input() public value: any;
   @Output() public valueChange: EventEmitter<string> = new EventEmitter<string>();
 
+  public get stringValue(): string {
+    return this.stringify(this.value);
+  }
+  public set stringValue(value: string) {
+    this.value = value;
+  }
+
   protected initialValue: string;
 
   public constructor() {
