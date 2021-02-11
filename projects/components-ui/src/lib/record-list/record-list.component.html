@@ -6,7 +6,7 @@
     [style.float]="['left', 'right'].includes(layout?.detailPosition) ? layout?.detailPosition : 'inherit'">
   </ift-record>
   <div class="header" [style.width]="'' + (getWidth()+19) + 'px'"><h3>{{layout?.title}}</h3></div>
-  <div #headerRow class="row header"
+  <div #headerRow class="all41-row header"
       [style.width]="'' + (getWidth()+19) + 'px'"
       [style.gridTemplateColumns]="gridTemplateColumns()">
     <ng-container *ngFor="let col of listColumns">
@@ -22,7 +22,7 @@
       [style.width]="'' + (getWidth() + 19) + 'px'"
       [style.height]="getDataHeight(headerRow, controlsRow) + 'px'"
       [style.maxHeight]="getDataHeight(headerRow, controlsRow) + 'px'" >
-    <div class="row"
+    <div class="all41-row"
         [style.width]="'' + getWidth() + 'px'"
         [style.cursor]="cursorStyle"
         [style.gridTemplateColumns]="gridTemplateColumns()"

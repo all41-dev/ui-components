@@ -13,7 +13,7 @@
   /*border-bottom-left-radius: 5px;*/
   /*border-bottom-right-radius: 5px; --> disabled as behind scrollbar on chrome --> ugly */
 }
-.row {
+.all41-row {
   display: grid;
   /*grid-template-columns: 30px 300px 70px;*/
   grid-auto-rows: auto;
