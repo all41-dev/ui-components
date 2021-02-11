@@ -4,8 +4,8 @@
           #input></textarea>
 <div [hidden]="isEdit === true && hasFocus === true"
      [class.edit]="isEdit === true"
-     [title]="value"
+     [title]="stringify(value)"
      [class.modified]="modified === true"
      (click)="focus(input, $event)">
-  {{value === '' ? '&nbsp;' : value}}
+  {{stringify(value)}}
 </div>

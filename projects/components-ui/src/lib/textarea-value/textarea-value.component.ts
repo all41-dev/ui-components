@@ -7,7 +7,7 @@ import {ValueComponent} from '../value/value.component';
   styleUrls: ['./textarea-value.component.css']
 })
 export class TextareaValueComponent extends ValueComponent {
-  @Input() public value: string;
+  @Input() public value: any;
   @Output() public valueChange: EventEmitter<string> = new EventEmitter<string>();
 
   protected initialValue: string;
@@ -24,5 +24,17 @@ export class TextareaValueComponent extends ValueComponent {
       this.modifiedChange.emit(this.modified);
     }
     this.valueChange.emit(this.value);
+  }
+  public stringify(value: unknown): string {
+    switch (typeof value) {
+      case 'string':
+        return value === '' ? '&nbsp;' : value;
+      case 'object':
+        return JSON.stringify(value, null, 2);
+      default:
+        return value === undefined ?
+          '&nbsp;' :
+          value.toString();
+    }
   }
 }
