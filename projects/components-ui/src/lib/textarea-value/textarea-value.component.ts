@@ -35,13 +35,13 @@ export class TextareaValueComponent extends ValueComponent {
   public stringify(value: unknown): string {
     switch (typeof value) {
       case 'string':
-        return value === '' ? '&nbsp;' : value;
+        return value;
       case 'object':
         return JSON.stringify(value, null, 2);
       default:
-        return value === undefined ?
-          '&nbsp;' :
-          value.toString();
+        return value ?
+          value.toString() :
+          '';
     }
   }
 }

@@ -7,5 +7,5 @@
      [title]="stringValue"
      [class.modified]="modified === true"
      (click)="focus(input, $event)">
-  {{stringValue}}
+  {{stringValue || '&nbsp;'}}
 </div>

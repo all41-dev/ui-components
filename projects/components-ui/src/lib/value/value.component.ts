@@ -17,7 +17,7 @@ export abstract class ValueComponent implements OnInit {
       default:
         return false;
     }
-  };
+  }
   @Input() public hasFocus = false;
   @Input() public modified: boolean;
   @Input() public parentComponent: RecordComponent<any>|RecordListComponent<any>;
