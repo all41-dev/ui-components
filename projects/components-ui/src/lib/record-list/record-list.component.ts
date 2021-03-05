@@ -379,7 +379,11 @@ export class RecordListComponent<T> extends AuthenticationBase implements OnChan
     saveButton.focus();
     saveButton.click();
   }
-  public save(/*event = null*/): Promise<T[]> {
+  public async save(/*event = null*/): Promise<T[]> {
+    if (this.layout?.beforeSave) {
+      await this.layout.beforeSave(this.modifiedRecords());
+    }
+
     if (this.layout?.save) {
       return this.layout?.save(this.modifiedRecords());
     }

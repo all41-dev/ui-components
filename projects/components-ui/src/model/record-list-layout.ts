@@ -47,6 +47,7 @@ export class RecordListLayout<T> {
   /** @default false */
   isAddEnabled?: boolean;
   save?: (record: T[]) => Promise<T[]>;
+  beforeSave?: (record: T[]) => Promise<void>;
   newRecTemplate?: any;
   dblClick?: (record: T) => void;
   click?: (record: T) => void;

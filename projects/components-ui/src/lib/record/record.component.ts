@@ -200,6 +200,9 @@ export class RecordComponent<T> implements OnInit, OnChanges {
 
 
   public async save(): Promise<void> {
+    if (this.layout?.beforeSave) {
+      await this.layout.beforeSave([this.record]);
+    }
     if (this.layout?.save !== undefined) {
       const res = await this.layout?.save([this.record]);
       this.record = (this.layout?.load ? this.layout?.load(res) : res)[0];
