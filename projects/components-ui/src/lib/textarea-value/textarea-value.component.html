@@ -1,4 +1,4 @@
-<textarea style="position:relative"
+<textarea style="position:relative; height:150px"
        [hidden]="isEdit === false || hasFocus === false"
        [(ngModel)]="stringValue" (blur)="blur()" (keydown.shift.tab)="tab($event)" (keydown.tab)="tab($event)"
           #input></textarea>
@@ -7,5 +7,5 @@
      [title]="stringValue"
      [class.modified]="modified === true"
      (click)="focus(input, $event)">
-  {{stringValue || '&nbsp;'}}
+  {{stringValue}}&nbsp;
 </div>
