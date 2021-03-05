@@ -37,6 +37,7 @@ export class TextareaValueComponent extends ValueComponent {
       case 'string':
         return value;
       case 'object':
+        if (value === null) return '';
         return JSON.stringify(value, null, 2);
       default:
         return value ?

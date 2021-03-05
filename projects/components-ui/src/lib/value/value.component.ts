@@ -38,7 +38,7 @@ export abstract class ValueComponent implements OnInit {
       return typeof html === 'string' ? html : html(this.parentComponent, this.record);
     }
     // console.debug(`prop value: ${this.value}`);
-    return this.value === '' ? '&nbsp;' : this.value;
+    return ['', null].includes(this.value) ? '&nbsp;' : this.value;
   }
 
   public ngOnInit(): void {
