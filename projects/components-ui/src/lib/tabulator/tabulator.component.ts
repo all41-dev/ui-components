@@ -7,6 +7,8 @@ import { Config } from "../config";
 import moment from 'moment';
 
 // if broken, add export default Tabulator at the top of @types/tabulator-tables/index.d.ts
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-ignore
 import Tabulator from "tabulator-tables";
 
 @Component({
