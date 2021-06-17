@@ -14,7 +14,6 @@
     "allowSyntheticDefaultImports": true,
     "target": "ES2015",
     "typeRoots": [
-      "types",
       "node_modules/@types"
     ],
     "lib": [
@@ -33,4 +32,4 @@
   "angularCompilerOptions": {
     "enableIvy": false,
   }
-  }
+}
