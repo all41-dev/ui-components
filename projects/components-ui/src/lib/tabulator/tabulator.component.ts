@@ -7,7 +7,7 @@ import { Config } from "../config";
 import moment from 'moment';
 
 // if broken, add export default Tabulator at the top of @types/tabulator-tables/index.d.ts
-const Tabulator = require("../../../types/tabulator-tables");
+import Tabulator from "tabulator-tables";
 
 @Component({
   selector: 'all41-tabulator',
@@ -16,8 +16,8 @@ const Tabulator = require("../../../types/tabulator-tables");
 })
 export class TabulatorComponent<T> extends AuthenticationBase {
   @Input() public extendedOptions?: TabulatorExtendedOptions<T>;
-  @Input() public tabulator?: typeof Tabulator;
-  @Output() public tabulatorChange: EventEmitter<typeof Tabulator> = new EventEmitter<typeof Tabulator>();
+  @Input() public tabulator?: Tabulator;
+  @Output() public tabulatorChange: EventEmitter<Tabulator> = new EventEmitter<Tabulator>();
 
   private _tabulatorElement?: ElementRef;
   @ViewChild('tabulatorelem') public get tabulatorElement(): ElementRef | undefined { return this._tabulatorElement; }
@@ -26,11 +26,11 @@ export class TabulatorComponent<T> extends AuthenticationBase {
     this._initTabulator();
   }
 
-  private _tabulatorOptions?: typeof Tabulator.Options;
-  @Input() public get tabulatorOptions(): typeof Tabulator.Options | undefined {
+  private _tabulatorOptions?: Tabulator.Options;
+  @Input() public get tabulatorOptions(): Tabulator.Options | undefined {
     return this._tabulatorOptions;
   }
-  public set tabulatorOptions(options: typeof Tabulator.Options | undefined) {
+  public set tabulatorOptions(options: Tabulator.Options | undefined) {
     this._tabulatorOptions = options;
     this._initTabulator();
   }
@@ -88,7 +88,7 @@ export class TabulatorComponent<T> extends AuthenticationBase {
     //   this._rowFormatter(r);
     // });
   }
-  public add = async (value?: Partial<T>): Promise<typeof Tabulator.RowComponent> => this.tabulator.addRow(value);
+  public add = async (value?: Partial<T>): Promise<Tabulator.RowComponent> => this.tabulator.addRow(value);
   public delete = (): void => {
     if (!this.tabulator) return;
     const baseUrl = this.extendedOptions.cudAjaxUrl || this.tabulatorOptions.ajaxURL;
@@ -192,7 +192,7 @@ export class TabulatorComponent<T> extends AuthenticationBase {
     moment.locale('fr');
     return moment.duration(moment(val).diff(moment())).humanize(true);
   }
-  private _rowFormatter = (row: typeof Tabulator.RowComponent) => {
+  private _rowFormatter = (row: Tabulator.RowComponent) => {
     const cells = row.getCells();
     if (cells.some((c) => c.isEdited())) row.getElement().style.backgroundColor = '#deba9b'
     else {
@@ -202,7 +202,7 @@ export class TabulatorComponent<T> extends AuthenticationBase {
       }, 1000);
     }
   };
-  private _cellMutator = (val: any, _d: any, _t: any, _p: any, cell?: typeof Tabulator.CellComponent) => { if (cell) this._rowFormatter(cell.getRow()); return val; }
+  private _cellMutator = (val: any, _d: any, _t: any, _p: any, cell?: Tabulator.CellComponent) => { if (cell) this._rowFormatter(cell.getRow()); return val; }
 
   // private _cellMutator = (val: any, _d: any, _t: any, _p: any, cell?: Tabulator.CellComponent) => { if (cell) this._rowFormatter(cell.getRow()); return val; }
   // private _getFooter = (tabulator: Tabulator): HTMLElement => {
