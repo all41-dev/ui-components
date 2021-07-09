@@ -88,7 +88,7 @@ export class TabulatorComponent<T> extends AuthenticationBase {
     //   this._rowFormatter(r);
     // });
   }
-  public add = async (value?: Partial<T>): Promise<Tabulator.RowComponent> => this.tabulator.addRow(value);
+  public add = async (value?: Partial<T>): Promise<Tabulator.RowComponent> => this.tabulator.addRow(JSON.parse(JSON.stringify(value)));
   public delete = (): void => {
     if (!this.tabulator) return;
     const baseUrl = this.extendedOptions.cudAjaxUrl || this.tabulatorOptions.ajaxURL;
