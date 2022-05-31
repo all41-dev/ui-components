@@ -1,9 +1,13 @@
 import { OAuthService, AuthConfig } from 'angular-oauth2-oidc';
 import { JwksValidationHandler } from 'angular-oauth2-oidc-jwks';
 import { AddHeadersInterceptor } from './add-headers';
-import { OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Config } from './config';
 
+@Component({
+  selector: 'ift-abstract-auth',
+  template: '<div>abstract component, do not use</div>',
+})
 export abstract class AuthenticationBase implements OnInit {
   public user: any;
   public token: any;
@@ -21,8 +25,8 @@ export abstract class AuthenticationBase implements OnInit {
 
   private _authCompleted = false;
   public get isAuthCompleted(): boolean { return this._authCompleted; };
-  protected setAuthCompleted(): void { this._authCompleted = true; }
   private _isIdTokenSet = false;
+  protected setAuthCompleted(): void { this._authCompleted = true; }
   public get isIdTokenSet(): boolean {
     return this._isIdTokenSet;
   }

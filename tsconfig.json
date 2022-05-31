@@ -31,6 +31,6 @@
     },
   },
   "angularCompilerOptions": {
-    "enableIvy": false,
+    // "enableIvy": false,
   }
 }

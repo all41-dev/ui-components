@@ -1,8 +1,12 @@
-import {EventEmitter, Input, OnInit, Output} from '@angular/core';
+import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import { BaseColumn, ReadonlyColumn } from '../../model/column';
 import { RecordListComponent } from '../record-list/record-list.component';
 import { RecordComponent } from '../record/record.component';
 
+@Component({
+  selector: 'ift-abstract-value',
+  template: '<div>abstract component, do not use</div>',
+})
 export abstract class ValueComponent implements OnInit {
   public get isEdit(): boolean {
     let displaySetting = this.parentIsList ? this.columnLayout.listDisplay : this.columnLayout.detailDisplay;

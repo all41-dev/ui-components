@@ -3,7 +3,7 @@
   "author": "eric@all41.dev",
   "description": "Angular library for ui components",
   "peerDependencies": {
-    "@angular/common": "^11.0.0",
-    "@angular/core": "^11.0.0"
+    "@angular/common": "^13.3.9",
+    "@angular/core": "^13.3.9"
   }
 }
